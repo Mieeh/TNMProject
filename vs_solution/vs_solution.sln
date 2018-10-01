@@ -7,20 +7,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game_project", "game_projec
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|windows 32 bit = Debug|windows 32 bit
+		Release|windows 32 bit = Release|windows 32 bit
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|x64.ActiveCfg = Debug|x64
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|x64.Build.0 = Debug|x64
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|x86.ActiveCfg = Debug|Win32
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|x86.Build.0 = Debug|Win32
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|x64.ActiveCfg = Release|x64
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|x64.Build.0 = Release|x64
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|x86.ActiveCfg = Release|Win32
-		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|x86.Build.0 = Release|Win32
+		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|windows 32 bit.ActiveCfg = Debug|Win32
+		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Debug|windows 32 bit.Build.0 = Debug|Win32
+		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|windows 32 bit.ActiveCfg = Release|Win32
+		{4A7BE2AE-32FD-461F-B5E9-F97CB731D647}.Release|windows 32 bit.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
