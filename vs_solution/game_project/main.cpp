@@ -8,23 +8,18 @@ using namespace bear;
 struct Game :BearClass
 {
 	Engine* game; // Engine object
-	Space* space;
+	Space space;
 
-	Game()
-	{
-		space = new Space();
-		space->addEntity("linus");
-		space->addEntity("not linus");
-		space->addEntity("maybe linus");
-		std::cout << "Ey";
-		
+	Game() : space()
+	{		
 		game = new Engine(this); // Create engine instance
 	}
 
 	// ============================== // 
 
 	void init() override {
-		std::cout << "Game was init()" << std::endl;
+		// Testing the space 
+		space.addEntity("test");
 	}
 
 	void update(float dt) override {

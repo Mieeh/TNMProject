@@ -9,6 +9,7 @@
 #include"entity.h"
 
 struct Space {
+	// Data
 	std::map<std::string, uint2> entity_index_map;
 	Entity* entity_list[MAX_ENTITIES] = { nullptr };
 
@@ -16,5 +17,5 @@ struct Space {
 	Space();
 	~Space();
 	Entity* getEntity(const std::string& name);
-	void addEntity(const std::string& name);
+	Entity* addEntity(const std::string& name);
 };

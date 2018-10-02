@@ -1,5 +1,7 @@
 #include"space.h"
 
+#include<iostream>
+
 Space::Space()
 {
 
@@ -10,7 +12,7 @@ Entity * Space::getEntity(const std::string& name)
 	return entity_list[entity_index_map[name]];
 }
 
-void Space::addEntity(const std::string & name)
+Entity* Space::addEntity(const std::string & name)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++) {
 		if (entity_list[i] == nullptr) {
@@ -18,9 +20,12 @@ void Space::addEntity(const std::string & name)
 			int index = i;
 			entity_index_map.insert(std::pair<std::string, uint2>(name, i));
 			entity_list[i] = new Entity();
-			break;
+			return entity_list[i];
 		}
 	}
+
+	std::cout << "ERROR: Couldn't add entity! Max size of entities has been reached!" << std::endl;
+	return nullptr;
 }
 
 Space::~Space()
