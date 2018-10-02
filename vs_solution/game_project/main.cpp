@@ -1,16 +1,24 @@
 #include<iostream>
 
 #include"engine\bear_game.h"
+#include"engine/space.h"
 
 using namespace bear;
 
 struct Game :BearClass
 {
 	Engine* game; // Engine object
+	Space* space;
 
 	Game()
 	{
-		game = new Engine(this);
+		space = new Space();
+		space->addEntity("linus");
+		space->addEntity("not linus");
+		space->addEntity("maybe linus");
+		std::cout << "Ey";
+		
+		game = new Engine(this); // Create engine instance
 	}
 
 	// ============================== // 
@@ -39,6 +47,5 @@ int main()
 	Game *game = new Game();
 	delete game;
 
-	system("pause>null");
 	return 0;
 }

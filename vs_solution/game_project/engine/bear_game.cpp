@@ -16,7 +16,7 @@ Engine::Engine(BearClass* bear_class)
 
 	// Go into the main loop
 	this->core();
-}
+}	
 
 Engine::~Engine()
 {
