@@ -127,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="engine\bear_game.cpp" />
+    <ClCompile Include="engine\game_systems.cpp" />
     <ClCompile Include="engine\space.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -135,6 +136,7 @@
     <ClInclude Include="engine\bear_game.h" />
     <ClInclude Include="engine\constants.h" />
     <ClInclude Include="engine\entity.h" />
+    <ClInclude Include="engine\game_systems.h" />
     <ClInclude Include="engine\space.h" />
     <ClInclude Include="engine\typedefs.h" />
   </ItemGroup>

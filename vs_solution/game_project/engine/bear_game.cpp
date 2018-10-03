@@ -1,6 +1,10 @@
 #include"bear_game.h"
 #include"constants.h"
 
+#include"game_systems.h"
+
+#include<graphics/graphics.h>
+
 using namespace bear;
 using namespace bear::window;
 
@@ -9,6 +13,14 @@ Engine::Engine(BearClass* bear_class)
 	// Create some framework related objects
 	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project");
 	game_window->setVSync(VSYNC);
+
+	// Init bear-framework systems
+	if (!bear::graphics::Graphics::init(WINDOW_WIDTH, WINDOW_HEIGHT)) {
+		std::cout << "ERROR: Failed to init BEAR-FRAMEWORK graphics!" << std::endl;
+	}
+
+	// Init game systems
+	Graphics::Instance()->init();
 
 	// Call "game" init
 	this->bear_class = bear_class;
@@ -42,6 +54,10 @@ void Engine::core()
 
 		// rendering
 		game_window->clear();
+
+		Graphics::Instance()->begin();
+		bear_class->render(); // Here is where the "game" submits the primitives to be rendered by the rendering system
+		Graphics::Instance()->flush();
 
 		game_window->display();
 	}

@@ -1,6 +1,8 @@
 #pragma once
 
+#include<graphics/renderable.h>
+
 // Base class for all entities in the engine 
 struct Entity {
-	int x;
+	bear::graphics::Renderable renderable;
 };

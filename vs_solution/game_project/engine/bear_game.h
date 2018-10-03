@@ -10,6 +10,7 @@ struct BearClass {
 	// Implemented by the "game"
 	virtual void init() { }
 	virtual void update(float dt) { }
+	virtual void render() { }
 	virtual void on_event(bear::Event& event) { }
 	virtual void exit() { }
 };
