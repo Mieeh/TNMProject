@@ -1,0 +1,51 @@
+#version 330
+
+layout (points) in; // We take a single vertex from the vertex stage
+layout (triangle_strip, max_vertices = 4) out; // We emit a quad
+
+uniform mat4 projection_matrix;
+uniform mat4 view_matrix = mat4(1.0);
+
+in VS_OUT {
+	vec2 position;
+	vec4 color;
+	float size;	
+} gs_in[];
+
+out Fragment{
+	vec4 color;
+	vec2 uv;
+} fragment;
+
+void main()
+{
+    mat4 pvMatrix = projection_matrix * view_matrix;
+
+    float size = gs_in[0].size;
+    vec2 pos = gs_in[0].position;
+	vec2 pos2 = pos + vec2(0, size);
+    vec2 pos3 = pos + vec2(size, 0);
+    vec2 pos4 = pos + vec2(size, size);
+
+    fragment.color = gs_in[0].color;
+	fragment.uv = vec2(0, 0);
+    gl_Position = pvMatrix * vec4(pos, 0, 1.0);
+    EmitVertex();
+
+	fragment.color = gs_in[0].color;
+	fragment.uv = vec2(0, 1);
+    gl_Position = pvMatrix * vec4(pos2, 0, 1.0);
+    EmitVertex();
+
+	fragment.color = gs_in[0].color;
+	fragment.uv = vec2(1, 0);
+    gl_Position = pvMatrix * vec4(pos3, 0, 1.0);
+    EmitVertex();
+
+	fragment.color = gs_in[0].color;
+	fragment.uv = vec2(1, 1);
+    gl_Position = pvMatrix * vec4(pos4, 0, 1.0);
+    EmitVertex();
+
+    EndPrimitive();
+}

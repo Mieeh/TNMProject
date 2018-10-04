@@ -1,0 +1,19 @@
+#version 330 
+
+in Fragment{
+	vec4 color;
+	vec2 uv;
+} fragment;
+
+uniform sampler2D texture_sampler;
+uniform int texture_mode = 0;
+
+void main()
+{
+    if(texture_mode == 0) {
+        gl_FragColor = fragment.color;
+    }
+    else {
+        gl_FragColor = texture2D(texture_sampler, fragment.uv) * vec4(1,1,1,fragment.color.a);
+   }
+}

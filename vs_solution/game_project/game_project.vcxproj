@@ -129,16 +129,18 @@
     <ClCompile Include="engine\bear_game.cpp" />
     <ClCompile Include="engine\game_systems.cpp" />
     <ClCompile Include="engine\space.cpp" />
+    <ClCompile Include="game\game.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\bear_framework.h" />
     <ClInclude Include="engine\bear_game.h" />
-    <ClInclude Include="engine\constants.h" />
+    <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\entity.h" />
     <ClInclude Include="engine\game_systems.h" />
     <ClInclude Include="engine\space.h" />
-    <ClInclude Include="engine\typedefs.h" />
+    <ClInclude Include="game\game.h" />
+    <ClInclude Include="game\menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

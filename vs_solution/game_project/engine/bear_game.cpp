@@ -1,5 +1,5 @@
 #include"bear_game.h"
-#include"constants.h"
+#include"engine.h"
 
 #include"game_systems.h"
 
@@ -20,7 +20,7 @@ Engine::Engine(BearClass* bear_class)
 	}
 
 	// Init game systems
-	Graphics::Instance()->init();
+	GraphicsSystem::Instance()->init();
 
 	// Call "game" init
 	this->bear_class = bear_class;
@@ -34,8 +34,6 @@ Engine::~Engine()
 {
 	// Delete some framework related objects
 	delete game_window;
-
-	bear_class->exit();
 }
 
 void Engine::core()
@@ -52,13 +50,18 @@ void Engine::core()
 			bear_class->on_event(event);
 		}
 
-		// rendering
-		game_window->clear();
+		// call update
+		bear_class->update(1.0f); // Notes(david) add delta time for each frame!
 
-		Graphics::Instance()->begin();
+		// rendering
+		game_window->clear(UNLIT_BACKGROUND_COLOR);
+
+		GraphicsSystem::Instance()->begin();
 		bear_class->render(); // Here is where the "game" submits the primitives to be rendered by the rendering system
-		Graphics::Instance()->flush();
+		GraphicsSystem::Instance()->flush();
 
 		game_window->display();
 	}
+
+	bear_class->exit();
 }

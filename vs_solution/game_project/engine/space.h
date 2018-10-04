@@ -5,7 +5,7 @@
 
 #define MAX_ENTITIES 100
 
-#include"typedefs.h"
+#include"engine.h"
 #include"entity.h"
 
 struct Space {

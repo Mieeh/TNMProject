@@ -1,27 +1,37 @@
 #include "game_systems.h"
 
-void Graphics::init()
+using namespace bear;
+
+void GraphicsSystem::init()
 {
 	batch_renderer.init();
 }
 
-void Graphics::begin()
+void GraphicsSystem::begin()
 {
 	batch_renderer.begin();
 }
 
-void Graphics::draw(Entity & entity)
+void GraphicsSystem::draw(Entity & entity)
 {
 	batch_renderer.submit(&entity.renderable);
 }
 
-void Graphics::flush()
+void GraphicsSystem::flush()
 {
 	batch_renderer.flush();
 }
 
-Graphics * Graphics::Instance()
+GraphicsSystem * GraphicsSystem::Instance()
 {
-	static Graphics* instance = new Graphics();
+	static GraphicsSystem* instance = new GraphicsSystem();
+	return instance;
+}
+
+// State System
+
+StateSystem * StateSystem::Instance()
+{
+	static auto* instance = new StateSystem();
 	return instance;
 }

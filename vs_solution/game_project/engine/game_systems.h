@@ -4,12 +4,15 @@
 
 #include"entity.h"
 
+#include"engine.h"
+
 /*
 Master file for all game systems :
 - rendering
+- game state keeping
 */
 
-class Graphics {
+class GraphicsSystem {
 private:
 	bear::graphics::BatchRenderer batch_renderer;
 
@@ -21,7 +24,18 @@ public:
 
 	// Singleton, ignore
 private:
-	Graphics() { }
+	GraphicsSystem() { }
 public:
-	static Graphics* Instance();
+	static GraphicsSystem* Instance();
+};
+
+class StateSystem {
+public:
+	GameState state;
+
+	// Singleton, ignore
+private:
+	StateSystem() { }
+public:
+	static StateSystem* Instance();
 };

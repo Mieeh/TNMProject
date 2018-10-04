@@ -1,0 +1,12 @@
+#version 330
+
+in vec2 UV;
+out vec4 outColor;
+uniform sampler2D texFramebuffer;
+
+void main()
+{
+    vec4 texColor = texture(texFramebuffer, UV);
+
+    gl_FragColor = texColor;
+}
