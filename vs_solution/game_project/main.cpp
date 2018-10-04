@@ -6,11 +6,11 @@
 
 using namespace bear;
 
-struct Game :BearClass
+struct Game : BearClass
 {
 	Engine* game; // Engine object
 	Space space;
-	Entity* bitch;
+	Entity *bitch;
 
 	Game() : space()
 	{		
@@ -27,7 +27,7 @@ struct Game :BearClass
 	}
 
 	void update(float dt) override {
-
+		
 	}
 
 	void render() override {
