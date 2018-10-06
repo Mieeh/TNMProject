@@ -138,9 +138,11 @@
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\entity.h" />
     <ClInclude Include="engine\game_systems.h" />
+    <ClInclude Include="engine\level\level_interface.h" />
     <ClInclude Include="engine\space.h" />
     <ClInclude Include="game\game.h" />
-    <ClInclude Include="game\menu.h" />
+    <ClInclude Include="game\levels\level1.h" />
+    <ClInclude Include="game\levels\menu_level.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

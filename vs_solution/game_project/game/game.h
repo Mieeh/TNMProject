@@ -6,18 +6,14 @@
 #include"../engine/bear_game.h"
 #include"../engine/game_systems.h"
 
-#include"menu.h"
-
 using namespace bear;
 
 struct Game : BearClass
 {
 	Engine* game; // Engine object
 
-	Menu *menu; // Menu object
-	
-	// System pointers
-	StateSystem *state_system = StateSystem::Instance();
+	// Singleton pointers
+	LevelManagerSingleton* level_manager = LevelManagerSingleton::Instance(); // Keeping track and managing the current level to play!
 
 	Game()
 	{

@@ -20,7 +20,7 @@ Engine::Engine(BearClass* bear_class)
 	}
 
 	// Init game systems
-	GraphicsSystem::Instance()->init();
+	GraphicsSingleton::Instance()->init();
 
 	// Call "game" init
 	this->bear_class = bear_class;
@@ -56,9 +56,9 @@ void Engine::core()
 		// rendering
 		game_window->clear(UNLIT_BACKGROUND_COLOR);
 
-		GraphicsSystem::Instance()->begin();
+		GraphicsSingleton::Instance()->begin();
 		bear_class->render(); // Here is where the "game" submits the primitives to be rendered by the rendering system
-		GraphicsSystem::Instance()->flush();
+		GraphicsSingleton::Instance()->flush();
 
 		game_window->display();
 	}

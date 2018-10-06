@@ -2,36 +2,62 @@
 
 using namespace bear;
 
-void GraphicsSystem::init()
+void GraphicsSingleton::init()
 {
 	batch_renderer.init();
 }
 
-void GraphicsSystem::begin()
+void GraphicsSingleton::begin()
 {
 	batch_renderer.begin();
 }
 
-void GraphicsSystem::draw(Entity & entity)
+void GraphicsSingleton::draw(Entity & entity)
 {
 	batch_renderer.submit(&entity.renderable);
 }
 
-void GraphicsSystem::flush()
+void GraphicsSingleton::flush()
 {
 	batch_renderer.flush();
 }
 
-GraphicsSystem * GraphicsSystem::Instance()
+GraphicsSingleton * GraphicsSingleton::Instance()
 {
-	static GraphicsSystem* instance = new GraphicsSystem();
+	static GraphicsSingleton* instance = new GraphicsSingleton();
 	return instance;
 }
 
-// State System
+// Level Manager
 
-StateSystem * StateSystem::Instance()
+void LevelManagerSingleton::registerLevel(const std::string & level_name, ILevel * level)
 {
-	static auto* instance = new StateSystem();
+	level_map.insert(std::pair<std::string, ILevel*>(level_name, level));
+}
+
+void LevelManagerSingleton::setCurrentLevel(const std::string & level_name)
+{
+	current_level = level_map[level_name];
+	current_level->init();
+}
+
+void LevelManagerSingleton::update_current_level(float dt)
+{
+	current_level->update(dt);
+}
+
+void LevelManagerSingleton::on_event_current_level(Event & event)
+{
+	current_level->on_event(event);
+}
+
+void LevelManagerSingleton::render_current_level()
+{
+	current_level->render();
+}
+
+LevelManagerSingleton * LevelManagerSingleton::Instance()
+{
+	static auto* instance = new LevelManagerSingleton();
 	return instance;
 }

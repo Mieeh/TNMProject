@@ -1,18 +1,44 @@
 #pragma once
 
 #include<graphics/renderers/batch_renderer.h>
+#include<window/event.h>
+
+#include<map>
+#include<string>
 
 #include"entity.h"
-
+#include"level/level_interface.h"
 #include"engine.h"
 
 /*
 Master file for all game systems :
 - rendering
+- level managing
 - game state keeping
 */
 
-class GraphicsSystem {
+class LevelManagerSingleton {
+
+private:
+	ILevel* current_level;
+	std::map<std::string, ILevel*> level_map;
+
+
+public:
+	void registerLevel(const std::string& level_name, ILevel* level);
+	void setCurrentLevel(const std::string& level_name);
+	void update_current_level(float dt);
+	void on_event_current_level(Event& event);
+	void render_current_level();
+
+	// Singleton, ignore
+private:
+	LevelManagerSingleton() { }
+public:
+	static LevelManagerSingleton* Instance();
+};
+
+class GraphicsSingleton {
 private:
 	bear::graphics::BatchRenderer batch_renderer;
 
@@ -24,18 +50,7 @@ public:
 
 	// Singleton, ignore
 private:
-	GraphicsSystem() { }
+	GraphicsSingleton() { }
 public:
-	static GraphicsSystem* Instance();
-};
-
-class StateSystem {
-public:
-	GameState state;
-
-	// Singleton, ignore
-private:
-	StateSystem() { }
-public:
-	static StateSystem* Instance();
+	static GraphicsSingleton* Instance();
 };
