@@ -2,9 +2,9 @@
 
 #include<iostream>
 
-#include"../engine/engine.h"
-#include"../engine/bear_game.h"
-#include"../engine/game_systems.h"
+#include"../engine/include/engine.h"
+#include"../engine/include/bear_game.h"
+#include"../engine/include/game_systems.h"
 
 using namespace bear;
 

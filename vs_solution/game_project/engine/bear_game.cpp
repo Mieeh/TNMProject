@@ -1,9 +1,15 @@
-#include"bear_game.h"
-#include"engine.h"
+#include"include/bear_game.h"
+#include"include/engine.h"
 
-#include"game_systems.h"
+#include"include/game_systems.h"
 
 #include<graphics/graphics.h>
+#include<memory\resource_manager.h>
+#include<core\file_utility.h>
+
+#include<filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 using namespace bear;
 using namespace bear::window;
@@ -18,6 +24,9 @@ Engine::Engine(BearClass* bear_class)
 	if (!bear::graphics::Graphics::init(WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		std::cout << "ERROR: Failed to init BEAR-FRAMEWORK graphics!" << std::endl;
 	}
+
+	// Load resources
+	this->loadResources();
 
 	// Init game systems
 	GraphicsSingleton::Instance()->init();
@@ -34,6 +43,32 @@ Engine::~Engine()
 {
 	// Delete some framework related objects
 	delete game_window;
+}
+
+void Engine::loadResources()
+{
+	static bool call_flag = false;
+	if (call_flag) {
+		std::cout << "EREOR: Trying to load game resources twice or more! Not good!\n";
+	}
+
+	// Loop through each .png file int the /resources folder and register the texture with filename as name
+	std::vector<std::string> paths;
+	// 1. Get all .png paths
+	for (auto &path : fs::directory_iterator(RESOURCES_RELATIVE_PATH)) {
+		std::string p = path.path().string();
+		if (core::get_file_suffix(p) == ".png") {
+			paths.push_back(p);
+		}
+	}
+	for (auto &path : paths) {
+		unsigned int i = path.find("\\"); // Name start ]
+		unsigned int j = path.find("."); // Name end [
+		std::string file_name = path.substr(i+1, (j-i)-1); 
+		ResourceManager::Instance()->CreateTexture(file_name, path, graphics::image_format::RGBA);
+	}
+
+	call_flag = true;
 }
 
 void Engine::core()

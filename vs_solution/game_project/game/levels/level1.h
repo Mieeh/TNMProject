@@ -1,12 +1,18 @@
 #pragma once
 
-#include"../../engine/level/level_interface.h"
-#include"../../engine/game_systems.h"
+#include"../../engine/include/level_interface.h"
+#include"../../engine/include/game_systems.h"
+
+#include"level_utility.h"
 
 struct Level1 : ILevel {
 
-	void init() override {
+	std::vector<Entity> entity_list;
+	Entity lil;
 
+	void init() override {
+		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list);
+		std::cout << "glitter" << std::endl;
 	}
 
 	void on_event(Event& event) {
@@ -22,7 +28,7 @@ struct Level1 : ILevel {
 	}
 
 	void render() override {
-
+		GraphicsSingleton::Instance()->draw(entity_list);
 	}
 
 };

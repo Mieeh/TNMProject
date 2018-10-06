@@ -1,4 +1,4 @@
-#include "game_systems.h"
+#include "include/game_systems.h"
 
 using namespace bear;
 
@@ -10,6 +10,13 @@ void GraphicsSingleton::init()
 void GraphicsSingleton::begin()
 {
 	batch_renderer.begin();
+}
+
+void GraphicsSingleton::draw(std::vector<Entity>& entity_list)
+{
+	for (auto &entity : entity_list) {
+		batch_renderer.submit(&entity.renderable);
+	}
 }
 
 void GraphicsSingleton::draw(Entity & entity)
