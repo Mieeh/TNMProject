@@ -28,6 +28,18 @@ static void levelUtility_ConvertToEntities(level_list& _level_list, std::vector<
 				case FLOOR1:
 					entity.renderable.m_TextureName = "floor";
 					break;
+				case WALL_LEFT:
+					entity.renderable.m_TextureName = "wallLeft";
+					break;
+				case WALL_RIGHT:
+					entity.renderable.m_TextureName = "wallRight";
+					break;
+				case WALL_TOP:
+					entity.renderable.m_TextureName = "wallTop";
+					break;
+				case WALL_BOTTOM:
+					entity.renderable.m_TextureName = "wallBottom";
+					break;
 				case WALL_BOTTOM_LEFT_CORNER:
 					entity.renderable.m_TextureName = "bottomLeftCorner";
 					break;

@@ -4,12 +4,10 @@
 
 struct MenuLevel : ILevel {
 
-	Entity someBitch;
 
 	void init() override
 	{
-		someBitch.renderable.m_Transform.m_Position = core::Vector2f(200, 200);
-		someBitch.renderable.setTextureNameWData("topRightCorner");
+
 	}
 
 	void on_event(Event& event) override
@@ -27,6 +25,6 @@ struct MenuLevel : ILevel {
 
 	void render() override
 	{
-		GraphicsSingleton::Instance()->draw(someBitch);
+
 	}
 };

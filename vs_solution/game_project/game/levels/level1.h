@@ -8,11 +8,9 @@
 struct Level1 : ILevel {
 
 	std::vector<Entity> entity_list;
-	Entity lil;
 
 	void init() override {
-		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list);
-		std::cout << "glitter" << std::endl;
+		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list); // Get the level entities here
 	}
 
 	void on_event(Event& event) {
@@ -28,7 +26,7 @@ struct Level1 : ILevel {
 	}
 
 	void render() override {
-		GraphicsSingleton::Instance()->draw(entity_list);
+		GraphicsSingleton::Instance()->draw(entity_list); // Render all the entities here
 	}
 
 };
