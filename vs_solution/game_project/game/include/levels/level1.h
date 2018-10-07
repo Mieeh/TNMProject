@@ -15,11 +15,7 @@ struct Level1 : ILevel {
 	}
 
 	void on_event(Event& event) {
-		if (event.type == EventType::KeyPressed) {
-			if (event.key == Key::A) {
-				LevelManagerSingleton::Instance()->setCurrentLevel("menu");
-			}
-		}
+
 	}
 
 	void update(float dt) override {
@@ -28,6 +24,11 @@ struct Level1 : ILevel {
 
 	void render() override {
 		GraphicsSingleton::Instance()->draw(entity_list); // Render all the entities here
+	}
+
+	level_list& get_level_list()
+	{
+		return TEST_LEVEL;
 	}
 
 };

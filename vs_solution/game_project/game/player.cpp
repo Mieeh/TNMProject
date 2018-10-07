@@ -4,6 +4,10 @@
 
 #include"../engine/include/game_systems.h"
 
+#include<window/event.h>
+#include<window/GLFW_event.h>
+using namespace bear;
+
 Player* Player::instance = nullptr;
 
 Player::Player()
@@ -14,16 +18,32 @@ Player::Player()
 
 void Player::on_event(Event & event)
 {
+	if (event.type == EventType::KeyPressed) {
+		if (event.key == Key::D)
+			player_move({ 1, 0 });
+		else if (event.key == Key::A)
+			player_move({ -1, 0 });
+		else if (event.key == Key::S)
+			player_move({ 0, 1 });
+		else if (event.key == Key::W)
+			player_move({ 0, -1 });
+	}
 }
 
 void Player::update(float dt)
 {
+	entity.renderable.m_Transform.m_Position.moveTowards(core::Vector2f(position.x, position.y)*TILE_SIZE, 10.0f*dt);
 }
 
 void Player::render()
 {
-	entity.renderable.m_Transform.m_Position = core::Vector2f(position.x, position.y)*TILE_SIZE;
 	GraphicsSingleton::Instance()->draw(entity);
+}
+
+void Player::player_move(const core::Vector2i & walk_direction)
+{
+	core::Vector2i newPos = position + walk_direction;
+	position = newPos;
 }
 
 Player* Player::get()

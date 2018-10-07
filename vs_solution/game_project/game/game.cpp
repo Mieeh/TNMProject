@@ -1,14 +1,11 @@
 #include"include/game.h"
 
-#include"include/levels/menu_level.h"
 #include"include/levels/level1.h"
 
 void Game::init()
 {
-	level_manager->registerLevel("menu", new MenuLevel);
 	level_manager->registerLevel("level1", new Level1);
-
-	level_manager->setCurrentLevel("menu");
+	level_manager->setCurrentLevel("level1");
 }
 
 void Game::update(float dt) {

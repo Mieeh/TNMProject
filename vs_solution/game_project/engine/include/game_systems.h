@@ -19,7 +19,7 @@ Master file for all game systems :
 
 class LevelManagerSingleton {
 
-private:
+public:
 	ILevel* current_level;
 	std::map<std::string, ILevel*> level_map;
 

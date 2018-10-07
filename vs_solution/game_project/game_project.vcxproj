@@ -143,7 +143,6 @@
     <ClInclude Include="game\include\game.h" />
     <ClInclude Include="game\include\levels\level1.h" />
     <ClInclude Include="game\include\levels\level_utility.h" />
-    <ClInclude Include="game\include\levels\menu_level.h" />
     <ClInclude Include="game\include\player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
