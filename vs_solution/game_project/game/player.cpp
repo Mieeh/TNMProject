@@ -33,6 +33,19 @@ void Player::on_event(Event & event)
 void Player::update(float dt)
 {
 	entity.renderable.m_Transform.m_Position.moveTowards(core::Vector2f(position.x, position.y)*TILE_SIZE, 10.0f*dt);
+	//entity.renderable.m_Transform.m_Position = core::Vector2f(position.x*TILE_SIZE, position.y*TILE_SIZE);
+	
+	static core::Vector2f v1(0, 0);
+	static core::Vector2f v2(100, 100);
+	v1.moveTowards(v2, 5 * dt);
+	std::cout << v1 << std::endl;
+
+	//core::Vector2i integerPosition = core::Vector2i((int)entity.renderable.m_Transform.m_Position.x, (int)entity.renderable.m_Transform.m_Position.y);
+	//std::cout << "Entity position: " << integerPosition << std::endl;
+	//std::cout << "Position: " << position*TILE_SIZE << std::endl;
+	//if (integerPosition.x == position.x*TILE_SIZE && integerPosition.y == position.y*TILE_SIZE) {
+	//	std::cout << "on the tile!" << std::endl;
+	//}
 }
 
 void Player::render()
@@ -44,6 +57,7 @@ void Player::player_move(const core::Vector2i & walk_direction)
 {
 	core::Vector2i newPos = position + walk_direction;
 	position = newPos;
+	
 }
 
 Player* Player::get()

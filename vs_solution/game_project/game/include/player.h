@@ -8,12 +8,18 @@
 
 using namespace bear;
 
+enum PlayerStates {
+	IDLE,
+	IN_TRANSIT
+};
+
 class Player {
 
 private:
 	// Player members 
-	LevelManagerSingleton *levelManagerSingleton = LevelManagerSingleton::Instance();
+	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 	Entity entity;
+	PlayerStates player_state = PlayerStates::IDLE;
 
 public:
 	core::Vector2i position;
