@@ -1,7 +1,7 @@
 #pragma once
 
-#include"../../engine/include/level_interface.h"
-#include"../../engine/include/game_systems.h"
+#include"../../../engine/include/level_interface.h"
+#include"../../../engine/include/game_systems.h"
 
 #include"level_utility.h"
 
@@ -11,6 +11,7 @@ struct Level1 : ILevel {
 
 	void init() override {
 		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list); // Get the level entities here
+		Player::get()->position = core::Vector2i(1, 1);
 	}
 
 	void on_event(Event& event) {

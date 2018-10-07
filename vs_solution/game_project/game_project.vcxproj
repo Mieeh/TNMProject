@@ -129,6 +129,7 @@
     <ClCompile Include="engine\bear_game.cpp" />
     <ClCompile Include="engine\game_systems.cpp" />
     <ClCompile Include="game\game.cpp" />
+    <ClCompile Include="game\player.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -138,11 +139,12 @@
     <ClInclude Include="engine\include\entity.h" />
     <ClInclude Include="engine\include\game_systems.h" />
     <ClInclude Include="engine\include\level_interface.h" />
-    <ClInclude Include="game\constants.h" />
-    <ClInclude Include="game\game.h" />
-    <ClInclude Include="game\levels\level1.h" />
-    <ClInclude Include="game\levels\level_utility.h" />
-    <ClInclude Include="game\levels\menu_level.h" />
+    <ClInclude Include="game\include\constants.h" />
+    <ClInclude Include="game\include\game.h" />
+    <ClInclude Include="game\include\levels\level1.h" />
+    <ClInclude Include="game\include\levels\level_utility.h" />
+    <ClInclude Include="game\include\levels\menu_level.h" />
+    <ClInclude Include="game\include\player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

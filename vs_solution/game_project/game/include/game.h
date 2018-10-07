@@ -2,9 +2,11 @@
 
 #include<iostream>
 
-#include"../engine/include/engine.h"
-#include"../engine/include/bear_game.h"
-#include"../engine/include/game_systems.h"
+#include"../../engine/include/engine.h"
+#include"../../engine/include/bear_game.h"
+#include"../../engine/include/game_systems.h"
+
+#include"player.h"
 
 using namespace bear;
 
@@ -14,6 +16,7 @@ struct Game : BearClass
 
 	// Singleton pointers
 	LevelManagerSingleton* level_manager = LevelManagerSingleton::Instance(); // Keeping track and managing the current level to play!
+	Player* player = Player::get();
 
 	Game()
 	{

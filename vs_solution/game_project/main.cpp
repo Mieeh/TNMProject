@@ -1,7 +1,4 @@
-#include"game\game.h"
-
-#include<filesystem>
-namespace fs = std::experimental::filesystem;
+#include"game/include/game.h"
 
 int main()
 {
