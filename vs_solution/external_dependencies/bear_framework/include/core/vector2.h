@@ -80,9 +80,9 @@ namespace bear { namespace core {
 
 	static void moveTowards2i(Vector2i& v1, Vector2i v2, float speed) {
 		Vector2f dir_norm = core::Vector2f(v2.x - v1.x, v2.y - v1.y).normalize();
-		core::Vector2f newPos = (core::Vector2f(v1.x, v1.y) + dir_norm * speed);
-		core::Vector2i newPosi = core::Vector2i((int)newPos.x, (int)newPos.y);
-		v1 = newPosi;
+		core::Vector2i newPos = (core::Vector2i(v1.x, v1.y) + core::Vector2i(dir_norm.x * speed, dir_norm.y * speed));
+
+		v1 = newPos;
 	}
 }
 }
