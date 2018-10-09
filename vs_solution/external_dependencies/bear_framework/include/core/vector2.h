@@ -24,7 +24,7 @@ namespace bear { namespace core {
 			y = y * factor;
 		}
 		void moveTowards(core::Vector2<T> target, float speed) {
-			if (Vector2<T>::distance(*this, target) > 0.01f) {
+			if (Vector2<T>::distance(*this, target) > 1.0f) {
 				Vector2<T> dir = Vector2<T>(target.x - this->x, target.y - this->y);
 				Vector2<T> norm_dir = dir.normalize();
 				*this = (*this) + (norm_dir*speed);
@@ -77,5 +77,12 @@ namespace bear { namespace core {
 	typedef Vector2<float> Vector2f;
 	typedef Vector2<unsigned int> Vector2ui;
 	typedef Vector2<double> Vector2d;
+
+	static void moveTowards2i(Vector2i& v1, Vector2i v2, float speed) {
+		Vector2f dir_norm = core::Vector2f(v2.x - v1.x, v2.y - v1.y).normalize();
+		core::Vector2f newPos = (core::Vector2f(v1.x, v1.y) + dir_norm * speed);
+		core::Vector2i newPosi = core::Vector2i((int)newPos.x, (int)newPos.y);
+		v1 = newPosi;
+	}
 }
 }

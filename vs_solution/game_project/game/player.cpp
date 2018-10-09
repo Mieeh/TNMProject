@@ -33,12 +33,11 @@ void Player::on_event(Event & event)
 void Player::update(float dt)
 {
 	entity.renderable.m_Transform.m_Position.moveTowards(core::Vector2f(position.x, position.y)*TILE_SIZE, 10.0f*dt);
-	//entity.renderable.m_Transform.m_Position = core::Vector2f(position.x*TILE_SIZE, position.y*TILE_SIZE);
 	
-	static core::Vector2f v1(0, 0);
-	static core::Vector2f v2(100, 100);
-	v1.moveTowards(v2, 5 * dt);
-	std::cout << v1 << std::endl;
+	//static core::Vector2i v1(1, 1);
+	//static core::Vector2i v2(100, 100);
+	//core::moveTowards2i(v1, v2, 1.5f*dt);
+	//std::cout << v1 << std::endl;
 
 	//core::Vector2i integerPosition = core::Vector2i((int)entity.renderable.m_Transform.m_Position.x, (int)entity.renderable.m_Transform.m_Position.y);
 	//std::cout << "Entity position: " << integerPosition << std::endl;
