@@ -31,9 +31,8 @@ void Player::on_event(Event & event)
 }
 
 void Player::update(float dt)
-{
-	core::Vector2i goal_pos = core::Vector2i(position.x, position.y)*TILE_SIZE;
-	std::cout << goal_pos << std::endl;
+{	
+	entity.renderable.m_Transform.m_Position = (core::Vector2f)world_position;	
 }
 
 void Player::render()
@@ -43,9 +42,8 @@ void Player::render()
 
 void Player::player_move(const core::Vector2i & walk_direction)
 {
-	core::Vector2i newPos = position + walk_direction;
-	position = newPos;
-	
+	tile_position += walk_direction;
+	world_position = tile_position * TILE_SIZE;
 }
 
 Player* Player::get()

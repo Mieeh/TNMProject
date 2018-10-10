@@ -70,6 +70,10 @@ namespace bear { namespace core {
 			this->y *= right.y;
 			return *this;
 		}
+
+		// Conversions
+		explicit operator Vector2<int>() { return Vector2<int>(this->x, this->y); }
+		explicit operator Vector2<float>() { return Vector2<float>(this->x, this->y); }
 	};
 	
 	// Define some default templates

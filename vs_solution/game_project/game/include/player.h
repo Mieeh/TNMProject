@@ -22,11 +22,14 @@ private:
 	PlayerStates player_state = PlayerStates::IDLE;
 
 public:
-	core::Vector2i position;
+	core::Vector2i tile_position;
+	core::Vector2i world_position;
 
 	void on_event(Event& event);
 	void update(float dt);
 	void render();
+
+	void set_position(const core::Vector2i& new_position);
 	void player_move(const core::Vector2i& walk_direction);
 
 public:
