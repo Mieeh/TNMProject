@@ -73,7 +73,14 @@ void Engine::loadResources()
 
 void Engine::core()
 {
+	core::Clock dt_clock;
+	dt_clock.start();
+	float dt = 1.0f;
+
 	while (game_window->isOpen()) {
+		
+		dt_clock.reset(); // Reset the clock for this frame
+
 		// Event polling
 		for (Event event : game_window->getRegisteredEvents()) {
 
@@ -86,7 +93,7 @@ void Engine::core()
 		}
 
 		// call update
-		bear_class->update(1.0f); // Notes(david) add delta time for each frame!
+		bear_class->update(dt); 
 
 		// rendering
 		game_window->clear(UNLIT_BACKGROUND_COLOR);
@@ -96,6 +103,8 @@ void Engine::core()
 		GraphicsSingleton::Instance()->flush();
 
 		game_window->display();
+
+		dt = dt_clock.getTicks(); // Get the number of ticks for this frame
 	}
 
 	bear_class->exit();

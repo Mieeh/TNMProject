@@ -11,11 +11,11 @@ struct Level1 : ILevel {
 
 	void init() override {
 		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list); // Get the level entities here
-		Player::get()->tile_position = { 1, 1 };
+		Player::get()->set_position(core::Vector2i(1, 1));
 	}
 
 	void on_event(Event& event) {
-
+		
 	}
 
 	void update(float dt) override {

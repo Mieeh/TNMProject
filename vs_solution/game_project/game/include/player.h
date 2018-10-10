@@ -17,13 +17,16 @@ class Player {
 
 private:
 	// Player members 
+	const float move_speed = 0.2f;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
+	
 	Entity entity;
+	
 	PlayerStates player_state = PlayerStates::IDLE;
+	core::Vector2i tile_position;
+	core::Vector2f world_position;
 
 public:
-	core::Vector2i tile_position;
-	core::Vector2i world_position;
 
 	void on_event(Event& event);
 	void update(float dt);

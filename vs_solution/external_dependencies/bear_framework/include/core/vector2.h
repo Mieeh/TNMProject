@@ -40,6 +40,10 @@ namespace bear { namespace core {
 			os << "(" << right.x << ", " << right.y << ")";
 			return os;
 		}
+		// == Operator
+		bool operator==(const Vector2<T> right) {
+			return this->x == right.x && this->y == right.y;
+		}
 		Vector2<T> operator-(const Vector2<T> right) {
 			return Vector2<T>(this->x - right.x, this->y - right.y);
 		}
@@ -72,8 +76,8 @@ namespace bear { namespace core {
 		}
 
 		// Conversions
-		explicit operator Vector2<int>() { return Vector2<int>(this->x, this->y); }
-		explicit operator Vector2<float>() { return Vector2<float>(this->x, this->y); }
+		explicit operator Vector2<int>() { return Vector2<int>((int)this->x, (int)this->y); }
+		explicit operator Vector2<float>() { return Vector2<float>((float)this->x, (float)this->y); }
 	};
 	
 	// Define some default templates
@@ -86,7 +90,8 @@ namespace bear { namespace core {
 		Vector2f dir_norm = core::Vector2f(v2.x - v1.x, v2.y - v1.y).normalize();
 		core::Vector2i newPos = (core::Vector2i(v1.x, v1.y) + core::Vector2i(dir_norm.x * speed, dir_norm.y * speed));
 
-		v1 = newPos;
+		if(!(v1 == v2))
+			v1 = newPos;
 	}
 }
 }
