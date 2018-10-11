@@ -11,7 +11,6 @@ struct Level1 : ILevel {
 
 	void init() override {
 		levelUtility_ConvertToEntities(TEST_LEVEL, entity_list); // Get the level entities here
-		Player::get()->set_position(core::Vector2i(1, 0));
 	}
 
 	void on_event(Event& event) {

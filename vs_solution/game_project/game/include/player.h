@@ -14,11 +14,11 @@ enum PlayerStates {
 };
 
 enum PlayerMoveDirection {
-	NO, // no
-	RIGHT, // (1, 0)
-	LEFT,  // (-1, 0)
-	DOWN,  // (0, 1)
-	UP     // (0, -1)
+	NO      = -1, // no
+	RIGHT   = 0,  // (1, 0)
+	LEFT    = 1,  // (-1, 0)
+	DOWN    = 2,  // (0, 1)
+	UP      = 3   // (0, -1)
 };
 
 class Player {
@@ -36,10 +36,8 @@ private:
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
 
-	const core::Vector2i RIGHT = core::Vector2i(1, 0);
-	const core::Vector2i LEFT = core::Vector2i(-1, 0);
-	const core::Vector2i DOWN = core::Vector2i(0, 1);
-	const core::Vector2i UP = core::Vector2i(0, -1);
+	// Move directions, used for translating the enum into a direction!
+	core::Vector2i move_directions[4] = { core::Vector2i(1,0), core::Vector2i(-1, 0), core::Vector2i(0, 1), core::Vector2i(0, -1) };
 
 public:
 
@@ -47,7 +45,7 @@ public:
 	void update(float dt);
 	void render();
 
-	void move_player(const core::Vector2i direction);
+	void move_player(int move_direction_enum);
 
 public:
 	static Player* get();

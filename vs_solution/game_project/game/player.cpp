@@ -21,14 +21,17 @@ Player::Player()
 void Player::on_event(Event & event)
 {
 	if (event.type == EventType::KeyPressed) {
-		if (event.key == Key::D)
-			move_right();
-		else if (event.key == Key::A)
-			move_left();
-		else if (event.key == Key::S)
-			move_down();
-		else if (event.key == Key::W)
-			move_up();
+		// Make sure the player is idle before we move/perform something!
+		if (player_state == PlayerStates::IDLE) {
+			if (event.key == Key::D)
+				move_player(PlayerMoveDirection::RIGHT);
+			else if (event.key == Key::A)
+				move_player(PlayerMoveDirection::LEFT);
+			else if (event.key == Key::S)
+				move_player(PlayerMoveDirection::DOWN);
+			else if (event.key == Key::W)
+				move_player(PlayerMoveDirection::UP);
+		}
 	}
 }
 
@@ -42,20 +45,37 @@ void Player::update(float dt)
 	case PlayerStates::IN_TRANSIT:
 		switch (move_direction) {
 		case PlayerMoveDirection::RIGHT: 
-			std::cout << "move to the right" << std::endl;
-			// Move to the right!			
+			// Move towards the goal position
+			entity.renderable.m_Transform.m_Position.x += move_speed * dt;
+			// Make sure we go to an idle state when we've reached our new position!
+			if (entity.renderable.m_Transform.m_Position.x >= world_position.x) {
+				player_state = PlayerStates::IDLE;
+				entity.renderable.m_Transform.m_Position = world_position;
+			}
 			break;
 		case PlayerMoveDirection::LEFT: 
-			std::cout << "move to the left" << std::endl;
-			// Move to the left
+			entity.renderable.m_Transform.m_Position.x += -move_speed * dt;
+			// Make sure we go to an idle state when we've reached our new position!
+			if (entity.renderable.m_Transform.m_Position.x <= world_position.x) {
+				player_state = PlayerStates::IDLE;
+				entity.renderable.m_Transform.m_Position = world_position;
+			}
 			break;
 		case PlayerMoveDirection::DOWN: 
-			std::cout << "move down" << std::endl;
-			// Move down
+			entity.renderable.m_Transform.m_Position.y += move_speed * dt;
+			// Make sure we go to an idle state when we've reached our new position
+			if (entity.renderable.m_Transform.m_Position.y >= world_position.y) {
+				player_state = PlayerStates::IDLE;
+				entity.renderable.m_Transform.m_Position = world_position;
+			}
 			break;
 		case PlayerMoveDirection::UP: 
-			std::cout << "move up" << std::endl;
-			// Move up
+			entity.renderable.m_Transform.m_Position.y += -move_speed * dt;
+			// Make sure we go to an idle state when we've reached our new position
+			if (entity.renderable.m_Transform.m_Position.y <= world_position.y) {
+				player_state = PlayerStates::IDLE;
+				entity.renderable.m_Transform.m_Position = world_position;
+			}
 			break;
 		}
 		break;
@@ -67,8 +87,15 @@ void Player::render()
 	GraphicsSingleton::Instance()->draw(entity);
 }
 
-void Player::move_player(const core::Vector2i direction)
+void Player::move_player(int move_direction_enum)
 {
+	// Set the player to be in transit!
+	player_state = PlayerStates::IN_TRANSIT;
+	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+	core::Vector2i dir = move_directions[move_direction_enum];
+	tile_position += dir;
+	world_position = (core::Vector2f)tile_position * TILE_SIZE;
 }
 
 Player* Player::get()
