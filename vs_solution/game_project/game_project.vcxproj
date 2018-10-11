@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="engine\include\bear_framework.h" />
     <ClInclude Include="engine\include\bear_game.h" />
+    <ClInclude Include="engine\include\enemy.h" />
     <ClInclude Include="engine\include\engine.h" />
     <ClInclude Include="engine\include\entity.h" />
     <ClInclude Include="engine\include\game_systems.h" />

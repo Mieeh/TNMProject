@@ -45,6 +45,18 @@ void Player::update(float dt)
 	case PlayerStates::IN_TRANSIT:
 		move_player_state_control(move_direction, dt);
 		break;
+	case PlayerStates::INTRO:
+		// Do intro logic
+		if (entity.renderable.m_Transform.m_Position.y < world_position.y) {
+			entity.renderable.m_Transform.m_Position.y += move_speed*0.25f*dt;
+			entity.renderable.m_Color.a += 0.0015f*dt;
+		}
+		else {
+			player_state = PlayerStates::IDLE;
+			entity.renderable.m_Transform.m_Position = world_position;
+			entity.renderable.m_Color.a = 1.0f;
+		}
+		break;
 	}
 }		
 
@@ -57,7 +69,7 @@ void Player::move_player(int move_direction_enum)
 {
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
 	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_list().at(new_tile_position.y).at(new_tile_position.x);
-
+					
 	// Notes(David): it's possible we have more than one floor so just seeing if it's FLOOR1 might not be enough to see if we're moving to a floor!
 	if (new_tile_value == FLOOR1) {
 		// Set the player to be in transit!
@@ -123,6 +135,17 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 void Player::idle_player_state_control()
 {
 	// Do idle stuff
+}
+
+void Player::play_intro_at(const core::Vector2i position)
+{
+	player_state = PlayerStates::INTRO;
+	tile_position = position;
+	world_position = (core::Vector2f)tile_position * TILE_SIZE;
+	static const int intro_offset = -100;
+	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
+
+	entity.renderable.m_Color.a = 0.0f;
 }
 
 Player* Player::get()
