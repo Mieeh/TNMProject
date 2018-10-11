@@ -13,18 +13,33 @@ enum PlayerStates {
 	IN_TRANSIT
 };
 
+enum PlayerMoveDirection {
+	NO, // no
+	RIGHT, // (1, 0)
+	LEFT,  // (-1, 0)
+	DOWN,  // (0, 1)
+	UP     // (0, -1)
+};
+
 class Player {
 
 private:
 	// Player members 
-	const float move_speed = 0.2f;
+	const float move_speed = 0.5f;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 	
 	Entity entity;
 	
 	PlayerStates player_state = PlayerStates::IDLE;
-	core::Vector2i tile_position;
+	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
+
+	core::Vector2i tile_position; 
 	core::Vector2f world_position;
+
+	const core::Vector2i RIGHT = core::Vector2i(1, 0);
+	const core::Vector2i LEFT = core::Vector2i(-1, 0);
+	const core::Vector2i DOWN = core::Vector2i(0, 1);
+	const core::Vector2i UP = core::Vector2i(0, -1);
 
 public:
 
@@ -32,8 +47,7 @@ public:
 	void update(float dt);
 	void render();
 
-	void set_position(const core::Vector2i& new_position);
-	void player_move(const core::Vector2i& walk_direction);
+	void move_player(const core::Vector2i direction);
 
 public:
 	static Player* get();

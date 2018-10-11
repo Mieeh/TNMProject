@@ -22,30 +22,44 @@ void Player::on_event(Event & event)
 {
 	if (event.type == EventType::KeyPressed) {
 		if (event.key == Key::D)
-			player_move({ 1, 0 });
+			move_right();
 		else if (event.key == Key::A)
-			player_move({ -1, 0 });
+			move_left();
 		else if (event.key == Key::S)
-			player_move({ 0, 1 });
+			move_down();
 		else if (event.key == Key::W)
-			player_move({ 0, -1 });
+			move_up();
 	}
 }
 
 void Player::update(float dt)
 {	
-	//core::Vector2f current_world_pos = entity.renderable.m_Transform.m_Position;	
-	
-	//float a = 0.1f;
-	//float b = 0.2f;
-
-	// Move towards target position
-#define EPSILON 0.8f
-	float delta = std::fabs((entity.renderable.m_Transform.m_Position.x - world_position.x));
-	if (delta < EPSILON) {
-		std::cout << "on tile ";
+	switch (player_state) {
+	case PlayerStates::IDLE:
+		// Do idle stuff
+		std::cout << "I am idle" << std::endl;
+		break;
+	case PlayerStates::IN_TRANSIT:
+		switch (move_direction) {
+		case PlayerMoveDirection::RIGHT: 
+			std::cout << "move to the right" << std::endl;
+			// Move to the right!			
+			break;
+		case PlayerMoveDirection::LEFT: 
+			std::cout << "move to the left" << std::endl;
+			// Move to the left
+			break;
+		case PlayerMoveDirection::DOWN: 
+			std::cout << "move down" << std::endl;
+			// Move down
+			break;
+		case PlayerMoveDirection::UP: 
+			std::cout << "move up" << std::endl;
+			// Move up
+			break;
+		}
+		break;
 	}
-	entity.renderable.m_Transform.m_Position.moveTowards(world_position, move_speed*dt);
 }		
 
 void Player::render()
@@ -53,16 +67,8 @@ void Player::render()
 	GraphicsSingleton::Instance()->draw(entity);
 }
 
-void Player::set_position(const core::Vector2i & new_position)
+void Player::move_player(const core::Vector2i direction)
 {
-	tile_position = new_position;
-	world_position = (core::Vector2f)tile_position*TILE_SIZE;
-}
-
-void Player::player_move(const core::Vector2i & walk_direction)
-{
-	tile_position += walk_direction;
-	world_position = (core::Vector2f)tile_position * TILE_SIZE;
 }
 
 Player* Player::get()

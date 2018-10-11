@@ -24,11 +24,9 @@ namespace bear { namespace core {
 			y = y * factor;
 		}
 		void moveTowards(core::Vector2<T> target, float speed) {
-			if (Vector2<T>::distance(*this, target) > 1.0f) {
 				Vector2<T> dir = Vector2<T>(target.x - this->x, target.y - this->y);
 				Vector2<T> norm_dir = dir.normalize();
 				*this = (*this) + (norm_dir*speed);
-			}
 		}
 
 		static T distance(Vector2<T> &a_V1, Vector2<T> &a_V2) {
