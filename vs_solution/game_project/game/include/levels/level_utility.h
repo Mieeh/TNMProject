@@ -3,13 +3,24 @@
 #include"../constants.h"
 
 #include<vector>
+#include<map>
+
 #include"../../../engine/include/entity.h"
 #include<core\vector2.h>
 
 using namespace bear;
 
+struct Item;
+struct IEnemy;
+
+// Structure for data that every level has // @PROTOTYPE
+struct LevelContent {
+	std::map<core::Vector2i, Item> items;
+	std::map<core::Vector2i, IEnemy> enemies;
+};
+
 // Used for simplifly the task of converting a list of integers to a list of entities that can be rendered 
-static void levelUtility_ConvertToEntities(level_list& _level_list, std::vector<Entity>& entity_list) {
+static void levelUtility_ConvertToTileEntities(level_list& _level_list, std::vector<Entity>& entity_list) {
 	for (int y = 0; y < _level_list.size(); y++) 
 	{ 
 		for (int x = 0; x < _level_list.at(y).size(); ++x) 

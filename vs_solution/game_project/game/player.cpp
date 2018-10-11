@@ -37,47 +37,13 @@ void Player::on_event(Event & event)
 
 void Player::update(float dt)
 {	
+	// What're we doing?
 	switch (player_state) {
 	case PlayerStates::IDLE:
-		// Do idle stuff
-		std::cout << "I am idle" << std::endl;
+		idle_player_state_control();
 		break;
 	case PlayerStates::IN_TRANSIT:
-		switch (move_direction) {
-		case PlayerMoveDirection::RIGHT: 
-			// Move towards the goal position
-			entity.renderable.m_Transform.m_Position.x += move_speed * dt;
-			// Make sure we go to an idle state when we've reached our new position!
-			if (entity.renderable.m_Transform.m_Position.x >= world_position.x) {
-				player_state = PlayerStates::IDLE;
-				entity.renderable.m_Transform.m_Position = world_position;
-			}
-			break;
-		case PlayerMoveDirection::LEFT: 
-			entity.renderable.m_Transform.m_Position.x += -move_speed * dt;
-			// Make sure we go to an idle state when we've reached our new position!
-			if (entity.renderable.m_Transform.m_Position.x <= world_position.x) {
-				player_state = PlayerStates::IDLE;
-				entity.renderable.m_Transform.m_Position = world_position;
-			}
-			break;
-		case PlayerMoveDirection::DOWN: 
-			entity.renderable.m_Transform.m_Position.y += move_speed * dt;
-			// Make sure we go to an idle state when we've reached our new position
-			if (entity.renderable.m_Transform.m_Position.y >= world_position.y) {
-				player_state = PlayerStates::IDLE;
-				entity.renderable.m_Transform.m_Position = world_position;
-			}
-			break;
-		case PlayerMoveDirection::UP: 
-			entity.renderable.m_Transform.m_Position.y += -move_speed * dt;
-			// Make sure we go to an idle state when we've reached our new position
-			if (entity.renderable.m_Transform.m_Position.y <= world_position.y) {
-				player_state = PlayerStates::IDLE;
-				entity.renderable.m_Transform.m_Position = world_position;
-			}
-			break;
-		}
+		move_player_state_control(move_direction, dt);
 		break;
 	}
 }		
@@ -89,13 +55,74 @@ void Player::render()
 
 void Player::move_player(int move_direction_enum)
 {
-	// Set the player to be in transit!
-	player_state = PlayerStates::IN_TRANSIT;
-	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
+	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_list().at(new_tile_position.y).at(new_tile_position.x);
 
-	core::Vector2i dir = move_directions[move_direction_enum];
-	tile_position += dir;
+	// Notes(David): it's possible we have more than one floor so just seeing if it's FLOOR1 might not be enough to see if we're moving to a floor!
+	if (new_tile_value == FLOOR1) {
+		// Set the player to be in transit!
+		player_state = PlayerStates::IN_TRANSIT;
+		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+		core::Vector2i dir = move_directions[move_direction_enum];
+		tile_position += dir;
+		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+
+		// Message the level we've moved
+		LevelManagerSingleton::Instance()->current_level->player_moved();
+	}
+}
+
+void Player::set_player_position(const core::Vector2i position)
+{
+	// Sets the player position (instantly no state logic)
+	tile_position = position;
 	world_position = (core::Vector2f)tile_position * TILE_SIZE;
+	entity.renderable.m_Transform.m_Position = world_position;
+}
+
+void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
+{
+	switch (dir) {
+	case PlayerMoveDirection::RIGHT:
+		// Move towards the goal position
+		entity.renderable.m_Transform.m_Position.x += move_speed * dt;
+		// Make sure we go to an idle state when we've reached our new position!
+		if (entity.renderable.m_Transform.m_Position.x >= world_position.x) {
+			player_state = PlayerStates::IDLE;
+			entity.renderable.m_Transform.m_Position = world_position;
+		}
+		break;
+	case PlayerMoveDirection::LEFT:
+		entity.renderable.m_Transform.m_Position.x += -move_speed * dt;
+		// Make sure we go to an idle state when we've reached our new position!
+		if (entity.renderable.m_Transform.m_Position.x <= world_position.x) {
+			player_state = PlayerStates::IDLE;
+			entity.renderable.m_Transform.m_Position = world_position;
+		}
+		break;
+	case PlayerMoveDirection::DOWN:
+		entity.renderable.m_Transform.m_Position.y += move_speed * dt;
+		// Make sure we go to an idle state when we've reached our new position
+		if (entity.renderable.m_Transform.m_Position.y >= world_position.y) {
+			player_state = PlayerStates::IDLE;
+			entity.renderable.m_Transform.m_Position = world_position;
+		}
+		break;
+	case PlayerMoveDirection::UP:
+		entity.renderable.m_Transform.m_Position.y += -move_speed * dt;
+		// Make sure we go to an idle state when we've reached our new position
+		if (entity.renderable.m_Transform.m_Position.y <= world_position.y) {
+			player_state = PlayerStates::IDLE;
+			entity.renderable.m_Transform.m_Position = world_position;
+		}
+		break;
+	}
+}
+
+void Player::idle_player_state_control()
+{
+	// Do idle stuff
 }
 
 Player* Player::get()

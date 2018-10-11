@@ -9,8 +9,10 @@
 using namespace bear;
 
 enum PlayerStates {
+	INTRO,
 	IDLE,
-	IN_TRANSIT
+	IN_TRANSIT,
+	OUTRO
 };
 
 enum PlayerMoveDirection {
@@ -45,7 +47,11 @@ public:
 	void update(float dt);
 	void render();
 
-	void move_player(int move_direction_enum);
+	void move_player(int move_direction_enum); // moves player in direction
+	void set_player_position(const core::Vector2i position); // Instantly moves player to position, tile-based
+
+	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
+	void idle_player_state_control(); // logic for idle state is here
 
 public:
 	static Player* get();
