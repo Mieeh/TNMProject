@@ -3,6 +3,8 @@
 #include<iostream>
 #include<math.h>
 
+#include<string>
+
 namespace bear { namespace core {
 
 	template<typename T>
@@ -76,10 +78,15 @@ namespace bear { namespace core {
 		// Conversions
 		explicit operator Vector2<int>() { return Vector2<int>((int)this->x, (int)this->y); }
 		explicit operator Vector2<float>() { return Vector2<float>((float)this->x, (float)this->y); }
+		explicit operator std::string() { return ( std::to_string(this->x) + std::to_string(this->y) ); } // Whoever wrote this is stupid
 	};
 	
 	// Define some default templates
 	typedef Vector2<int> Vector2i;
+	static bool operator<(const Vector2i& left, const Vector2i& right) {
+		if (right.x > left.x)
+			return true;
+	}
 	typedef Vector2<float> Vector2f;
 	typedef Vector2<unsigned int> Vector2ui;
 	typedef Vector2<double> Vector2d;

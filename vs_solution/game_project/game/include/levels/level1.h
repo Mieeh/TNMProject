@@ -13,7 +13,7 @@ struct Level1 : ILevel {
 		content.tile_map = TEST_LEVEL;
 		levelUtility_ConvertToLevelContent(content);
 
-		Player::get()->play_intro_at(core::Vector2i(1, 3));
+		Player::get()->play_intro_at(core::Vector2i(1, 1));
 	}
 
 	void on_event(Event& event) {

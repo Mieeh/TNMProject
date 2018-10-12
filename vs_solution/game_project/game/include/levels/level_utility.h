@@ -7,7 +7,9 @@
 
 #include"../../../engine/include/entity.h"
 #include"../../../engine/include/level.h"
-#include<core\vector2.h>
+
+// Include enemies and such
+#include"../enemies/bat.h"
 
 using namespace bear;
 
@@ -20,8 +22,8 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 		{
 			core::Vector2f realPosition = core::Vector2f(x*TILE_SIZE, y*TILE_SIZE);
 			
-			int tileValue = _level_list.at(y).at(x);
-			if (tileValue != -1) {
+			int tile_value = _level_list.at(y).at(x);
+			if (tile_value != -1) {
 				level_content.walls_floors.push_back(Entity());
 				Entity& entity = level_content.walls_floors.back();
 				entity.renderable.m_Transform.m_Position = realPosition;
@@ -29,7 +31,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 
 				// Set texture name based on tile value
 				{
-					switch (tileValue) {
+					switch (tile_value) {
 					case FLOOR1:
 						entity.renderable.m_TextureName = "ground";
 						break;
@@ -50,6 +52,18 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 						break;
 					case BOTTOM_RIGHT_WALL:
 						entity.renderable.m_TextureName = "bottomRightWall";
+						break;
+					}
+				}
+
+				if (is_enemy(tile_value)) {
+					entity.renderable.m_TextureName = "ground";
+					core::Vector2i tile_position(x, y);
+					switch (tile_value) {
+					case BAT:
+						std::string k = (std::string)tile_position;
+						level_content.enemies.insert(std::pair<std::string, EnemyBase>(k, Bat()));
+						//std::cout << tile_position << std::endl;
 						break;
 					}
 				}

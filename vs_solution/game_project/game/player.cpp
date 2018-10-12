@@ -3,6 +3,7 @@
 #include"include/constants.h"
 
 #include"../engine/include/game_systems.h"
+#include"../engine/include/enemy.h"
 
 #include<window/event.h>
 #include<window/GLFW_event.h>
@@ -68,8 +69,8 @@ void Player::move_player(int move_direction_enum)
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
 	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
 
-	// Notes(David): it's possible we have more than one floor so just seeing if it's FLOOR1 might not be enough to see if we're moving to a floor!
-	if (new_tile_value == FLOOR1) {
+	// We trying to transit to a floor?
+	if (is_floor(new_tile_value)) {
 		// Set the player to be in transit!
 		player_state = PlayerStates::IN_TRANSIT;
 		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
@@ -80,6 +81,13 @@ void Player::move_player(int move_direction_enum)
 
 		// Message the level we've moved
 		LevelManagerSingleton::Instance()->current_level->player_moved();
+
+		std::cout << (std::string)tile_position << std::endl;
+	}
+	else if (is_enemy(new_tile_value)) {
+		std::string k = (std::string)new_tile_position;
+		std::cout << LevelManagerSingleton::Instance()->current_level->get_level_content().enemies.at(k).hp << std::endl;
+		LevelManagerSingleton::Instance()->current_level->get_level_content().enemies.at(k).hp -= 10;
 	}
 }
 

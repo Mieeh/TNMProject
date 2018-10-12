@@ -1,5 +1,6 @@
 #pragma once
 
+#include<core\vector2.h>
 #include<window/event.h>
 using namespace bear;
 
@@ -7,15 +8,14 @@ using namespace bear;
 typedef std::vector<std::vector<int>> level_list;
 
 // Forward decleration
-struct Item;
-struct IEnemy;
+struct EnemyBase;
 
 // Structure for data that every level has // @PROTOTYPE
 struct LevelContent {
 	level_list tile_map;
 	std::vector<Entity> walls_floors;
 	//std::map<core::Vector2i, Item> items;
-	//std::map<core::Vector2i, IEnemy> enemies;
+	std::map<std::string, EnemyBase> enemies;
 };
 
 struct ILevel {
