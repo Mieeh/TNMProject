@@ -32,7 +32,7 @@ struct Level1 : ILevel {
 	}
 
 	void player_moved() override {
-
+	
 	}
 
 	LevelContent& get_level_content()

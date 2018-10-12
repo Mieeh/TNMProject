@@ -8,8 +8,6 @@
 #include<window/GLFW_event.h>
 using namespace bear;
 
-#include<cmath>
-
 Player* Player::instance = nullptr;
 
 Player::Player()

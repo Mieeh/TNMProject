@@ -14,7 +14,7 @@ typedef std::vector<std::vector<int>> level_list;
 #define BOTTOM_LEFT_WALL 5
 #define BOTTOM_RIGHT_WALL 6
 
-static level_list TEST_LEVEL =
+static level_list TEST_LEVEL = 
 {
 	{ 3, 1, 1, 1, 1, 1, 4 },
 	{ 3, 0, 0, 0, 0, 0, 4 },
