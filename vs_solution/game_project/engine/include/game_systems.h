@@ -7,7 +7,7 @@
 #include<string>
 
 #include"entity.h"
-#include"level_interface.h"
+#include"level.h"
 #include"engine.h"
 
 /*

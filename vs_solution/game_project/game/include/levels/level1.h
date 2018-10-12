@@ -1,22 +1,26 @@
 #pragma once
 
-#include"../../../engine/include/level_interface.h"
+#include"../../../engine/include/level.h"
 #include"../../../engine/include/game_systems.h"
 
 #include"level_utility.h"
 
 struct Level1 : ILevel {
 
-	std::vector<Entity> entity_list;
+	LevelContent content;
 
 	void init() override {
-		levelUtility_ConvertToTileEntities(TEST_LEVEL, entity_list); // Get the level entities here
-		//Player::get()->set_player_position(core::Vector2i(1, 1));
+		content.tile_map = TEST_LEVEL;
+		levelUtility_ConvertToLevelContent(content);
+
 		Player::get()->play_intro_at(core::Vector2i(1, 3));
 	}
 
 	void on_event(Event& event) {
-
+		if (event.type == EventType::KeyPressed) {
+			if (event.key == Key::X)
+				Player::get()->play_intro_at(core::Vector2i(1, 1));
+		}
 	}
 
 	void update(float dt) override {
@@ -24,16 +28,16 @@ struct Level1 : ILevel {
 	}
 
 	void render() override {
-		GraphicsSingleton::Instance()->draw(entity_list); // Render all the entities here
+		GraphicsSingleton::Instance()->draw(content.walls_floors); // Render all the entities here
 	}
 
 	void player_moved() override {
-		//std::cout << "player has moved!!" << std::endl;
+
 	}
 
-	level_list& get_level_list()
+	LevelContent& get_level_content()
 	{
-		return TEST_LEVEL;
+		return content;
 	}
 
 };

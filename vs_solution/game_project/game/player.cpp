@@ -68,8 +68,8 @@ void Player::render()
 void Player::move_player(int move_direction_enum)
 {
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
-	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_list().at(new_tile_position.y).at(new_tile_position.x);
-					
+	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
+
 	// Notes(David): it's possible we have more than one floor so just seeing if it's FLOOR1 might not be enough to see if we're moving to a floor!
 	if (new_tile_value == FLOOR1) {
 		// Set the player to be in transit!
