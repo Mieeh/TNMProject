@@ -14,8 +14,12 @@ namespace fs = std::experimental::filesystem;
 using namespace bear;
 using namespace bear::window;
 
+Engine* Engine::instance = nullptr;
+
 Engine::Engine(BearClass* bear_class)
 {
+	Engine::instance = this;
+
 	// Create some framework related objects
 	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project");
 	game_window->setVSync(VSYNC);
@@ -43,6 +47,15 @@ Engine::~Engine()
 {
 	// Delete some framework related objects
 	delete game_window;
+}
+
+void Engine::perform_window_shake(float length, float intensity)
+{
+	do_window_shake = true;
+	this->length = length;
+	this->intensity = intensity;
+	counter = 0;
+	this->origin = game_window->getWindowPosition();
 }
 
 void Engine::loadResources()
@@ -93,6 +106,7 @@ void Engine::core()
 		}
 
 		// call update
+		this->update(dt);
 		bear_class->update(dt); 
 
 		// rendering
@@ -109,3 +123,24 @@ void Engine::core()
 
 	bear_class->exit();
 }
+
+void Engine::update(float dt)
+{
+	static float constant = 1.5f;
+
+	if (do_window_shake) {
+		counter += 1.5f * dt;
+		if (counter < length) {
+			// Perform "window" shake
+			core::Vector2i pos = game_window->getWindowPosition();
+			core::Vector2i new_pos = pos + (core::Vector2i)core::randomPointInsideCircle(intensity);
+			game_window->setWindowPosition(new_pos);
+		}
+		else {
+			do_window_shake = false;
+			game_window->setWindowPosition(origin);
+		}
+	}
+}
+
+

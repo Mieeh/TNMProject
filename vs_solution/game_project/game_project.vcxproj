@@ -140,6 +140,7 @@
     <ClInclude Include="engine\include\entity.h" />
     <ClInclude Include="engine\include\game_systems.h" />
     <ClInclude Include="engine\include\level.h" />
+    <ClInclude Include="game\include\combat.h" />
     <ClInclude Include="game\include\constants.h" />
     <ClInclude Include="game\include\enemies\bat.h" />
     <ClInclude Include="game\include\game.h" />

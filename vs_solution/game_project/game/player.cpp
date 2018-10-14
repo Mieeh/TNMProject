@@ -1,7 +1,9 @@
 #include"include\player.h"
 
 #include"include/constants.h"
+#include"include/combat.h"
 
+#include"../engine/include/bear_game.h"
 #include"../engine/include/game_systems.h"
 #include"../engine/include/enemy.h"
 
@@ -54,6 +56,7 @@ void Player::update(float dt)
 			player_state = PlayerStates::IDLE;
 			entity.renderable.m_Transform.m_Position = world_position;
 			entity.renderable.m_Color.a = 1.0f;
+			Engine::instance->perform_window_shake(400, 10); 
 		}
 		break;
 	}
@@ -81,14 +84,19 @@ void Player::move_player(int move_direction_enum)
 
 		// Message the level we've moved
 		LevelManagerSingleton::Instance()->current_level->player_moved();
-
-		std::cout << (std::string)tile_position << std::endl;
 	}
 	else if (is_enemy(new_tile_value)) {
-		std::string k = (std::string)new_tile_position;
-		std::cout << LevelManagerSingleton::Instance()->current_level->get_level_content().enemies.at(k).hp << std::endl;
-		LevelManagerSingleton::Instance()->current_level->get_level_content().enemies.at(k).hp -= 10;
+		std::string key = (std::string)new_tile_position;
+		EnemyBase& enemy = level_manager_singleton->current_level->get_level_content().enemies.at(key);
+		CombatResult combat_result = Combat::perform_combat(enemy);
+		std::cout << "Performing combat...\n";
+		std::cout << "Player hp: " << hp << std::endl;
+		std::cout << "Enemy hp: " << enemy.hp << std::endl;
+		std::cout << std::endl;
 	}
+
+	// Update the layer
+	entity.renderable.m_Layer = tile_position.y;
 }
 
 void Player::set_player_position(const core::Vector2i position)

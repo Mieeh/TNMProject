@@ -59,13 +59,17 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				if (is_enemy(tile_value)) {
 					entity.renderable.m_TextureName = "ground";
 					core::Vector2i tile_position(x, y);
+					std::string key = (std::string)tile_position;
 					switch (tile_value) {
 					case BAT:
-						std::string k = (std::string)tile_position;
-						level_content.enemies.insert(std::pair<std::string, EnemyBase>(k, Bat()));
-						//std::cout << tile_position << std::endl;
+						level_content.enemies.insert(std::pair<std::string, EnemyBase>(key, Bat())); // Add enemy to the list
+						level_content.enemies.at(key).entity.renderable.m_TextureName = "test_enemy";
+						level_content.enemies.at(key).entity.renderable.m_Transform.m_Position = core::Vector2f((tile_position.x*TILE_SIZE) + BAT_OFFSET_X, (tile_position.y*TILE_SIZE) + BAT_OFFSET_Y);
+						level_content.enemies.at(key).entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE*BAT_SIZE_X, TILE_SIZE*BAT_SIZE_Y);
 						break;
 					}
+
+					level_content.enemies.at(key).entity.renderable.m_Layer = y;
 				}
 			}
 		}

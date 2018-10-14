@@ -14,7 +14,6 @@
 Master file for all game systems :
 - rendering
 - level managing
-- game state keeping
 */
 
 class LevelManagerSingleton {
@@ -45,6 +44,7 @@ public:
 	void init();
 	void begin();
 	void draw(std::vector<Entity>& entity_list);
+	void draw(std::map<std::string, EnemyBase>& enemy_map);
 	void draw(Entity& entity);
 	void flush();
 

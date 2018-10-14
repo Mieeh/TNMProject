@@ -25,11 +25,15 @@ enum PlayerMoveDirection {
 
 class Player {
 
+public:
+	// Gameplay related
+	int hp = 5;     // Notes(david) what is this actually supposed to be?
+	int attack = 1; // Notes(david) what is this actually supposed to be?
+
 private:
-	// Player members 
 	const float move_speed = 0.5f;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
-	
+
 	Entity entity;
 	
 	PlayerStates player_state = PlayerStates::IDLE;

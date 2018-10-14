@@ -7,8 +7,7 @@ using namespace bear;
 #include<vector>
 typedef std::vector<std::vector<int>> level_list;
 
-// Forward decleration
-struct EnemyBase;
+#include"enemy.h"
 
 // Structure for data that every level has // @PROTOTYPE
 struct LevelContent {
