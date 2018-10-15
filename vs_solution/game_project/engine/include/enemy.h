@@ -13,5 +13,5 @@ struct EnemyBase {
 	std::string name;
 	int hp;
 	int damage;
-	bool is_dead = true;
+	bool is_dead = false;
 };

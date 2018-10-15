@@ -86,13 +86,31 @@ void Player::move_player(int move_direction_enum)
 		LevelManagerSingleton::Instance()->current_level->player_moved();
 	}
 	else if (is_enemy(new_tile_value)) {
+		// Get the enemy!
 		std::string key = (std::string)new_tile_position;
 		EnemyBase& enemy = level_manager_singleton->current_level->get_level_content().enemies.at(key);
-		CombatResult combat_result = Combat::perform_combat(enemy);
-		std::cout << "Performing combat...\n";
-		std::cout << "Player hp: " << hp << std::endl;
-		std::cout << "Enemy hp: " << enemy.hp << std::endl;
-		std::cout << std::endl;
+
+		// Check to make sure the enemy isn't already dead!
+		if (!enemy.is_dead) {
+			// Perform combat with the enemy
+			CombatResult combat_result = Combat::perform_combat(enemy);
+			if (combat_result == CombatResult::ENEMY_DIED) {
+				// Enemy died!
+				enemy.is_dead = true;
+			}
+		}
+		else {
+			// Set the player to be in transit!
+			player_state = PlayerStates::IN_TRANSIT;
+			move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+			core::Vector2i dir = move_directions[move_direction_enum];
+			tile_position += dir;
+			world_position = (core::Vector2f)tile_position * TILE_SIZE;
+
+			// Message the level we've moved
+			LevelManagerSingleton::Instance()->current_level->player_moved();
+		}
 	}
 
 	// Update the layer

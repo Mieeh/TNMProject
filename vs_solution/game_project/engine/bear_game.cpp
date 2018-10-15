@@ -90,8 +90,18 @@ void Engine::core()
 	dt_clock.start();
 	float dt = 1.0f;
 
+	core::Clock fpsClock;
+	fpsClock.start();
+	size_t fps = 0;
+
 	while (game_window->isOpen()) {
 		
+		if (fpsClock.getTicks() >= 1000) {
+			std::cout << fps << std::endl;
+			fps = 0;
+			fpsClock.reset();
+		}
+
 		dt_clock.reset(); // Reset the clock for this frame
 
 		// Event polling
@@ -119,6 +129,7 @@ void Engine::core()
 		game_window->display();
 
 		dt = dt_clock.getTicks(); // Get the number of ticks for this frame
+		fps++;
 	}
 
 	bear_class->exit();

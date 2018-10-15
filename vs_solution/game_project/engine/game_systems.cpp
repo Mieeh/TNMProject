@@ -22,7 +22,8 @@ void GraphicsSingleton::draw(std::vector<Entity>& entity_list)
 void GraphicsSingleton::draw(std::map<std::string, EnemyBase>& enemy_map)
 {
 	for (auto& x : enemy_map) {
-		batch_renderer.submit(&x.second.entity.renderable);
+		if(!x.second.is_dead)
+			batch_renderer.submit(&x.second.entity.renderable);
 	}
 }
 
