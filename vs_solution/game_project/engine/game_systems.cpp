@@ -7,6 +7,17 @@ void GraphicsSingleton::init()
 	batch_renderer.init();
 }
 
+void GraphicsSingleton::update(float dt) {
+	if (point_to_follow != nullptr) {
+		core::Vector2f goal_pos = ((*point_to_follow) * -1) + core::Vector2f(window_size.x/2, window_size.y/2);
+		core::Vector2f curr = view.getPosition();
+		if (core::Vector2f::distance(curr, goal_pos) > 2.0f) {
+			curr.moveTowards(goal_pos, 0.1f*dt);
+			view.setPosition(curr);
+		}
+	}
+}
+
 void GraphicsSingleton::begin()
 {
 	batch_renderer.begin();
@@ -34,7 +45,16 @@ void GraphicsSingleton::draw(Entity & entity)
 
 void GraphicsSingleton::flush()
 {
-	batch_renderer.flush();
+	batch_renderer.flush(view);
+}
+
+void GraphicsSingleton::window_resized(const Event & event)
+{
+	if (event.type == EventType::WindowReiszed) {
+		// Do the stuff neccesary 
+		graphics::Graphics::window_resize_callback(event.size.x, event.size.y);
+		window_size = event.size;
+	}
 }
 
 GraphicsSingleton * GraphicsSingleton::Instance()

@@ -30,7 +30,7 @@ public:
 	int hp = 5;     // Notes(david) what is this actually supposed to be?
 	int attack = 1; // Notes(david) what is this actually supposed to be?
 
-private:
+public:
 	const float move_speed = 0.5f;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 

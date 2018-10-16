@@ -14,6 +14,8 @@ struct Level1 : ILevel {
 		levelUtility_ConvertToLevelContent(content);
 
 		Player::get()->play_intro_at(core::Vector2i(1, 1));
+
+		GraphicsSingleton::Instance()->point_to_follow = &Player::get()->world_position;
 	}
 
 	void on_event(Event& event) {

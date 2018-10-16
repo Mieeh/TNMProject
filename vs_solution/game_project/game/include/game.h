@@ -15,6 +15,7 @@ struct Game : BearClass
 	Engine* game; // Engine object
 
 	// Singleton pointers
+	GraphicsSingleton* graphics_singleton = GraphicsSingleton::Instance(); 
 	LevelManagerSingleton* level_manager = LevelManagerSingleton::Instance(); // Keeping track and managing the current level to play!
 	Player* player = Player::get();
 

@@ -110,6 +110,9 @@ void Engine::core()
 			if (event.type == EventType::Closed) {
 				game_window->close(); // Close the window
 			}
+			else if (event.type == EventType::WindowReiszed) {
+				GraphicsSingleton::Instance()->window_resized(event);
+			}
 
 			// Send events to game
 			bear_class->on_event(event);

@@ -10,6 +10,7 @@ void Game::init()
 }
 
 void Game::update(float dt) {
+	graphics_singleton->update(dt);
 	level_manager->update_current_level(dt);
 	player->update(dt);
 }
