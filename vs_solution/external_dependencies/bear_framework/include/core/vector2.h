@@ -30,6 +30,11 @@ namespace bear { namespace core {
 				Vector2<T> norm_dir = dir.normalize();
 				*this = (*this) + (norm_dir*speed);
 		}
+		void lerp(core::Vector2<T> target, float t) {
+			//*this = (*this) * t + target*(1.f - t);
+			this->x = (1.0f - t) * this->x + t * target.x;
+			this->y = (1.0f - t) * this->y + t * target.y;
+		}
 
 		static T distance(Vector2<T> &a_V1, Vector2<T> &a_V2) {
 			return std::sqrt(std::pow<T, int>(a_V2.x - a_V1.x, 2) + std::pow<T, int>(a_V2.y - a_V1.y, 2));

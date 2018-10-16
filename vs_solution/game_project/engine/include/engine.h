@@ -1,5 +1,6 @@
 #pragma once
 
+#define TILE_SIZE 64
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define VSYNC 1
