@@ -6,6 +6,11 @@ typedef std::vector<std::vector<int>> level_list;
 
 #define TILE_SIZE 64 // Very important value used alot!
 
+#define LAYER0 1
+#define LAYER1 10
+#define LAYER2 100
+#define LAYER3 1000
+
 #define FLOOR1 0
 #define WALL_TOP 1
 #define PIT 2
@@ -49,28 +54,18 @@ static bool is_floor(int _v) {
 
 static level_list TEST_LEVEL = 
 {
-<<<<<<< HEAD
 	{ 3, 1, 1, 1, 1,   1, 4 },
 	{ 3, 0, 0, 0, 0,   0, 4 },
-	{ 3, 0, 0, 0, BAT, 0, 4 },    
-	{ 3, 0, 0, 0, 0,   G, 4 },	
+	{ 3, 0, 0, 0, BAT, G, 4 },    
+	{ 3, 0, 0, 0, 0,   0, 4 },	
 	{-1, 2, 2, 2, 2,   2,-1 },
-=======
-	{ 3, 1, 1, 1, 1, 1,   4 },
-	{ 3, 0, 0, 0, BAT, 0,   4 },
-	{ 3, 0, 0, 0, 0, 0,   4 },    
-	{ 3, 0, 0, 0, 0, 0, 4 },	
-	{-1, 2, 2, 2, 2, 2,  -1 },
 };
 
 static level_list LEVEL_2 =
 {
 	{-1, 3, 1, 1, 1, 1, 4, -1 },
 	{ 3, 1, 0, 0, 0, 0, 1,  4 },
-	{ 3, 0, 0, 0, 0, 0, 0,	4 },
-	{ 3, 0, 0, 0, 0, 0, 0,	4 },
-	{ 3, 0, 0, 0, 0, 0, 0,	4 },
+	{ 3, 0, 0, 0, 0, 0, G,	4 },
 	{-1, 2, 0, 0, 0, 0, 2, -1 },
 	{-1,-1, 2, 2, 2, 2,-1, -1 },
->>>>>>> 1f12e79e8f012b42a4443b429a1f0afafc9e7efd
 };

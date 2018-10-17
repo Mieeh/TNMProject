@@ -14,9 +14,11 @@ struct Level2 : ILevel {
 		content.tile_map = LEVEL_2;
 		levelUtility_ConvertToLevelContent(content);
 
-		Player::get()->play_intro_at(core::Vector2i(3, 3));
+		Player::get()->play_intro_at(core::Vector2i(1, 2));
 
 		GraphicsSingleton::Instance()->point_to_follow = &Player::get()->world_position;
+
+		next_level_name = "level1";
 	}
 
 	void on_event(Event& event) {

@@ -28,6 +28,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				Entity& entity = level_content.walls_floors.back();
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+				entity.renderable.m_Layer = LAYER1;
 
 				// Set texture name based on tile value
 				{
@@ -82,7 +83,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				}
 
 				// Set correct layer according to y
-				level_content.enemies.at(key).entity.renderable.m_Layer = y;
+				level_content.enemies.at(key).entity.renderable.m_Layer = LAYER3 + y;
 			}
 		}
 	}
