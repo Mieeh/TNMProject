@@ -103,5 +103,10 @@ namespace bear { namespace core {
 		if(!(v1 == v2))
 			v1 = newPos;
 	}
+
+	static void lerp(float &a, float b, float t) {
+		a = (1.0f - t) * a + t * b;
+	}
+
 }
 }

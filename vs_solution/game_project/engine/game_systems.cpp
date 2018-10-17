@@ -74,8 +74,13 @@ void LevelManagerSingleton::registerLevel(const std::string & level_name, ILevel
 
 void LevelManagerSingleton::setCurrentLevel(const std::string & level_name)
 {
-	current_level = level_map[level_name];
-	current_level->init();
+	if (level_map.find(level_name) != level_map.end()) {
+		current_level = level_map[level_name];
+		current_level->init();
+	}
+	else {
+		std::cout << "ERROR: Big fucking error; trying to load an non-existing level" << std::endl;
+	}
 }
 
 void LevelManagerSingleton::update_current_level(float dt)

@@ -144,6 +144,7 @@
     <ClInclude Include="game\include\constants.h" />
     <ClInclude Include="game\include\enemies\bat.h" />
     <ClInclude Include="game\include\game.h" />
+    <ClInclude Include="game\include\item.h" />
     <ClInclude Include="game\include\levels\level1.h" />
     <ClInclude Include="game\include\levels\level_utility.h" />
     <ClInclude Include="game\include\player.h" />

@@ -23,7 +23,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 			core::Vector2f realPosition = core::Vector2f(x*TILE_SIZE, y*TILE_SIZE);
 			
 			int tile_value = _level_list.at(y).at(x);
-			if (tile_value != -1) {
+			if (is_floor_or_wall(tile_value)) {
 				level_content.walls_floors.push_back(Entity());
 				Entity& entity = level_content.walls_floors.back();
 				entity.renderable.m_Transform.m_Position = realPosition;
@@ -31,6 +31,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 
 				// Set texture name based on tile value
 				{
+					// Big switch setting the correct texture for the tile
 					switch (tile_value) {
 					case FLOOR1:
 						entity.renderable.m_TextureName = "ground";
@@ -53,24 +54,35 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					case BOTTOM_RIGHT_WALL:
 						entity.renderable.m_TextureName = "bottomRightWall";
 						break;
-					}
-				}
+					case GOAL:
 
-				if (is_enemy(tile_value)) {
-					entity.renderable.m_TextureName = "ground";
-					core::Vector2i tile_position(x, y);
-					std::string key = (std::string)tile_position;
-					switch (tile_value) {
-					case BAT:
-						level_content.enemies.insert(std::pair<std::string, EnemyBase>(key, Bat())); // Add enemy to the list
-						level_content.enemies.at(key).entity.renderable.m_TextureName = "test_enemy";
-						level_content.enemies.at(key).entity.renderable.m_Transform.m_Position = core::Vector2f((tile_position.x*TILE_SIZE) + BAT_OFFSET_X, (tile_position.y*TILE_SIZE) + BAT_OFFSET_Y);
-						level_content.enemies.at(key).entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE*BAT_SIZE_X, TILE_SIZE*BAT_SIZE_Y);
 						break;
 					}
-
-					level_content.enemies.at(key).entity.renderable.m_Layer = y;
 				}
+				}
+			else if (is_enemy(tile_value)) {
+
+				// Place ground tile under the enemy
+				level_content.walls_floors.push_back(Entity());
+				Entity& entity = level_content.walls_floors.back();
+				entity.renderable.m_TextureName = "ground";
+				entity.renderable.m_Transform.m_Position = realPosition;
+				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				// Place the enemy with key "key" at correct position with correct enemy object
+				core::Vector2i tile_position(x, y);
+				std::string key = (std::string)tile_position;
+				switch (tile_value) {
+				case BAT:
+					level_content.enemies.insert(std::pair<std::string, EnemyBase>(key, Bat())); // Add enemy to the list
+					level_content.enemies.at(key).entity.renderable.m_TextureName = "test_enemy";
+					level_content.enemies.at(key).entity.renderable.m_Transform.m_Position = core::Vector2f((tile_position.x*TILE_SIZE) + BAT_OFFSET_X, (tile_position.y*TILE_SIZE) + BAT_OFFSET_Y);
+					level_content.enemies.at(key).entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE*BAT_SIZE_X, TILE_SIZE*BAT_SIZE_Y);
+					break;
+				}
+
+				// Set correct layer according to y
+				level_content.enemies.at(key).entity.renderable.m_Layer = y;
 			}
 		}
 	}

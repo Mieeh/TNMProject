@@ -49,7 +49,8 @@ void Player::update(float dt)
 	case PlayerStates::INTRO:
 		// Do intro logic
 		if (entity.renderable.m_Transform.m_Position.y < world_position.y) {
-			entity.renderable.m_Transform.m_Position.y += move_speed*0.25f*dt;
+			//core::lerp(entity.renderable.m_Transform.m_Position.y, world_position.y, 0.001f*dt);
+			entity.renderable.m_Transform.m_Position.y += fall_speed*dt;
 			entity.renderable.m_Color.a += 0.0015f*dt;
 		}
 		else {
@@ -58,6 +59,18 @@ void Player::update(float dt)
 			entity.renderable.m_Color.a = 1.0f;
 			Engine::instance->perform_window_shake(400, 10); 
 		}
+		break;
+	case PlayerStates::OUTRO:
+		
+		if (entity.renderable.m_Color.a > 0.0f) {
+			entity.renderable.m_Color.a -= 0.0015f*dt;
+			entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
+		}
+		else {
+			player_state = PlayerStates::IDLE;
+			level_manager_singleton->setCurrentLevel(level_manager_singleton->current_level->next_level_name); // Load the next level
+		}
+		
 		break;
 	}
 }		
@@ -112,6 +125,18 @@ void Player::move_player(int move_direction_enum)
 			LevelManagerSingleton::Instance()->current_level->player_moved();
 		}
 	}
+	else if (new_tile_value == GOAL) {
+
+		goal_trigger = true;
+
+		// Set the player to be in transit!
+		player_state = PlayerStates::IN_TRANSIT;
+		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+		core::Vector2i dir = move_directions[move_direction_enum];
+		tile_position += dir;
+		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+	}
 
 	// Update the layer
 	entity.renderable.m_Layer = tile_position.y;
@@ -125,6 +150,14 @@ void Player::set_player_position(const core::Vector2i position)
 	entity.renderable.m_Transform.m_Position = world_position;
 }
 
+void Player::set_player_state(PlayerStates new_state)
+{
+	player_state = new_state;
+	if (goal_trigger) {
+		player_state = PlayerStates::OUTRO;
+	}
+}
+
 void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 {
 	switch (dir) {
@@ -133,7 +166,7 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 		entity.renderable.m_Transform.m_Position.x += move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position!
 		if (entity.renderable.m_Transform.m_Position.x >= world_position.x) {
-			player_state = PlayerStates::IDLE;
+			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
 		}
 		break;
@@ -141,7 +174,7 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 		entity.renderable.m_Transform.m_Position.x += -move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position!
 		if (entity.renderable.m_Transform.m_Position.x <= world_position.x) {
-			player_state = PlayerStates::IDLE;
+			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
 		}
 		break;
@@ -149,7 +182,7 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 		entity.renderable.m_Transform.m_Position.y += move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position
 		if (entity.renderable.m_Transform.m_Position.y >= world_position.y) {
-			player_state = PlayerStates::IDLE;
+			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
 		}
 		break;
@@ -157,7 +190,7 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 		entity.renderable.m_Transform.m_Position.y += -move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position
 		if (entity.renderable.m_Transform.m_Position.y <= world_position.y) {
-			player_state = PlayerStates::IDLE;
+			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
 		}
 		break;

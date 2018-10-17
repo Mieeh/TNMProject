@@ -11,6 +11,7 @@ typedef std::vector<std::vector<int>> level_list;
 
 // Structure for data that every level has // @PROTOTYPE
 struct LevelContent {
+	core::Vector2i goal_pos;
 	level_list tile_map;
 	std::vector<Entity> walls_floors;
 	//std::map<core::Vector2i, Item> items;
@@ -18,6 +19,9 @@ struct LevelContent {
 };
 
 struct ILevel {
+
+	std::string next_level_name;
+
 	virtual void init() = 0; // Called when a level is started
 	virtual void on_event(Event& event) = 0; // Called every event
 	virtual void update(float dt) = 0; // Called ones each frame used to update game logic
