@@ -27,14 +27,14 @@ class Player {
 
 public:
 	// Gameplay related
-	int hp = 5;     // Notes(david) what is this actually supposed to be?
+	int hp = 5;     // Notes(david) what is this actually supposed to be?								
 	int attack = 1; // Notes(david) what is this actually supposed to be?
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
 
 private:
 	const float move_speed = 0.5f;
-	const float fall_speed = 0.125;
+	const float fall_speed = 0.65;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 
 	Entity entity;

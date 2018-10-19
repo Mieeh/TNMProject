@@ -17,6 +17,7 @@ Player::Player()
 {
 	entity.renderable.m_Color = core::Color::Red();
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+	entity.renderable.m_Layer = LAYER3;
 }
 
 void Player::on_event(Event & event)
@@ -50,7 +51,7 @@ void Player::update(float dt)
 		// Do intro logic
 		if (entity.renderable.m_Transform.m_Position.y < world_position.y) {
 			//core::lerp(entity.renderable.m_Transform.m_Position.y, world_position.y, 0.001f*dt);
-			entity.renderable.m_Transform.m_Position.y += fall_speed*dt;
+			entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
 			entity.renderable.m_Color.a += 0.0015f*dt;
 		}
 		else {
@@ -63,12 +64,20 @@ void Player::update(float dt)
 	case PlayerStates::OUTRO:
 		
 		if (entity.renderable.m_Color.a > 0.0f) {
+			// Move and fade
 			entity.renderable.m_Color.a -= 0.0015f*dt;
 			entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
+			// Layering
+			entity.renderable.m_Layer = LAYER0;
 		}
 		else {
-			player_state = PlayerStates::IDLE;
+			// Reset state
+			goal_trigger = false;				
+			set_player_state(PlayerStates::IDLE);
+			// Load new level
 			level_manager_singleton->setCurrentLevel(level_manager_singleton->current_level->next_level_name); // Load the next level
+			// Reset layer
+			entity.renderable.m_Layer = LAYER3;
 		}
 		
 		break;
@@ -139,7 +148,7 @@ void Player::move_player(int move_direction_enum)
 	}
 
 	// Update the layer
-	entity.renderable.m_Layer = tile_position.y;
+	entity.renderable.m_Layer = LAYER3 + tile_position.y;
 }
 
 void Player::set_player_position(const core::Vector2i position)
@@ -207,7 +216,7 @@ void Player::play_intro_at(const core::Vector2i position)
 	player_state = PlayerStates::INTRO;
 	tile_position = position;
 	world_position = (core::Vector2f)tile_position * TILE_SIZE;
-	static const int intro_offset = -100;
+	static const int intro_offset = -350;
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
 	entity.renderable.m_Color.a = 0.0f;

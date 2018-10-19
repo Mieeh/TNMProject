@@ -8,7 +8,7 @@ void Game::init()
 	level_manager->registerLevel("level1", new Level1);
 	level_manager->registerLevel("level2", new Level2);
 
-	level_manager->setCurrentLevel("level2");
+	level_manager->setCurrentLevel("level1");
 }
 
 void Game::update(float dt) {
