@@ -22,10 +22,7 @@ struct Level2 : ILevel {
 	}
 
 	void on_event(Event& event) {
-		if (event.type == EventType::KeyPressed) {
-			if (event.key == Key::X)
-				Player::get()->play_intro_at(core::Vector2i(3, 3));
-		}
+		
 	}
 
 	void update(float dt) override {

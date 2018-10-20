@@ -29,6 +29,7 @@ public:
 public:
 	void registerLevel(const std::string& level_name, ILevel* level);
 	void setCurrentLevel(const std::string& level_name);
+	void reInitCurrentLevel();
 	void update_current_level(float dt);
 	void on_event_current_level(Event& event);
 	void render_current_level();
@@ -43,9 +44,10 @@ public:
 class GraphicsSingleton {
 private:
 	bear::graphics::BatchRenderer batch_renderer;
-	core::Vector2f window_size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+	bear::graphics::BatchRenderer ui_renderer;
 
 public:
+	core::Vector2f window_size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 	core::Vector2f* point_to_follow;
 	graphics::View view;
 
@@ -54,6 +56,7 @@ public:
 
 	void init();
 	void begin();
+	void draw_as_ui(Entity& entity);
 	void draw(std::vector<Entity>& entity_list);
 	void draw(std::map<std::string, EnemyBase>& enemy_map);
 	void draw(Entity& entity);

@@ -34,6 +34,11 @@ void Player::on_event(Event & event)
 			else if (event.key == Key::W)
 				move_player(PlayerMoveDirection::UP);
 		}
+		else if (player_state == PlayerStates::DEAD) {
+			if (event.key == Key::X) {
+				reset_after_death();
+			}
+		}
 	}
 }
 
@@ -81,12 +86,21 @@ void Player::update(float dt)
 		}
 		
 		break;
+
+	case PlayerStates::DEAD:
+		death_panel.fade_to_1(dt);
+		break;
 	}
 }		
 
 void Player::render()
 {
 	GraphicsSingleton::Instance()->draw(entity);
+	// Dead? render the death panel if we are!
+	if (player_state == PlayerStates::DEAD) {
+		death_panel.entity.renderable.m_Transform.m_Size = GraphicsSingleton::Instance()->window_size;
+		GraphicsSingleton::Instance()->draw_as_ui(death_panel.entity);
+	}
 }
 
 void Player::move_player(int move_direction_enum)
@@ -111,32 +125,7 @@ void Player::move_player(int move_direction_enum)
 		// Get the enemy!
 		std::string key = (std::string)new_tile_position;
 		EnemyBase& enemy = level_manager_singleton->current_level->get_level_content().enemies.at(key);
-
-		// Check to make sure the enemy isn't already dead!
-		if (!enemy.is_dead) {
-			// Perform combat with the enemy
-			CombatResult combat_result = Combat::perform_combat(enemy);
-			if (combat_result == CombatResult::ENEMY_DIED) {
-				// Enemy died!
-				enemy.is_dead = true;
-			}
-			if (combat_result == CombatResult::PLAYER_DIED) {
-				player_state = PlayerStates::DEAD;
-				printf("player dead");
-			}
-		}
-		else {
-			// Set the player to be in transit!
-			player_state = PlayerStates::IN_TRANSIT;
-			move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
-
-			core::Vector2i dir = move_directions[move_direction_enum];
-			tile_position += dir;
-			world_position = (core::Vector2f)tile_position * TILE_SIZE;
-
-			// Message the level we've moved
-			LevelManagerSingleton::Instance()->current_level->player_moved();
-		}
+		resolve_combat(enemy, move_direction_enum);
 	}
 	else if (new_tile_value == GOAL) {
 
@@ -220,22 +209,50 @@ void Player::play_intro_at(const core::Vector2i position)
 	player_state = PlayerStates::INTRO;
 	tile_position = position;
 	world_position = (core::Vector2f)tile_position * TILE_SIZE;
-	static const int intro_offset = -350;
+	static const int intro_offset = -350; 
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
 	entity.renderable.m_Color.a = 0.0f;
 }
 
-void Player::resolve_combat(CombatResult combat_result)
+void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 {
-	switch (combat_result) {
-	case CombatResult::CLASH:
-		break;
-	case CombatResult::ENEMY_DIED:
-		break;
-	case CombatResult::PLAYER_DIED:
-		break;
+	// Check to make sure the enemy isn't already dead!
+	if (!enemy.is_dead) {
+		// Perform combat with the enemy
+		CombatResult combat_result = Combat::perform_combat(enemy);
+
+		// What happend during the combat? 
+		switch (combat_result) {
+		case CombatResult::ENEMY_DIED:
+			enemy.is_dead = true;
+			break;
+		case CombatResult::PLAYER_DIED:
+			set_player_state(PlayerStates::DEAD);
+			death_panel.a = 0.0f;
+			break;
+		case CombatResult::CLASH:
+			break;
+		}
 	}
+	else {
+		// Set the player to be in transit!
+		player_state = PlayerStates::IN_TRANSIT;
+		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+		core::Vector2i dir = move_directions[move_direction_enum];
+		tile_position += dir;
+		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+
+		// Message the level we've moved
+		LevelManagerSingleton::Instance()->current_level->player_moved();
+	}
+}
+
+void Player::reset_after_death()
+{
+	level_manager_singleton->reInitCurrentLevel(); // Reset current level
+	hp = 5; // Reset hp
 }
 
 Player* Player::get()

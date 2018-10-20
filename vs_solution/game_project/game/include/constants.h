@@ -55,10 +55,10 @@ static bool is_floor(int _v) {
 static level_list TEST_LEVEL = 
 {
 	{ 3, 1, 1, 1, 1,   1, 4 },
-	{ 3, 0, 0, 0, 0,   0, 4 },
-	{ 3, 0, 0, 0, BAT, G, 4 },    
-	{ 3, 0, 0, 0, 0,   0, 4 },	
-	{-1, 2, 2, 2, 2,   2,-1 },
+	{ 3, 0, 0, BAT, 0,   0, 4 },
+	{ 3, 0, 0, 0,   BAT, G, 4 },    
+	{ 3, 0, 0, BAT, 0,   0, 4 },	
+	{-1, 2, 2, 2,   2,   2,-1 },
 };
 
 static level_list LEVEL_2 =

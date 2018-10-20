@@ -5,6 +5,7 @@ using namespace bear;
 void GraphicsSingleton::init()
 {
 	batch_renderer.init();
+	ui_renderer.init();
 }
 
 void GraphicsSingleton::update(float dt) {
@@ -22,7 +23,13 @@ void GraphicsSingleton::update(float dt) {
 
 void GraphicsSingleton::begin()
 {
+	ui_renderer.begin();
 	batch_renderer.begin();
+}
+
+void GraphicsSingleton::draw_as_ui(Entity & entity)
+{
+	ui_renderer.submit(&entity.renderable);
 }
 
 void GraphicsSingleton::draw(std::vector<Entity>& entity_list)
@@ -48,6 +55,7 @@ void GraphicsSingleton::draw(Entity & entity)
 void GraphicsSingleton::flush()
 {
 	batch_renderer.flush(view);
+	ui_renderer.flush();
 }
 
 void GraphicsSingleton::window_resized(const Event & event)
@@ -81,6 +89,11 @@ void LevelManagerSingleton::setCurrentLevel(const std::string & level_name)
 	else {
 		std::cout << "ERROR: Big fucking error; trying to load an non-existing level" << std::endl;
 	}
+}
+
+void LevelManagerSingleton::reInitCurrentLevel()
+{
+	current_level->init();
 }
 
 void LevelManagerSingleton::update_current_level(float dt)

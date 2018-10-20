@@ -2,7 +2,8 @@
 
 #include"../../engine/include/entity.h"
 #include"../../engine/include/game_systems.h"
-#include"combat.h"
+
+#include"death_screen.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -40,6 +41,7 @@ private:
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 
 	Entity entity;
+	DeathPanel death_panel;
 	
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
@@ -61,7 +63,8 @@ public:
 	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
 	void idle_player_state_control(); // logic for idle state is here
 	void play_intro_at(const core::Vector2i position);
-	void resolve_combat(CombatResult combat_result);
+	void resolve_combat(EnemyBase& enemy, int move_direction_enum);
+	void reset_after_death();
 
 public:
 	static Player* get();

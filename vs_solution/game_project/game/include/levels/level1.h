@@ -14,7 +14,6 @@ struct Level1 : ILevel {
 		// Load the actual map data
 		content.tile_map = TEST_LEVEL;
 		levelUtility_ConvertToLevelContent(content);
-		printf("level 1 init");
 		
 		// Setup the player
 		Player::get()->play_intro_at(core::Vector2i(1, 1));
@@ -27,10 +26,7 @@ struct Level1 : ILevel {
 	}
 
 	void on_event(Event& event) {
-		if (event.type == EventType::KeyPressed) {
-			if (event.key == Key::X)
-				Player::get()->play_intro_at(core::Vector2i(1, 1));
-		}
+		
 	}
 
 	void update(float dt) override {
