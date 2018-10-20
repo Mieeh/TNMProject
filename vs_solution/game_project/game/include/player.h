@@ -2,6 +2,7 @@
 
 #include"../../engine/include/entity.h"
 #include"../../engine/include/game_systems.h"
+#include"combat.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -12,7 +13,8 @@ enum PlayerStates {
 	INTRO,
 	IDLE,
 	IN_TRANSIT,
-	OUTRO
+	OUTRO,
+	DEAD
 };
 
 enum PlayerMoveDirection {
@@ -59,6 +61,7 @@ public:
 	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
 	void idle_player_state_control(); // logic for idle state is here
 	void play_intro_at(const core::Vector2i position);
+	void resolve_combat(CombatResult combat_result);
 
 public:
 	static Player* get();

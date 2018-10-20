@@ -15,6 +15,9 @@ using namespace bear;
 
 // Used for simplifly the task of converting a list of integers to a list of entities that can be rendered 
 static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
+
+	level_content.enemies.clear();
+
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
 	{ 

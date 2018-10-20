@@ -8,12 +8,12 @@ void GraphicsSingleton::init()
 }
 
 void GraphicsSingleton::update(float dt) {
+
+	// Make the view follow the point_to_follow
 	if (point_to_follow != nullptr) {
 		core::Vector2f goal_pos = ((*point_to_follow) * -1) + core::Vector2f((window_size.x/2) - TILE_SIZE/2, (window_size.y/2) - TILE_SIZE/2);
 		core::Vector2f curr = view.getPosition();
 		if (core::Vector2f::distance(curr, goal_pos) > 2.0f) {
-			//curr.moveTowards(goal_pos, 0.1f*dt);
-			//std::cout << "Moving" << std::endl;
 			curr.lerp(goal_pos, 0.0025f*dt);
 			view.setPosition(curr);
 		}

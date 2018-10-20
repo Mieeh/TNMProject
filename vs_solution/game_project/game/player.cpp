@@ -120,6 +120,10 @@ void Player::move_player(int move_direction_enum)
 				// Enemy died!
 				enemy.is_dead = true;
 			}
+			if (combat_result == CombatResult::PLAYER_DIED) {
+				player_state = PlayerStates::DEAD;
+				printf("player dead");
+			}
 		}
 		else {
 			// Set the player to be in transit!
@@ -220,6 +224,18 @@ void Player::play_intro_at(const core::Vector2i position)
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
 	entity.renderable.m_Color.a = 0.0f;
+}
+
+void Player::resolve_combat(CombatResult combat_result)
+{
+	switch (combat_result) {
+	case CombatResult::CLASH:
+		break;
+	case CombatResult::ENEMY_DIED:
+		break;
+	case CombatResult::PLAYER_DIED:
+		break;
+	}
 }
 
 Player* Player::get()
