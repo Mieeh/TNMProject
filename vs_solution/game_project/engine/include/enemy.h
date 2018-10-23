@@ -6,6 +6,7 @@
 using namespace bear;
 
 struct EnemyBase {
+
 	// Graphical representation
 	Entity entity;
 	

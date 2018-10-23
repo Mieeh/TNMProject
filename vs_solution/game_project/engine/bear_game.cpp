@@ -33,6 +33,7 @@ Engine::Engine(BearClass* bear_class)
 	this->loadResources();
 
 	// Init game systems
+	ConfigSingleton::Instance()->load_key_bindings();
 	GraphicsSingleton::Instance()->init();
 
 	// Call "game" init

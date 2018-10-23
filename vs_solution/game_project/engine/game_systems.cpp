@@ -2,6 +2,8 @@
 
 using namespace bear;
 
+#include<fstream> // Used for loading configs
+
 void GraphicsSingleton::init()
 {
 	batch_renderer.init();
@@ -114,5 +116,24 @@ void LevelManagerSingleton::render_current_level()
 LevelManagerSingleton * LevelManagerSingleton::Instance()
 {
 	static auto* instance = new LevelManagerSingleton();
+	return instance;
+}
+
+// Config singleton
+
+void ConfigSingleton::load_key_bindings()
+{
+	std::string path = RESOURCES_RELATIVE_PATH + std::string("keybindings.txt");
+	std::ifstream file(path);
+	if (!file.is_open()) {
+		std::cout << "Big fucking ERROR! Can't load keybindings configfile" << std::endl;
+	}
+
+
+}
+
+ConfigSingleton * ConfigSingleton::Instance()
+{
+	static auto* instance = new ConfigSingleton();
 	return instance;
 }

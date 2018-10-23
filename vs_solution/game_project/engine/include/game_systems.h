@@ -70,3 +70,17 @@ private:
 public:
 	static GraphicsSingleton* Instance();
 };
+
+class ConfigSingleton {
+public:
+	void load_key_bindings();
+
+	Key move_keys[4];
+
+	// Singleton, ignore
+private:
+	ConfigSingleton() { }
+public:
+	static ConfigSingleton* Instance();
+
+};

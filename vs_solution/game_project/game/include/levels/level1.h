@@ -9,6 +9,7 @@
 struct Level1 : ILevel {
 
 	LevelContent content;
+	Player* player = Player::get(); // Update, event, render
 
 	void init() override {
 		// Load the actual map data
@@ -26,15 +27,16 @@ struct Level1 : ILevel {
 	}
 
 	void on_event(Event& event) {
-		
+		player->on_event(event);
 	}
 
 	void update(float dt) override {
-		
+		player->update(dt);
 	}
 
 	void render() override {
 		// Render all the entities here
+		player->render();
 		GraphicsSingleton::Instance()->draw(content.walls_floors);  // Render walls & floors
 		GraphicsSingleton::Instance()->draw(content.enemies);		// Render enemies
 	}
