@@ -13,7 +13,7 @@ using namespace bear;
 
 Player* Player::instance = nullptr;
 
-Player::Player()
+Player::Player() : player_anim()
 {
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
@@ -44,6 +44,9 @@ void Player::on_event(Event & event)
 
 void Player::update(float dt)
 {	
+	// Update the animation object
+	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
+
 	// What're we doing?
 	switch (player_state) {
 	case PlayerStates::IDLE:

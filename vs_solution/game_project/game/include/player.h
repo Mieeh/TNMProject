@@ -4,6 +4,7 @@
 #include"../../engine/include/game_systems.h"
 
 #include"death_screen.h"
+#include"player_animation.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -43,6 +44,7 @@ private:
 
 	Entity entity;
 	DeathPanel death_panel;
+	PlayerAnimation player_anim;
 	
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
