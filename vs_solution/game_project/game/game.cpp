@@ -4,12 +4,18 @@
 #include"include/levels/level2.h"
 #include"include/levels/menu.h"
 
+#include"../engine/include/game_systems.h"
+
 void Game::init()
 {
 	// Register levels
 	level_manager->registerLevel("level1", new Level1);
 	level_manager->registerLevel("level2", new Level2);
 	level_manager->registerLevel("menu", new TitleScreen);
+
+	// Notes(david) this should be registered using automation from the resource folder 
+	//SoundSingleton::Instance()->register_music("bg", "sound.ogg");
+	//SoundSingleton::Instance()->get_music("bg")->sf_music.play();
 
 	// Set current level
 	level_manager->setCurrentLevel("menu");

@@ -4,6 +4,8 @@ using namespace bear;
 
 #include<fstream> // Used for loading configs
 
+#include<core/vector2.h>
+
 void GraphicsSingleton::init()
 {
 	batch_renderer.init();
@@ -120,7 +122,6 @@ LevelManagerSingleton * LevelManagerSingleton::Instance()
 }
 
 // Config singleton
-
 void ConfigSingleton::load_key_bindings()
 {
 	std::string path = RESOURCES_RELATIVE_PATH + std::string("keybindings.txt");
@@ -129,11 +130,57 @@ void ConfigSingleton::load_key_bindings()
 		std::cout << "Big fucking ERROR! Can't load keybindings configfile" << std::endl;
 	}
 
+	std::vector<std::string> file_lines;
+	std::string line;
+	while (file >> line) {
+		file_lines.push_back(line);
+	}
 
+	file.close(); // Close the file, we're done with it
+
+	// Go through each line from the kydbindings config file and register them to the keymap
+	for (std::string line : file_lines) {
+		int split_index = line.find(":");
+		std::string key = line.substr(0, split_index);
+		int value = std::stoi(line.substr(split_index + 1, line.length() - split_index + 1));
+		// Register to keymap
+		key_map.insert(std::pair<std::string, Key>(key, static_cast<Key>(value)));
+	}
 }
 
 ConfigSingleton * ConfigSingleton::Instance()
 {
 	static auto* instance = new ConfigSingleton();
+	return instance;
+}
+
+// Music singleton
+
+SoundSingleton* SoundSingleton::instance = nullptr;
+
+void SoundSingleton::register_music(std::string name, const std::string & path)
+{
+	music_list.insert(std::pair<std::string, std::shared_ptr<Music>>(name, std::make_shared<Music>(path)));
+}
+
+std::shared_ptr<Music> SoundSingleton::get_music(std::string name)
+{
+	return music_list.at(name);
+}
+
+void SoundSingleton::register_sfx(std::string name, const std::string & path)
+{
+	sfx_list.insert(std::pair<std::string, std::shared_ptr<SFX>>(name, std::make_shared<SFX>(path)));
+}
+
+std::shared_ptr<SFX> SoundSingleton::get_sfx(std::string name)
+{
+	return sfx_list.at(name);
+}
+
+SoundSingleton * SoundSingleton::Instance()
+{
+	if (instance == nullptr)
+		instance = new SoundSingleton();
 	return instance;
 }

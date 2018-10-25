@@ -15,23 +15,23 @@ Player* Player::instance = nullptr;
 
 Player::Player()
 {
-	entity.renderable.m_Color = core::Color::Red();
+	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 	entity.renderable.m_Layer = LAYER3;
 }
 
 void Player::on_event(Event & event)
-{
+{					
 	if (event.type == EventType::KeyPressed) {
 		// Make sure the player is idle before we move/perform something!
 		if (player_state == PlayerStates::IDLE) {
-			if (event.key == Key::D)
+			if (event.key == config_singleton->key_map.at("MOVE_RIGHT"))
 				move_player(PlayerMoveDirection::RIGHT);
-			else if (event.key == Key::A)
+			else if (event.key == config_singleton->key_map.at("MOVE_LEFT"))
 				move_player(PlayerMoveDirection::LEFT);
-			else if (event.key == Key::S)
+			else if (event.key == config_singleton->key_map.at("MOVE_DOWN"))
 				move_player(PlayerMoveDirection::DOWN);
-			else if (event.key == Key::W)
+			else if (event.key == config_singleton->key_map.at("MOVE_UP"))
 				move_player(PlayerMoveDirection::UP);
 		}
 		else if (player_state == PlayerStates::DEAD) {

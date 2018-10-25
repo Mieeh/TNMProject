@@ -6,11 +6,13 @@
 
 #include<map>
 #include<string>
+#include<memory.h>
 
 #include"bear_game.h"
 #include"entity.h"
 #include"level.h"
 #include"engine.h"
+#include"sfml_audio_wrapper.h"
 
 /*
 Master file for all game systems :
@@ -75,7 +77,7 @@ class ConfigSingleton {
 public:
 	void load_key_bindings();
 
-	Key move_keys[4];
+	std::map<std::string, Key> key_map;
 
 	// Singleton, ignore
 private:
@@ -83,4 +85,25 @@ private:
 public:
 	static ConfigSingleton* Instance();
 
+};
+
+class SoundSingleton {
+
+private:
+	std::map<std::string, std::shared_ptr<Music>> music_list;
+	std::map<std::string, std::shared_ptr<SFX>> sfx_list;
+
+public:
+	void register_music(std::string name, const std::string& path);
+	std::shared_ptr<Music> get_music(std::string name);
+	void register_sfx(std::string name, const std::string& path);
+	std::shared_ptr<SFX> get_sfx(std::string name);
+
+	// Singleton, ignore
+private:
+	SoundSingleton() { }
+	static SoundSingleton* instance;
+
+public:
+	static SoundSingleton* Instance();
 };

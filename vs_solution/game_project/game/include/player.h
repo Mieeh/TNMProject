@@ -39,6 +39,7 @@ private:
 	const float move_speed = 0.5f;
 	const float fall_speed = 0.65;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
+	ConfigSingleton* config_singleton = ConfigSingleton::Instance();
 
 	Entity entity;
 	DeathPanel death_panel;
