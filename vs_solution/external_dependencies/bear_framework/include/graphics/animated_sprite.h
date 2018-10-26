@@ -31,7 +31,7 @@ namespace bear { namespace graphics {
 		AnimatedSprite();
 
 		// Adds a new keyframe at the back of the animation
-		void addKeyframe(AnimatedKeyframe& a_Keyframe);
+		void addKeyframe(AnimatedKeyframe a_Keyframe);
 		// start the animation
 		void play();
 		// sto pthe animation

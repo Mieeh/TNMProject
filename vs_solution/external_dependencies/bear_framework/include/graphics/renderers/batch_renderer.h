@@ -18,7 +18,7 @@ namespace bear { namespace graphics {
 
 #define VERTEX_SIZE sizeof(Vertex)
 #define QUAD_SIZE VERTEX_SIZE * 6 // 6 indices
-#define QUAD_MAX_COUNT 40963 // 64*64
+#define QUAD_MAX_COUNT 256*256 // big one
 #define UNLIT_BUFFER_SIZE QUAD_SIZE * QUAD_MAX_COUNT
 
 	/*

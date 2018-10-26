@@ -31,8 +31,23 @@ PlayerAnimation::PlayerAnimation() {
 
 std::string PlayerAnimation::update(int player_state, int move_direction, float dt) {
 
-	walk_right.update(dt);
-	return walk_right.m_CurrentTextureName;
+	if (move_direction == PlayerMoveDirection::RIGHT) {
+		walk_right.update(dt);
+		return walk_right.m_CurrentTextureName;
+	}
+	else if (move_direction == PlayerMoveDirection::LEFT) {
+		walk_left.update(dt);
+		return walk_left.m_CurrentTextureName;
+	}
+	else if (move_direction == PlayerMoveDirection::DOWN) {
+		walk_down.update(dt);
+		return walk_down.m_CurrentTextureName;
+	}
+	else if (move_direction == PlayerMoveDirection::UP) {
+		walk_up.update(dt);
+		return walk_up.m_CurrentTextureName;
+	}
+	return "runningRight1";
 
 	/*
 	if (player_state == PlayerStates::IN_TRANSIT) {
