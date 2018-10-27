@@ -27,6 +27,9 @@ PlayerAnimation::PlayerAnimation() {
 	walk_left.m_TickBreak = 100;
 
 	walk_right.play();
+	walk_left.play();
+	walk_down.play();
+	walk_up.play();
 }
 
 std::string PlayerAnimation::update(int player_state, int move_direction, float dt) {

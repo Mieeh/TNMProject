@@ -58,8 +58,8 @@ void GraphicsSingleton::draw(Entity & entity)
 
 void GraphicsSingleton::flush()
 {
-	batch_renderer.flush(view);
-	ui_renderer.flush();
+	batch_renderer.flush(view);          
+	ui_renderer.flush();                 
 }
 
 void GraphicsSingleton::window_resized(const Event & event)

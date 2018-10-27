@@ -98,7 +98,7 @@ void Engine::core()
 	while (game_window->isOpen()) {
 		
 		if (fpsClock.getTicks() >= 1000) {
-			std::cout << fps << std::endl;
+			//std::cout << fps << std::endl;
 			fps = 0;
 			fpsClock.reset();
 		}

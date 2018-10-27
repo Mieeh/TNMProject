@@ -46,6 +46,7 @@ void Player::update(float dt)
 {	
 	// Update the animation object
 	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
+	std::cout << entity.renderable.m_TextureName << std::endl;
 
 	// What're we doing?
 	switch (player_state) {
