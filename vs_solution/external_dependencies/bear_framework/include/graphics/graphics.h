@@ -12,6 +12,7 @@
 #include"text.h"
 #include"view.h"
 #include"framebuffer.h"
+#include"renderers/slow_renderer.h"
 
 #include"../core/file_utility.h"
 
@@ -22,6 +23,7 @@ namespace bear { namespace graphics {
 		friend class BatchRenderer;
 		friend class TextLabel;
 		friend class ParticleSource;
+		friend class SlowRenderer;
 	
 	private:
 		// Used by: BatchRenderer
@@ -74,7 +76,8 @@ namespace bear { namespace graphics {
 		    "out_color = in_color;", 
 			"uv = in_uv;", 
 			"pos = in_pos;",
-			"ts = texture_slot;",
+			//"ts = texture_slot;",
+			"ts = -1;",
 		"}" 
 	};
 	static std::string default_fragment_shader_source[] = {
@@ -89,19 +92,22 @@ namespace bear { namespace graphics {
 		"in float ts;"
 
 		"uniform sampler2D texture_sampler;",
-		"uniform int texture_mode;",
 
-		"uniform sampler2D texture_samplers[14];",
+		//"uniform sampler2D texture_samplers[14];",
 
 		"void main() {",
-			"if(ts == -1) {",
-			    "gl_FragColor = out_color;", 
-			"}", 
-			"else {", 
-		        "highp int _ts = int(ts);"
-			    "gl_FragColor = texture(texture_samplers[_ts], uv) * out_color;", 
-				//"color = texture(texture_sampler, uv) * out_color;",
-			"}",  
+			"if(uv.x > 0) { gl_FragColor = texture(texture_sampler, uv) * out_color; }",
+			"else { gl_FragColor = out_color; }",
+			//"gl_FragColor = out_color;",
+
+			//"if(ts == -1) {",
+			//    "gl_FragColor = out_color;", 
+			//"}", 
+			//"else {", 
+		    //    "highp int _ts = int(ts);"
+			//    "gl_FragColor = texture(texture_samplers[_ts], uv) * out_color;", 
+			//	//"color = texture(texture_sampler, uv) * out_color;",
+			//"}",  
 		"}" 
 	};
 

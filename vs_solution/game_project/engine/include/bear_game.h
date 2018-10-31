@@ -21,7 +21,6 @@ struct Engine {
 	static Engine* instance;
 	BearClass *bear_class;
 	bear::window::Window* game_window;
-	bear::graphics::BatchRenderer* main_renderer;
 
 	// Cam shake stuff
 	bool do_window_shake = false;
@@ -38,4 +37,6 @@ struct Engine {
 	void loadResources();
 	// Main game loop
 	void core();
+	// Called on application exit
+	void exit();
 };

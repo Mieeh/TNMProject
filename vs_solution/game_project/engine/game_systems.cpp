@@ -3,13 +3,24 @@
 using namespace bear;
 
 #include<fstream> // Used for loading configs
+#include<math.h>
 
 #include<core/vector2.h>
 
 void GraphicsSingleton::init()
 {
-	batch_renderer.init();
-	ui_renderer.init();
+	// Create and init renderers
+	slow_renderer = new bear::graphics::SlowRenderer();
+	slow_ui_renderer = new bear::graphics::SlowRenderer();
+	slow_renderer->init();
+	slow_ui_renderer->init();
+}
+
+void GraphicsSingleton::exit()
+{
+	//std::cout << "Graphics Singleton exit called\n";
+	delete slow_renderer;
+	delete slow_ui_renderer;
 }
 
 void GraphicsSingleton::update(float dt) {
@@ -18,8 +29,11 @@ void GraphicsSingleton::update(float dt) {
 	if (point_to_follow != nullptr) {
 		core::Vector2f goal_pos = ((*point_to_follow) * -1) + core::Vector2f((window_size.x/2) - TILE_SIZE/2, (window_size.y/2) - TILE_SIZE/2);
 		core::Vector2f curr = view.getPosition();
-		if (core::Vector2f::distance(curr, goal_pos) > 2.0f) {
+		if (core::Vector2f::distance(curr, goal_pos) > 1.0f) {
 			curr.lerp(goal_pos, 0.0025f*dt);
+			//curr.moveTowards(goal_pos, 0.1f*dt);
+			curr.x = round(curr.x);
+			curr.y = round(curr.y);
 			view.setPosition(curr);
 		}
 	}
@@ -27,45 +41,45 @@ void GraphicsSingleton::update(float dt) {
 
 void GraphicsSingleton::begin()
 {
-	ui_renderer.begin();
-	batch_renderer.begin();
+	slow_renderer->begin();
+	slow_ui_renderer->begin();
 }
 
 void GraphicsSingleton::draw_as_ui(Entity & entity)
 {
-	ui_renderer.submit(&entity.renderable);
+	slow_ui_renderer->submit(entity.renderable);
 }
 
 void GraphicsSingleton::draw(std::vector<Entity>& entity_list)
 {
 	for (auto &entity : entity_list) {
-		batch_renderer.submit(&entity.renderable);
+		slow_renderer->submit(entity.renderable);
 	}
 }
 
 void GraphicsSingleton::draw(std::map<std::string, EnemyBase>& enemy_map)
 {
 	for (auto& x : enemy_map) {
-		if(!x.second.is_dead)
-			batch_renderer.submit(&x.second.entity.renderable);
+		if (!x.second.is_dead)
+			slow_renderer->submit(x.second.entity.renderable);
 	}
 }
 
 void GraphicsSingleton::draw(Entity & entity)
 {
-	batch_renderer.submit(&entity.renderable);
+	slow_renderer->submit(entity.renderable);
 }
 
 void GraphicsSingleton::flush()
 {
-	batch_renderer.flush(view);          
-	ui_renderer.flush();                 
+	slow_renderer->flush(view);
+	slow_ui_renderer->flush();
 }
 
 void GraphicsSingleton::window_resized(const Event & event)
 {
 	if (event.type == EventType::WindowReiszed) {
-		// Do the stuff neccesary 
+		// Bear framework callback for the rendering
 		graphics::Graphics::window_resize_callback(event.size.x, event.size.y);
 		window_size = event.size;
 	}
@@ -78,6 +92,18 @@ GraphicsSingleton * GraphicsSingleton::Instance()
 }
 
 // Level Manager
+
+void LevelManagerSingleton::exit()
+{
+	//std::cout << "Level Manager exit called!\n";
+
+	current_level = nullptr;
+	auto it = std::map<std::string, ILevel*>::iterator();
+	for (it = level_map.begin(); it != level_map.end(); ++it) {
+		delete it->second;
+		level_map.erase(it);
+	}
+}
 
 void LevelManagerSingleton::registerLevel(const std::string & level_name, ILevel * level)
 {
@@ -157,6 +183,18 @@ ConfigSingleton * ConfigSingleton::Instance()
 // Music singleton
 
 SoundSingleton* SoundSingleton::instance = nullptr;
+
+void SoundSingleton::exit()
+{
+	//std::cout << "Sound Singleton exit called\n";
+
+	for (const auto& x : music_list) {
+		music_list.erase(x.first);
+	}
+	for (const auto& x : sfx_list) {
+		sfx_list.erase(x.first);
+	}
+}
 
 void SoundSingleton::register_music(std::string name, const std::string & path)
 {

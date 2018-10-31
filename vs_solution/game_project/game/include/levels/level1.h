@@ -37,8 +37,8 @@ struct Level1 : ILevel {
 	void render() override {
 		// Render all the entities here
 		player->render();
-		//GraphicsSingleton::Instance()->draw(content.walls_floors);  // Render walls & floors
-		//GraphicsSingleton::Instance()->draw(content.enemies);		// Render enemies
+		GraphicsSingleton::Instance()->draw(content.enemies);		// Render enemies
+		GraphicsSingleton::Instance()->draw(content.walls_floors);  // Render walls & floors
 	}
 
 	void player_moved() override {

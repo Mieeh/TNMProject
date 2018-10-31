@@ -1,6 +1,7 @@
 #pragma once
 
-#include<graphics/renderers/batch_renderer.h>
+#include<graphics/renderers/slow_renderer.h>
+//#include<graphics/renderers/batch_renderer.h>
 #include<graphics/view.h>
 #include<window/event.h>
 
@@ -18,6 +19,8 @@
 Master file for all game systems :
 - rendering
 - level managing
+- config 
+- music/sfx
 */
 
 using namespace bear;
@@ -29,6 +32,9 @@ public:
 	std::map<std::string, ILevel*> level_map;
 
 public:
+
+	void exit();
+
 	void registerLevel(const std::string& level_name, ILevel* level);
 	void setCurrentLevel(const std::string& level_name);
 	void reInitCurrentLevel();
@@ -45,10 +51,11 @@ public:
 
 class GraphicsSingleton {
 private:
-	bear::graphics::BatchRenderer batch_renderer;
-	bear::graphics::BatchRenderer ui_renderer;
+	// Bear framework rendering objects 
+	bear::graphics::SlowRenderer *slow_renderer;
+	bear::graphics::SlowRenderer *slow_ui_renderer;
 
-public:
+public:									
 	core::Vector2f window_size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 	core::Vector2f* point_to_follow;
 	graphics::View view;
@@ -57,6 +64,8 @@ public:
 	void update(float dt);
 
 	void init();
+	void exit(); // Called on application exit
+
 	void begin();
 	void draw_as_ui(Entity& entity);
 	void draw(std::vector<Entity>& entity_list);
@@ -74,16 +83,15 @@ public:
 };
 
 class ConfigSingleton {
+private:
+	// Singleton, ignore
+	ConfigSingleton() { }
+	
 public:
 	void load_key_bindings();
+	static ConfigSingleton* Instance();
 
 	std::map<std::string, Key> key_map;
-
-	// Singleton, ignore
-private:
-	ConfigSingleton() { }
-public:
-	static ConfigSingleton* Instance();
 
 };
 
@@ -94,6 +102,8 @@ private:
 	std::map<std::string, std::shared_ptr<SFX>> sfx_list;
 
 public:
+	void exit();
+
 	void register_music(std::string name, const std::string& path);
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);

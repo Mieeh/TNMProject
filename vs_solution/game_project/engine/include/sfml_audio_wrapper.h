@@ -6,12 +6,8 @@ struct Music {
 	sf::Music sf_music;
 
 	Music(const std::string& path) {
-		printf("Music created wtf\n");
 		sf_music.openFromFile(path);
-	}
-
-	~Music() {
-		//printf("Jak and dexter 3\n");
+		//printf("Music created wtf\n");
 	}
 };
 
@@ -23,11 +19,6 @@ struct SFX {
 	{
 		sf_buffer.loadFromFile(path);
 		sf_sound.setBuffer(sf_buffer);
-		printf("Creating sound\n");
-	}
-
-	~SFX()
-	{
-		printf("Deleting sound\n");
+		//printf("Creating sound\n");
 	}
 };

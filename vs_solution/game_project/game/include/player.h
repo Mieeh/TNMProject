@@ -31,13 +31,13 @@ class Player {
 
 public:
 	// Gameplay related
-	int hp = 5;     // Notes(david) what is this actually supposed to be?								
-	int attack = 1; // Notes(david) what is this actually supposed to be?
+	int hp = 5;     							
+	int attack = 1; 
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
 
 private:
-	const float move_speed = 0.5f;
+	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
 	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
 	ConfigSingleton* config_singleton = ConfigSingleton::Instance();
@@ -59,15 +59,20 @@ public:
 	void update(float dt);
 	void render();
 
-	void move_player(int move_direction_enum); // moves player in direction
 	void set_player_position(const core::Vector2i position); // Instantly moves player to position, tile-based
 	void set_player_state(PlayerStates new_state); // Sets player_state + some other switching logic between states
 
-	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
-	void idle_player_state_control(); // logic for idle state is here
 	void play_intro_at(const core::Vector2i position);
 	void resolve_combat(EnemyBase& enemy, int move_direction_enum);
 	void reset_after_death();
+
+	// Per state code methods
+	void idle_player_state_control(); // logic for idle state is here
+	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
+	void move_player(int move_direction_enum); // moves player in direction
+	void intro_player(float dt); // does intro 
+	void outro_player(float dt); // does outro 
+
 
 public:
 	static Player* get();

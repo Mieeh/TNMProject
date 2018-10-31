@@ -46,7 +46,6 @@ void Player::update(float dt)
 {	
 	// Update the animation object
 	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
-	std::cout << entity.renderable.m_TextureName << std::endl;
 
 	// What're we doing?
 	switch (player_state) {
@@ -57,38 +56,10 @@ void Player::update(float dt)
 		move_player_state_control(move_direction, dt);
 		break;
 	case PlayerStates::INTRO:
-		// Do intro logic
-		if (entity.renderable.m_Transform.m_Position.y < world_position.y) {
-			//core::lerp(entity.renderable.m_Transform.m_Position.y, world_position.y, 0.001f*dt);
-			entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
-			entity.renderable.m_Color.a += 0.0015f*dt;
-		}
-		else {
-			player_state = PlayerStates::IDLE;
-			entity.renderable.m_Transform.m_Position = world_position;
-			entity.renderable.m_Color.a = 1.0f;
-			Engine::instance->perform_window_shake(400, 10); 
-		}
+		intro_player(dt);
 		break;
 	case PlayerStates::OUTRO:
-		
-		if (entity.renderable.m_Color.a > 0.0f) {
-			// Move and fade
-			entity.renderable.m_Color.a -= 0.0015f*dt;
-			entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
-			// Layering
-			entity.renderable.m_Layer = LAYER0;
-		}
-		else {
-			// Reset state
-			goal_trigger = false;				
-			set_player_state(PlayerStates::IDLE);
-			// Load new level
-			level_manager_singleton->setCurrentLevel(level_manager_singleton->current_level->next_level_name); // Load the next level
-			// Reset layer
-			entity.renderable.m_Layer = LAYER3;
-		}
-		
+		outro_player(dt);
 		break;
 
 	case PlayerStates::DEAD:
@@ -100,6 +71,7 @@ void Player::update(float dt)
 void Player::render()
 {
 	GraphicsSingleton::Instance()->draw(entity);
+
 	// Dead? render the death panel if we are!
 	if (player_state == PlayerStates::DEAD) {
 		death_panel.entity.renderable.m_Transform.m_Size = GraphicsSingleton::Instance()->window_size;
@@ -146,6 +118,42 @@ void Player::move_player(int move_direction_enum)
 
 	// Update the layer
 	entity.renderable.m_Layer = LAYER3 + tile_position.y;
+}
+
+void Player::intro_player(float dt)
+{
+	// Move playerdown until we hit the start position
+	if (entity.renderable.m_Transform.m_Position.y < world_position.y) {
+		entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
+		entity.renderable.m_Color.a += 0.0015f*dt;
+	}
+	else {
+		player_state = PlayerStates::IDLE;
+		entity.renderable.m_Transform.m_Position = world_position;
+		entity.renderable.m_Color.a = 1.0f;
+		Engine::instance->perform_window_shake(400, 10);
+	}
+}
+
+void Player::outro_player(float dt)
+{
+	// Move the player position down until it's faded out
+	if (entity.renderable.m_Color.a > 0.0f) {
+		// Move and fade
+		entity.renderable.m_Color.a -= 0.0015f*dt;
+		entity.renderable.m_Transform.m_Position.y += fall_speed * dt;
+		// Layering
+		entity.renderable.m_Layer = LAYER0;
+	}
+	else {
+		// Reset state
+		goal_trigger = false;
+		set_player_state(PlayerStates::IDLE);
+		// Load new level
+		level_manager_singleton->setCurrentLevel(level_manager_singleton->current_level->next_level_name); // Load the next level
+		// Reset layer
+		entity.renderable.m_Layer = LAYER3;
+	}
 }
 
 void Player::set_player_position(const core::Vector2i position)
@@ -217,6 +225,9 @@ void Player::play_intro_at(const core::Vector2i position)
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
 	entity.renderable.m_Color.a = 0.0f;
+
+	// Reset player HP
+	hp = 5;
 }
 
 void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)

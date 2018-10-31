@@ -21,10 +21,10 @@ PlayerAnimation::PlayerAnimation() {
 	walk_down.m_IsLooping = true;
 	walk_left.m_IsLooping = true;
 
-	walk_up.m_TickBreak = 100;
+	walk_up.m_TickBreak = 10;
 	walk_right.m_TickBreak = 10;
-	walk_down.m_TickBreak = 100;
-	walk_left.m_TickBreak = 100;
+	walk_down.m_TickBreak = 10;
+	walk_left.m_TickBreak = 10;
 
 	walk_right.play();
 	walk_left.play();
@@ -34,45 +34,23 @@ PlayerAnimation::PlayerAnimation() {
 
 std::string PlayerAnimation::update(int player_state, int move_direction, float dt) {
 
-	if (move_direction == PlayerMoveDirection::RIGHT) {
-		walk_right.update(dt);
-		return walk_right.m_CurrentTextureName;
-	}
-	else if (move_direction == PlayerMoveDirection::LEFT) {
-		walk_left.update(dt);
-		return walk_left.m_CurrentTextureName;
-	}
-	else if (move_direction == PlayerMoveDirection::DOWN) {
-		walk_down.update(dt);
-		return walk_down.m_CurrentTextureName;
-	}
-	else if (move_direction == PlayerMoveDirection::UP) {
-		walk_up.update(dt);
-		return walk_up.m_CurrentTextureName;
-	}
-	return "runningRight1";
-
-	/*
 	if (player_state == PlayerStates::IN_TRANSIT) {
-		switch (move_direction) {
-		case PlayerMoveDirection::LEFT:
-			walk_left.update(dt);
-			current_animation = walk_left;
-			break;
-		case PlayerMoveDirection::RIGHT:
+		if (move_direction == PlayerMoveDirection::RIGHT) {
 			walk_right.update(dt);
-			current_animation = walk_right;
-			break;		
-		case PlayerMoveDirection::DOWN:
-			walk_down.update(dt);
-			current_animation = walk_down;
-			break;		
-		case PlayerMoveDirection::UP:
-			walk_up.update(dt);
-			current_animation = walk_up;
-			break;
+			return walk_right.m_CurrentTextureName;
 		}
-		
+		else if (move_direction == PlayerMoveDirection::LEFT) {
+			walk_left.update(dt);
+			return walk_left.m_CurrentTextureName;
+		}
+		else if (move_direction == PlayerMoveDirection::DOWN) {
+			walk_down.update(dt);
+			return walk_down.m_CurrentTextureName;
+		}
+		else if (move_direction == PlayerMoveDirection::UP) {
+			walk_up.update(dt);
+			return walk_up.m_CurrentTextureName;
+		}
 	}
-	*/
+	return "runningDown1";
 }
