@@ -19,7 +19,7 @@ PlayerAnimation::PlayerAnimation() {
 	walk_up.m_IsLooping = true;
 	walk_right.m_IsLooping = true;
 	walk_down.m_IsLooping = true;
-	walk_left.m_IsLooping = true;
+	walk_left.m_IsLooping = true; 
 
 	walk_up.m_TickBreak = 10;
 	walk_right.m_TickBreak = 10;

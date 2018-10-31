@@ -11,6 +11,8 @@
 
 using namespace bear;
 
+struct Engine;
+
 enum PlayerStates {
 	INTRO,
 	IDLE,
@@ -39,12 +41,12 @@ public:
 private:
 	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
-	LevelManagerSingleton *level_manager_singleton = LevelManagerSingleton::Instance();
-	ConfigSingleton* config_singleton = ConfigSingleton::Instance();
+	Engine* engine;
 
 	Entity entity;
 	DeathPanel death_panel;
 	PlayerAnimation player_anim;
+	std::string last_played_footstep = "footstep1";
 	
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
@@ -52,6 +54,9 @@ private:
 
 	// Move directions, used for translating the enum into a direction!
 	core::Vector2i move_directions[4] = { core::Vector2i(1,0), core::Vector2i(-1, 0), core::Vector2i(0, 1), core::Vector2i(0, -1) };
+
+private:
+	std::string get_random_footstep(unsigned int number_of_footsteps);
 
 public:
 

@@ -1,10 +1,9 @@
 #pragma once
 
 #include"bear_framework.h"
-
-/* This class gets inherited by the main "game" class
-* 1. put all core-framework code here!
-*/
+#include"game_systems.h"
+ 
+/* This class gets inherited by the main "game" class */
 
 struct BearClass {
 	// Implemented by the "game"
@@ -21,6 +20,12 @@ struct Engine {
 	static Engine* instance;
 	BearClass *bear_class;
 	bear::window::Window* game_window;
+
+	// Game systems
+	std::unique_ptr<LevelManager> level_manager;
+	std::unique_ptr<GraphicsManager> graphics_manager;
+	std::unique_ptr<ConfigManager> config_manager;
+	std::unique_ptr<SoundManager> sound_manager;
 
 	// Cam shake stuff
 	bool do_window_shake = false;

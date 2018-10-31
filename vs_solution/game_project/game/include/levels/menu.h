@@ -16,9 +16,9 @@ struct TitleScreen : ILevel {
 
 	void on_event(Event &event) override {
 		if (event.type == EventType::KeyPressed) {
-			if (event.key == ConfigSingleton::Instance()->key_map.at("INTERACT1")) {
-				LevelManagerSingleton::Instance()->setCurrentLevel("level1");
-			}
+			//if (event.key == ConfigSingleton::Instance()->key_map.at("INTERACT1")) {
+			//	LevelManagerSingleton::Instance()->setCurrentLevel("level1");
+			//}
 		}
 	}
 
@@ -27,7 +27,7 @@ struct TitleScreen : ILevel {
 	}
 
 	void render() override {
-		GraphicsSingleton::Instance()->draw(test);
+		//GraphicsSingleton::Instance()->draw(test);
 	}
 
 	void player_moved() override {

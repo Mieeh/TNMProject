@@ -28,13 +28,16 @@ Engine::Engine(BearClass* bear_class)
 	if (!bear::graphics::Graphics::init(WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		std::cout << "ERROR: Failed to init BEAR-FRAMEWORK graphics!" << std::endl;
 	}
+	
+	//Create the game systems
+	level_manager = std::make_unique<LevelManager>();
+	graphics_manager = std::make_unique<GraphicsManager>();
+	config_manager = std::make_unique<ConfigManager>();
+	sound_manager = std::make_unique<SoundManager>();
 
 	// Load resources
 	this->loadResources();
 
-	// Init game systems
-	ConfigSingleton::Instance()->load_key_bindings();
-	GraphicsSingleton::Instance()->init();
 
 	// Call "game" init
 	this->bear_class = bear_class;
@@ -97,7 +100,7 @@ void Engine::loadResources()
 		unsigned int i = path.find_last_of("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
 		std::string file_name = path.substr(i + 1, (j - i) - 1);
-		SoundSingleton::Instance()->register_music(file_name, path);
+		sound_manager->register_music(file_name, path);
 	}
 
 	// Loop through each .ogg file in the /resources/sfx and register them with the same fucking name as filename
@@ -112,7 +115,7 @@ void Engine::loadResources()
 		unsigned int i = path.find_last_of("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
 		std::string file_name = path.substr(i + 1, (j - i) - 1);
-		SoundSingleton::Instance()->register_sfx(file_name, path);
+		sound_manager->register_sfx(file_name, path);
 	}
 
 	call_flag = true;
@@ -145,7 +148,7 @@ void Engine::core()
 				game_window->close(); // Close the window
 			}
 			else if (event.type == EventType::WindowReiszed) {
-				GraphicsSingleton::Instance()->window_resized(event);
+				graphics_manager->window_resized(event);
 			}
 
 			// Send events to game
@@ -159,9 +162,9 @@ void Engine::core()
 		// rendering
 		game_window->clear(UNLIT_BACKGROUND_COLOR);
 
-		GraphicsSingleton::Instance()->begin();
+		graphics_manager->begin();
 		bear_class->render(); // Here is where the "game" submits the primitives to be rendered by the rendering system
-		GraphicsSingleton::Instance()->flush();
+		graphics_manager->flush();
 
 		game_window->display();
 
@@ -176,9 +179,9 @@ void Engine::exit()
 {
 	bear_class->exit();
 	// Call exit on the various systems!
-	GraphicsSingleton::Instance()->exit();
-	LevelManagerSingleton::Instance()->exit();
-	SoundSingleton::Instance()->exit();
+	graphics_manager->exit();
+	graphics_manager->exit();
+	graphics_manager->exit();
 }
 
 void Engine::update(float dt)

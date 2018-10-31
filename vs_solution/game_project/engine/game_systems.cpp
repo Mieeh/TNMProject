@@ -7,7 +7,10 @@ using namespace bear;
 
 #include<core/vector2.h>
 
-void GraphicsSingleton::init()
+#include<graphics/graphics.h>
+#include<window\GLFW_event.h>
+
+void GraphicsManager::init()
 {
 	// Create and init renderers
 	slow_renderer = new bear::graphics::SlowRenderer();
@@ -16,14 +19,14 @@ void GraphicsSingleton::init()
 	slow_ui_renderer->init();
 }
 
-void GraphicsSingleton::exit()
+void GraphicsManager::exit()
 {
 	//std::cout << "Graphics Singleton exit called\n";
 	delete slow_renderer;
 	delete slow_ui_renderer;
 }
 
-void GraphicsSingleton::update(float dt) {
+void GraphicsManager::update(float dt) {
 
 	// Make the view follow the point_to_follow
 	if (point_to_follow != nullptr) {
@@ -39,25 +42,25 @@ void GraphicsSingleton::update(float dt) {
 	}
 }
 
-void GraphicsSingleton::begin()
+void GraphicsManager::begin()
 {
 	slow_renderer->begin();
 	slow_ui_renderer->begin();
 }
 
-void GraphicsSingleton::draw_as_ui(Entity & entity)
+void GraphicsManager::draw_as_ui(Entity & entity)
 {
 	slow_ui_renderer->submit(entity.renderable);
 }
 
-void GraphicsSingleton::draw(std::vector<Entity>& entity_list)
+void GraphicsManager::draw(std::vector<Entity>& entity_list)
 {
 	for (auto &entity : entity_list) {
 		slow_renderer->submit(entity.renderable);
 	}
 }
 
-void GraphicsSingleton::draw(std::map<std::string, EnemyBase>& enemy_map)
+void GraphicsManager::draw(std::map<std::string, EnemyBase>& enemy_map)
 {
 	for (auto& x : enemy_map) {
 		if (!x.second.is_dead)
@@ -65,18 +68,19 @@ void GraphicsSingleton::draw(std::map<std::string, EnemyBase>& enemy_map)
 	}
 }
 
-void GraphicsSingleton::draw(Entity & entity)
+void GraphicsManager::draw(Entity & entity)
 {
 	slow_renderer->submit(entity.renderable);
 }
 
-void GraphicsSingleton::flush()
+void GraphicsManager::flush()
 {
 	slow_renderer->flush(view);
 	slow_ui_renderer->flush();
 }
 
-void GraphicsSingleton::window_resized(const Event & event)
+//std::cout << "Level Manager exit called!\n";
+void GraphicsManager::window_resized(const Event & event)
 {
 	if (event.type == EventType::WindowReiszed) {
 		// Bear framework callback for the rendering
@@ -85,18 +89,10 @@ void GraphicsSingleton::window_resized(const Event & event)
 	}
 }
 
-GraphicsSingleton * GraphicsSingleton::Instance()
-{
-	static GraphicsSingleton* instance = new GraphicsSingleton();
-	return instance;
-}
-
 // Level Manager
 
-void LevelManagerSingleton::exit()
+void LevelManager::exit()
 {
-	//std::cout << "Level Manager exit called!\n";
-
 	current_level = nullptr;
 	auto it = std::map<std::string, ILevel*>::iterator();
 	for (it = level_map.begin(); it != level_map.end(); ++it) {
@@ -105,12 +101,12 @@ void LevelManagerSingleton::exit()
 	}
 }
 
-void LevelManagerSingleton::registerLevel(const std::string & level_name, ILevel * level)
+void LevelManager::registerLevel(const std::string & level_name, ILevel * level)
 {
 	level_map.insert(std::pair<std::string, ILevel*>(level_name, level));
 }
 
-void LevelManagerSingleton::setCurrentLevel(const std::string & level_name)
+void LevelManager::setCurrentLevel(const std::string & level_name)
 {
 	if (level_map.find(level_name) != level_map.end()) {
 		current_level = level_map[level_name];
@@ -121,34 +117,29 @@ void LevelManagerSingleton::setCurrentLevel(const std::string & level_name)
 	}
 }
 
-void LevelManagerSingleton::reInitCurrentLevel()
+void LevelManager::reInitCurrentLevel()
 {
 	current_level->init();
 }
 
-void LevelManagerSingleton::update_current_level(float dt)
+void LevelManager::update_current_level(float dt)
 {
 	current_level->update(dt);
 }
 
-void LevelManagerSingleton::on_event_current_level(Event & event)
+void LevelManager::on_event_current_level(Event & event)
 {
 	current_level->on_event(event);
 }
 
-void LevelManagerSingleton::render_current_level()
+void LevelManager::render_current_level()
 {
 	current_level->render();
 }
 
-LevelManagerSingleton * LevelManagerSingleton::Instance()
-{
-	static auto* instance = new LevelManagerSingleton();
-	return instance;
-}
+// Config manager
 
-// Config singleton
-void ConfigSingleton::load_key_bindings()
+void ConfigManager::load_key_bindings()
 {
 	std::string path = RESOURCES_RELATIVE_PATH + std::string("keybindings.txt");
 	std::ifstream file(path);
@@ -174,20 +165,10 @@ void ConfigSingleton::load_key_bindings()
 	}
 }
 
-ConfigSingleton * ConfigSingleton::Instance()
+// Music manager
+
+void SoundManager::exit()
 {
-	static auto* instance = new ConfigSingleton();
-	return instance;
-}
-
-// Music singleton
-
-SoundSingleton* SoundSingleton::instance = nullptr;
-
-void SoundSingleton::exit()
-{
-	//std::cout << "Sound Singleton exit called\n";
-
 	for (const auto& x : music_list) {
 		music_list.erase(x.first);
 	}
@@ -196,29 +177,22 @@ void SoundSingleton::exit()
 	}
 }
 
-void SoundSingleton::register_music(std::string name, const std::string & path)
+void SoundManager::register_music(std::string name, const std::string & path)
 {
 	music_list.insert(std::pair<std::string, std::shared_ptr<Music>>(name, std::make_shared<Music>(path)));
 }
 
-std::shared_ptr<Music> SoundSingleton::get_music(std::string name)
+std::shared_ptr<Music> SoundManager::get_music(std::string name)
 {
 	return music_list.at(name);
 }
 
-void SoundSingleton::register_sfx(std::string name, const std::string & path)
+void SoundManager::register_sfx(std::string name, const std::string & path)
 {
 	sfx_list.insert(std::pair<std::string, std::shared_ptr<SFX>>(name, std::make_shared<SFX>(path)));
 }
 
-std::shared_ptr<SFX> SoundSingleton::get_sfx(std::string name)
+std::shared_ptr<SFX> SoundManager::get_sfx(std::string name)
 {
 	return sfx_list.at(name);
-}
-
-SoundSingleton * SoundSingleton::Instance()
-{
-	if (instance == nullptr)
-		instance = new SoundSingleton();
-	return instance;
 }

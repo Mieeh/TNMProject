@@ -4,34 +4,27 @@
 //#include<graphics/renderers/batch_renderer.h>
 #include<graphics/view.h>
 #include<window/event.h>
+#include<window\GLFW_event.h>
 
 #include<map>
 #include<string>
-#include<memory.h>
+#include<memory>
 
-#include"bear_game.h"
 #include"entity.h"
 #include"level.h"
 #include"engine.h"
 #include"sfml_audio_wrapper.h"
 
-/*
-Master file for all game systems :
-- rendering
-- level managing
-- config 
-- music/sfx
-*/
-
 using namespace bear;
 
-class LevelManagerSingleton {
+class LevelManager {
 
 public:
 	ILevel* current_level;
 	std::map<std::string, ILevel*> level_map;
 
 public:
+	LevelManager() { }
 
 	void exit();
 
@@ -41,15 +34,9 @@ public:
 	void update_current_level(float dt);
 	void on_event_current_level(Event& event);
 	void render_current_level();
-
-	// Singleton, ignore
-private:
-	LevelManagerSingleton() { }
-public:
-	static LevelManagerSingleton* Instance();
 };
 
-class GraphicsSingleton {
+class GraphicsManager {
 private:
 	// Bear framework rendering objects 
 	bear::graphics::SlowRenderer *slow_renderer;
@@ -61,6 +48,8 @@ public:
 	graphics::View view;
 
 public:
+	GraphicsManager() { }
+
 	void update(float dt);
 
 	void init();
@@ -74,46 +63,31 @@ public:
 	void flush();
 
 	void window_resized(const Event &event);
-
-	// Singleton, ignore
-private:
-	GraphicsSingleton() { }
-public:
-	static GraphicsSingleton* Instance();
 };
 
-class ConfigSingleton {
-private:
-	// Singleton, ignore
-	ConfigSingleton() { }
+class ConfigManager {
+public:
+	std::map<std::string, Key> key_map;
 	
 public:
+	ConfigManager() { }
+
 	void load_key_bindings();
-	static ConfigSingleton* Instance();
-
-	std::map<std::string, Key> key_map;
-
 };
 
-class SoundSingleton {
+class SoundManager {
 
 private:
 	std::map<std::string, std::shared_ptr<Music>> music_list;
 	std::map<std::string, std::shared_ptr<SFX>> sfx_list;
 
 public:
+	SoundManager() { }
+
 	void exit();
 
 	void register_music(std::string name, const std::string& path);
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);
 	std::shared_ptr<SFX> get_sfx(std::string name);
-
-	// Singleton, ignore
-private:
-	SoundSingleton() { }
-	static SoundSingleton* instance;
-
-public:
-	static SoundSingleton* Instance();
 };

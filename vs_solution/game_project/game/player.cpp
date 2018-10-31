@@ -11,13 +11,21 @@
 #include<window/GLFW_event.h>
 using namespace bear;
 
+#include<random>
+
 Player* Player::instance = nullptr;
 
 Player::Player() : player_anim()
 {
+	engine = Engine::instance;
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 	entity.renderable.m_Layer = LAYER3;
+}
+
+std::string Player::get_random_footstep(unsigned int number_of_footsteps)
+{
+	return "footstep" + std::to_string((rand() % number_of_footsteps + 1));
 }
 
 void Player::on_event(Event & event)
@@ -25,13 +33,13 @@ void Player::on_event(Event & event)
 	if (event.type == EventType::KeyPressed) {
 		// Make sure the player is idle before we move/perform something!
 		if (player_state == PlayerStates::IDLE) {
-			if (event.key == config_singleton->key_map.at("MOVE_RIGHT"))
+			if (event.key == engine->config_manager->key_map.at("MOVE_RIGHT"))
 				move_player(PlayerMoveDirection::RIGHT);
-			else if (event.key == config_singleton->key_map.at("MOVE_LEFT"))
+			else if (event.key == engine->config_manager->key_map.at("MOVE_LEFT"))
 				move_player(PlayerMoveDirection::LEFT);
-			else if (event.key == config_singleton->key_map.at("MOVE_DOWN"))
+			else if (event.key == engine->config_manager->key_map.at("MOVE_DOWN"))
 				move_player(PlayerMoveDirection::DOWN);
-			else if (event.key == config_singleton->key_map.at("MOVE_UP"))
+			else if (event.key == engine->config_manager->key_map.at("MOVE_UP"))
 				move_player(PlayerMoveDirection::UP);
 		}
 		else if (player_state == PlayerStates::DEAD) {
@@ -54,6 +62,10 @@ void Player::update(float dt)
 		break;
 	case PlayerStates::IN_TRANSIT:
 		move_player_state_control(move_direction, dt);
+		if (engine->sound_manager->get_sfx(last_played_footstep)->sf_sound.getStatus() != sf::SoundSource::Status::Playing) {
+			last_played_footstep = get_random_footstep(3);
+			engine->sound_manager->get_sfx(last_played_footstep)->sf_sound.play();
+		}
 		break;
 	case PlayerStates::INTRO:
 		intro_player(dt);
@@ -70,19 +82,19 @@ void Player::update(float dt)
 
 void Player::render()
 {
-	GraphicsSingleton::Instance()->draw(entity);
+	engine->graphics_manager->draw(entity);
 
 	// Dead? render the death panel if we are!
 	if (player_state == PlayerStates::DEAD) {
-		death_panel.entity.renderable.m_Transform.m_Size = GraphicsSingleton::Instance()->window_size;
-		GraphicsSingleton::Instance()->draw_as_ui(death_panel.entity);
+		death_panel.entity.renderable.m_Transform.m_Size = engine->graphics_manager->window_size;
+		engine->graphics_manager->draw_as_ui(death_panel.entity);
 	}
 }
 
 void Player::move_player(int move_direction_enum)
 {
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
-	int new_tile_value = LevelManagerSingleton::Instance()->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
+	int new_tile_value = engine->level_manager->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
 
 	// We trying to transit to a floor?
 	if (is_floor(new_tile_value)) {
@@ -95,12 +107,12 @@ void Player::move_player(int move_direction_enum)
 		world_position = (core::Vector2f)tile_position * TILE_SIZE;
 
 		// Message the level we've moved
-		LevelManagerSingleton::Instance()->current_level->player_moved();
+		engine->level_manager->current_level->player_moved();
 	}
 	else if (is_enemy(new_tile_value)) {
 		// Get the enemy!
 		std::string key = (std::string)new_tile_position;
-		EnemyBase& enemy = level_manager_singleton->current_level->get_level_content().enemies.at(key);
+		EnemyBase& enemy = engine->level_manager->current_level->get_level_content().enemies.at(key);
 		resolve_combat(enemy, move_direction_enum);
 	}
 	else if (new_tile_value == GOAL) {
@@ -150,7 +162,7 @@ void Player::outro_player(float dt)
 		goal_trigger = false;
 		set_player_state(PlayerStates::IDLE);
 		// Load new level
-		level_manager_singleton->setCurrentLevel(level_manager_singleton->current_level->next_level_name); // Load the next level
+		engine->level_manager->setCurrentLevel(engine->level_manager->current_level->next_level_name); // Load the next level
 		// Reset layer
 		entity.renderable.m_Layer = LAYER3;
 	}
@@ -260,13 +272,13 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		world_position = (core::Vector2f)tile_position * TILE_SIZE;
 
 		// Message the level we've moved
-		LevelManagerSingleton::Instance()->current_level->player_moved();
+		engine->level_manager->current_level->player_moved();
 	}
 }
 
 void Player::reset_after_death()
 {
-	level_manager_singleton->reInitCurrentLevel(); // Reset current level
+	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 5; // Reset hp
 }
 

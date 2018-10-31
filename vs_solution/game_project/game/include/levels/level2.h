@@ -17,7 +17,7 @@ struct Level2 : ILevel {
 
 		Player::get()->play_intro_at(core::Vector2i(1, 2));
 
-		GraphicsSingleton::Instance()->point_to_follow = &Player::get()->world_position;
+		//GraphicsSingleton::Instance()->point_to_follow = &Player::get()->world_position;
 
 		next_level_name = "level1";
 	}
@@ -32,8 +32,8 @@ struct Level2 : ILevel {
 
 	void render() override {
 		player->render();
-		GraphicsSingleton::Instance()->draw(content.walls_floors); // Render all the entities here
-		GraphicsSingleton::Instance()->draw(content.enemies);
+		//GraphicsSingleton::Instance()->draw(content.walls_floors); // Render all the entities here
+		//GraphicsSingleton::Instance()->draw(content.enemies);
 	}
 
 	void player_moved() override {
