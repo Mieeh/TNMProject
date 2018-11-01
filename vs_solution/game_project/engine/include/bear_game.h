@@ -22,11 +22,11 @@ struct Engine {
 	bear::window::Window* game_window;
 
 	// Game systems
-	std::unique_ptr<LevelManager> level_manager;
-	std::unique_ptr<GraphicsManager> graphics_manager;
-	std::unique_ptr<ConfigManager> config_manager;
-	std::unique_ptr<SoundManager> sound_manager;
-
+	LevelManager* level_manager;
+	GraphicsManager* graphics_manager;
+	ConfigManager* config_manager;
+	SoundManager* sound_manager;
+	
 	// Cam shake stuff
 	bool do_window_shake = false;
 	bear::core::Vector2i origin;
@@ -41,7 +41,7 @@ struct Engine {
 	// Creates all the resources using the bear::ResourceManager
 	void loadResources();
 	// Main game loop
-	void core();
+	void core(BearClass *bear_class);
 	// Called on application exit
 	void exit();
 };

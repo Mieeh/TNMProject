@@ -30,21 +30,14 @@ Engine::Engine(BearClass* bear_class)
 	}
 	
 	//Create the game systems
-	level_manager = std::make_unique<LevelManager>();
-	graphics_manager = std::make_unique<GraphicsManager>();
-	config_manager = std::make_unique<ConfigManager>();
-	sound_manager = std::make_unique<SoundManager>();
+	//level_manager = std::make_unique<LevelManager>();
+	//graphics_manager = std::make_unique<GraphicsManager>();
+	//config_manager = std::make_unique<ConfigManager>();
+	//sound_manager = std::make_unique<SoundManager>();
 
-	// Load resources
-	this->loadResources();
-
-
-	// Call "game" init
-	this->bear_class = bear_class;
-	bear_class->init();
 
 	// Go into the main loop
-	this->core();
+	this->core(bear_class);
 }	
 
 Engine::~Engine()
@@ -121,8 +114,22 @@ void Engine::loadResources()
 	call_flag = true;
 }
 
-void Engine::core()
+void Engine::core(BearClass *bear_class)
 {
+	level_manager = new LevelManager;
+	graphics_manager = new GraphicsManager;
+	config_manager = new ConfigManager;
+	sound_manager = new SoundManager;
+
+	// Load resources
+	this->loadResources();
+
+	// Call "game" init
+	this->bear_class = bear_class;
+	bear_class->init();
+
+	// Done now go into the main loop
+
 	core::Clock dt_clock;
 	dt_clock.start();
 	float dt = 1.0f;

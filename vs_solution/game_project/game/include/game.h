@@ -14,12 +14,12 @@ struct Game : BearClass
 {
 	Engine* engine; // Engine object
 
-	// Singleton pointers
+	// Singleton pointers				 
 	Player* player = Player::get();
 
 	Game()
 	{
-		engine = new Engine(this); // Create engine instance
+		engine = new Engine(this); // Create engine instance         
 	}
 
 	void init() override;
