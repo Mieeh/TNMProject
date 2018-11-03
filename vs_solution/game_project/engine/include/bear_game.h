@@ -16,8 +16,14 @@ struct BearClass {
 
 // Game creates one of these!
 
-struct Engine {
+class Engine {
+private:
 	static Engine* instance;
+	Engine() { }
+
+public:
+	static Engine* Instance();
+
 	BearClass *bear_class;
 	bear::window::Window* game_window;
 
@@ -32,8 +38,8 @@ struct Engine {
 	bear::core::Vector2i origin;
 	float counter, length, intensity;
 
-	Engine(BearClass* bear_class);
-	~Engine();
+	// Inits game
+	void init(BearClass* bear_class);
 
 	void perform_window_shake(float length, float intensity);
 	// Internal stuff
@@ -41,7 +47,7 @@ struct Engine {
 	// Creates all the resources using the bear::ResourceManager
 	void loadResources();
 	// Main game loop
-	void core(BearClass *bear_class);
+	void core();
 	// Called on application exit
 	void exit();
 };

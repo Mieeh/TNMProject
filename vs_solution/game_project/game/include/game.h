@@ -12,14 +12,12 @@ using namespace bear;
 
 struct Game : BearClass
 {
-	Engine* engine; // Engine object
-
 	// Singleton pointers				 
 	Player* player = Player::get();
 
 	Game()
 	{
-		engine = new Engine(this); // Create engine instance         
+		Engine::Instance()->init(this);
 	}
 
 	void init() override;

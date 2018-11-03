@@ -2,6 +2,7 @@
 
 #include"../../engine/include/entity.h"
 #include"../../engine/include/game_systems.h"
+#include"../../engine/include/bear_game.h"
 
 #include"death_screen.h"
 #include"player_animation.h"
@@ -10,8 +11,6 @@
 #include<core\vector2.h>
 
 using namespace bear;
-
-struct Engine;
 
 enum PlayerStates {
 	INTRO,
@@ -37,11 +36,11 @@ public:
 	int attack = 1; 
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
+	Engine* engine = Engine::Instance();
 
 private:
 	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
-	Engine* engine;
 
 	Entity entity;
 	DeathPanel death_panel;

@@ -16,9 +16,17 @@ using namespace bear::window;
 
 Engine* Engine::instance = nullptr;
 
-Engine::Engine(BearClass* bear_class)
+Engine * Engine::Instance()
 {
-	Engine::instance = this;
+	if (instance == nullptr) {
+		instance = new Engine();
+	}
+	return instance;
+}
+
+void Engine::init(BearClass* bear_class)
+{
+	this->bear_class = bear_class;
 
 	// Create some framework related objects
 	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project");
@@ -28,22 +36,24 @@ Engine::Engine(BearClass* bear_class)
 	if (!bear::graphics::Graphics::init(WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		std::cout << "ERROR: Failed to init BEAR-FRAMEWORK graphics!" << std::endl;
 	}
-	
+
 	//Create the game systems
 	//level_manager = std::make_unique<LevelManager>();
 	//graphics_manager = std::make_unique<GraphicsManager>();
 	//config_manager = std::make_unique<ConfigManager>();
 	//sound_manager = std::make_unique<SoundManager>();
+	level_manager = new LevelManager;
+	graphics_manager = new GraphicsManager;
+	config_manager = new ConfigManager;
+	sound_manager = new SoundManager;
 
+	graphics_manager->init();
+	config_manager->load_key_bindings();
 
-	// Go into the main loop
-	this->core(bear_class);
-}	
+	// Load resources
+	this->loadResources();
 
-Engine::~Engine()
-{
-	// Delete some framework related objects
-	delete game_window;
+	this->core();
 }
 
 void Engine::perform_window_shake(float length, float intensity)
@@ -114,21 +124,10 @@ void Engine::loadResources()
 	call_flag = true;
 }
 
-void Engine::core(BearClass *bear_class)
+void Engine::core()
 {
-	level_manager = new LevelManager;
-	graphics_manager = new GraphicsManager;
-	config_manager = new ConfigManager;
-	sound_manager = new SoundManager;
-
-	// Load resources
-	this->loadResources();
-
 	// Call "game" init
-	this->bear_class = bear_class;
 	bear_class->init();
-
-	// Done now go into the main loop
 
 	core::Clock dt_clock;
 	dt_clock.start();
@@ -186,9 +185,12 @@ void Engine::exit()
 {
 	bear_class->exit();
 	// Call exit on the various systems!
-	graphics_manager->exit();
-	graphics_manager->exit();
-	graphics_manager->exit();
+	delete graphics_manager;
+	delete level_manager;
+	delete config_manager;
+	delete sound_manager;
+
+	delete game_window;
 }
 
 void Engine::update(float dt)

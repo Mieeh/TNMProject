@@ -10,7 +10,7 @@ struct Level1 : ILevel {
 
 	LevelContent content;
 	Player* player = Player::get(); // Update, event, render
-	Engine* engine = Engine::instance;
+	Engine* engine = Engine::Instance();
 
 	void init() override {
 		// Load the actual map data
@@ -18,10 +18,10 @@ struct Level1 : ILevel {
 		levelUtility_ConvertToLevelContent(content);
 		
 		// Setup the player
-		Player::get()->play_intro_at(core::Vector2i(1, 1));
+		player->play_intro_at(core::Vector2i(1, 1));
 
 		// Signal the camera which point to follows
-		engine->graphics_manager->point_to_follow = &Player::get()->world_position;
+		engine->graphics_manager->point_to_follow = &player->world_position;
 		
 		// Set the next level name so we know which level to load!
 		next_level_name = "level2";
@@ -38,15 +38,14 @@ struct Level1 : ILevel {
 	void render() override {
 		// Render all the entities here
 		player->render();
-		//GraphicsSingleton::Instance()->draw(content.enemies);		// Render enemies
-		//GraphicsSingleton::Instance()->draw(content.walls_floors);  // Render walls & floors
+		engine->graphics_manager->draw(content.enemies);
+		engine->graphics_manager->draw(content.walls_floors);
 	}
 
 	void player_moved() override {
 	
 	}
 
-	// Getter for the level content
 	LevelContent& get_level_content()
 	{
 		return content;

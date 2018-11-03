@@ -10,14 +10,15 @@ struct Level2 : ILevel {
 
 	LevelContent content;
 	Player* player = Player::get(); // Update, event, render
+	Engine* engine = Engine::Instance();
 
 	void init() override {
 		content.tile_map = LEVEL_2;
 		levelUtility_ConvertToLevelContent(content);
 
-		Player::get()->play_intro_at(core::Vector2i(1, 2));
+		player->play_intro_at(core::Vector2i(1, 2));
 
-		//GraphicsSingleton::Instance()->point_to_follow = &Player::get()->world_position;
+		engine->graphics_manager->point_to_follow = &player->world_position;
 
 		next_level_name = "level1";
 	}
@@ -32,8 +33,8 @@ struct Level2 : ILevel {
 
 	void render() override {
 		player->render();
-		//GraphicsSingleton::Instance()->draw(content.walls_floors); // Render all the entities here
-		//GraphicsSingleton::Instance()->draw(content.enemies);
+		engine->graphics_manager->draw(content.walls_floors);
+		engine->graphics_manager->draw(content.enemies);
 	}
 
 	void player_moved() override {

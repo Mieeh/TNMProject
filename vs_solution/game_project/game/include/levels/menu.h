@@ -2,12 +2,14 @@
 
 #include"../../../engine/include/level.h"
 #include"../../../engine/include/game_systems.h"
+#include"../../../engine/include/bear_game.h"
 
 #include<window\window.h>
 
 struct TitleScreen : ILevel {
 
 	Entity test;
+	Engine* engine = Engine::Instance();
 
 	void init() override {
 		test.renderable.m_Color = core::Color::Red();
@@ -16,9 +18,9 @@ struct TitleScreen : ILevel {
 
 	void on_event(Event &event) override {
 		if (event.type == EventType::KeyPressed) {
-			//if (event.key == ConfigSingleton::Instance()->key_map.at("INTERACT1")) {
-			//	LevelManagerSingleton::Instance()->setCurrentLevel("level1");
-			//}
+			if (event.key == engine->config_manager->key_map.at("INTERACT1")) {
+				engine->level_manager->setCurrentLevel("level1");
+			}
 		}
 	}
 
@@ -27,7 +29,7 @@ struct TitleScreen : ILevel {
 	}
 
 	void render() override {
-		//GraphicsSingleton::Instance()->draw(test);
+		engine->graphics_manager->draw(test);
 	}
 
 	void player_moved() override {

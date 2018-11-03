@@ -9,27 +9,27 @@
 void Game::init()
 {
 	// Register levels
-	engine->level_manager->registerLevel("level1", new Level1);
-	engine->level_manager->registerLevel("level2", new Level2);
-	engine->level_manager->registerLevel("menu", new TitleScreen);
+	Engine::Instance()->level_manager->registerLevel("level1", new Level1);
+	Engine::Instance()->level_manager->registerLevel("level2", new Level2);
+	Engine::Instance()->level_manager->registerLevel("menu", new TitleScreen);
 
-	engine->sound_manager->get_music("bg")->sf_music.play();
+	Engine::Instance()->sound_manager->get_music("bg")->sf_music.play();
 
 	// Set current level
-	engine->level_manager->setCurrentLevel("menu");
+	Engine::Instance()->level_manager->setCurrentLevel("menu");
 }
 
 void Game::update(float dt) {
-	engine->graphics_manager->update(dt);
-	engine->level_manager->update_current_level(dt);
+	Engine::Instance()->graphics_manager->update(dt);
+	Engine::Instance()->level_manager->update_current_level(dt);
 }
 
 void Game::render() {
-	engine->level_manager->render_current_level();
+	Engine::Instance()->level_manager->render_current_level();
 }
 
 void Game::on_event(Event& event) {
-	engine->level_manager->on_event_current_level(event);
+	Engine::Instance()->level_manager->on_event_current_level(event);
 }
 
 void Game::exit()

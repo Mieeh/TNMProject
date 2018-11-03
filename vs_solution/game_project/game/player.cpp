@@ -17,7 +17,6 @@ Player* Player::instance = nullptr;
 
 Player::Player() : player_anim()
 {
-	engine = Engine::instance;
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 	entity.renderable.m_Layer = LAYER3;
@@ -143,7 +142,7 @@ void Player::intro_player(float dt)
 		player_state = PlayerStates::IDLE;
 		entity.renderable.m_Transform.m_Position = world_position;
 		entity.renderable.m_Color.a = 1.0f;
-		Engine::instance->perform_window_shake(400, 10);
+		engine->perform_window_shake(400, 10);
 	}
 }
 
