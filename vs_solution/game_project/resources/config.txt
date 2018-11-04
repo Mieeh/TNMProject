@@ -1,2 +1,2 @@
-background_levels 1.0
-sfx_levels 1.0
+background_levels 100
+sfx_levels 100

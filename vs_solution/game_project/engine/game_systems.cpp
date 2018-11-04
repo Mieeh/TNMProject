@@ -185,7 +185,10 @@ void ConfigManager::load_config_values()
 	for (auto line : lines) {
 		int split_index = line.find(" ");
 		std::string key = line.substr(0, split_index);
-		std::cout << key << std::endl;
+		std::string value = line.substr(split_index + 1, line.length() - split_index + 1);
+		auto converted = std::stof(value);
+		
+		config_values.insert(std::pair<std::string, float>(key, converted));
 	}
 }
 
@@ -219,4 +222,11 @@ void SoundManager::register_sfx(std::string name, const std::string & path)
 std::shared_ptr<SFX> SoundManager::get_sfx(std::string name)
 {
 	return sfx_list.at(name);
+}
+
+void SoundManager::setSFX_Volumes(float volume)
+{
+	for (auto it = sfx_list.begin(); it != sfx_list.end(); ++it) {
+		it->second->sf_sound.setVolume(volume);
+	}
 }

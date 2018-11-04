@@ -13,8 +13,12 @@ void Game::init()
 	Engine::Instance()->level_manager->registerLevel("level2", new Level2);
 	Engine::Instance()->level_manager->registerLevel("menu", new TitleScreen);
 
+	float music_volume = Engine::Instance()->config_manager->config_values.at("background_levels");
+	Engine::Instance()->sound_manager->get_music("bg")->sf_music.setVolume(music_volume);
 	Engine::Instance()->sound_manager->get_music("bg")->sf_music.setLoop(true);
 	Engine::Instance()->sound_manager->get_music("bg")->sf_music.play();
+
+	Engine::Instance()->sound_manager->setSFX_Volumes(Engine::Instance()->config_manager->config_values.at("sfx_levels"));
 
 	// Set current level
 	Engine::Instance()->level_manager->setCurrentLevel("menu");

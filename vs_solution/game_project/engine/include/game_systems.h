@@ -68,7 +68,7 @@ public:
 class ConfigManager {
 public:
 	std::map<std::string, Key> key_map;
-	std::map<std::string, float> f_config_values;
+	std::map<std::string, float> config_values;
 	
 public:
 	ConfigManager() { }
@@ -92,4 +92,6 @@ public:
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);
 	std::shared_ptr<SFX> get_sfx(std::string name);
+
+	void setSFX_Volumes(float volume);
 };
