@@ -18,7 +18,7 @@ Player* Player::instance = nullptr;
 Player::Player() : player_anim()
 {
 	entity.renderable.m_TextureName = "runningDown3";
-	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
 	entity.renderable.m_Layer = LAYER3;
 }
 
@@ -53,6 +53,8 @@ void Player::update(float dt)
 {	
 	// Update the animation object
 	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
+
+	// Offset
 
 	// What're we doing?
 	switch (player_state) {
@@ -103,7 +105,7 @@ void Player::move_player(int move_direction_enum)
 
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
-		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
@@ -124,7 +126,7 @@ void Player::move_player(int move_direction_enum)
 
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
-		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 	}
 
 	// Update the layer
@@ -171,7 +173,7 @@ void Player::set_player_position(const core::Vector2i position)
 {
 	// Sets the player position (instantly no state logic)
 	tile_position = position;
-	world_position = (core::Vector2f)tile_position * TILE_SIZE;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 	entity.renderable.m_Transform.m_Position = world_position;
 }
 
@@ -231,7 +233,7 @@ void Player::play_intro_at(const core::Vector2i position)
 {
 	player_state = PlayerStates::INTRO;
 	tile_position = position;
-	world_position = (core::Vector2f)tile_position * TILE_SIZE;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 	static const int intro_offset = -350; 
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
@@ -268,7 +270,7 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
-		world_position = (core::Vector2f)tile_position * TILE_SIZE;
+		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();

@@ -165,6 +165,30 @@ void ConfigManager::load_key_bindings()
 	}
 }
 
+void ConfigManager::load_config_values()
+{
+	std::string path = RESOURCES_RELATIVE_PATH + std::string("config.txt");
+	std::ifstream file(path);
+	if (!file.is_open()) {
+		std::cout << "Big fucking ERROR! Can't load configuration file" << std::endl;
+	}
+
+	std::vector<std::string> lines;
+	std::string line;
+	while (std::getline(file, line)) {
+		lines.push_back(line);
+	}
+
+	file.close(); // Close the file, we're done with it
+
+	// Go through each line from the config file and register the value in the map
+	for (auto line : lines) {
+		int split_index = line.find(" ");
+		std::string key = line.substr(0, split_index);
+		std::cout << key << std::endl;
+	}
+}
+
 // Music manager
 
 void SoundManager::exit()

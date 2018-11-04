@@ -47,8 +47,9 @@ void Engine::init(BearClass* bear_class)
 	config_manager = new ConfigManager;
 	sound_manager = new SoundManager;
 
-	graphics_manager->init();
 	config_manager->load_key_bindings();
+	config_manager->load_config_values();
+	graphics_manager->init();
 
 	// Load resources
 	this->loadResources();

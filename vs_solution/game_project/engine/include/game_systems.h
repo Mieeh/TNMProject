@@ -68,11 +68,13 @@ public:
 class ConfigManager {
 public:
 	std::map<std::string, Key> key_map;
+	std::map<std::string, float> f_config_values;
 	
 public:
 	ConfigManager() { }
 
 	void load_key_bindings();
+	void load_config_values();
 };
 
 class SoundManager {

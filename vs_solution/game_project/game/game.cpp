@@ -13,6 +13,7 @@ void Game::init()
 	Engine::Instance()->level_manager->registerLevel("level2", new Level2);
 	Engine::Instance()->level_manager->registerLevel("menu", new TitleScreen);
 
+	Engine::Instance()->sound_manager->get_music("bg")->sf_music.setLoop(true);
 	Engine::Instance()->sound_manager->get_music("bg")->sf_music.play();
 
 	// Set current level

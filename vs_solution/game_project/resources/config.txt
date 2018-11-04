@@ -1,0 +1,2 @@
+background_levels 1.0
+sfx_levels 1.0
