@@ -1,3 +1,14 @@
 #pragma once
 
-// Notes(david) Item code should probably go here at some point
+#include<string>
+
+enum ItemType {
+	WEAPON,
+	HEALTH,
+	KEY
+};
+
+struct Item {
+	std::string name;
+	float value;
+};

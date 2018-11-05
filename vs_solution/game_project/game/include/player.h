@@ -6,6 +6,7 @@
 
 #include"death_screen.h"
 #include"player_animation.h"
+#include"item.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -42,6 +43,8 @@ public:
 	Engine* engine = Engine::Instance();
 
 private:
+	Item* item; // Player item
+
 	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
 
