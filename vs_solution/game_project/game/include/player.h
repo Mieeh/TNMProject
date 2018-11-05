@@ -6,7 +6,6 @@
 
 #include"death_screen.h"
 #include"player_animation.h"
-#include"item.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -43,8 +42,6 @@ public:
 	Engine* engine = Engine::Instance();
 
 private:
-	Item* item; // Player item
-
 	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
 
@@ -52,7 +49,8 @@ private:
 	DeathPanel death_panel;
 	PlayerAnimation player_anim;
 	std::string last_played_footstep = "footstep1";
-	
+	const float footstep_delay = 250;
+
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
 	bool goal_trigger = false;

@@ -165,6 +165,7 @@ void Engine::core()
 		// call update
 		this->update(dt);
 		bear_class->update(dt); 
+		sound_manager->update(dt);
 
 		// rendering
 		game_window->clear(UNLIT_BACKGROUND_COLOR);

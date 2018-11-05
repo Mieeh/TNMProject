@@ -194,6 +194,22 @@ void ConfigManager::load_config_values()
 
 // Music manager
 
+void SoundManager::update(float dt)
+{
+	for (auto i = 0; i < sfx_poll.size(); i++) {
+		// get delayed sfx and increment timer
+		DelayedSFX& delayed_sfx = sfx_poll.at(i);
+		delayed_sfx.timer += 1 * dt;
+
+		// Pop the delayed sfx?
+		if (delayed_sfx.timer >= delayed_sfx.delay) {
+			sfx_list.at(delayed_sfx.name)->sf_sound.play();
+			sfx_poll.erase(sfx_poll.begin() + i);
+			continue;
+		}
+	}
+}
+
 void SoundManager::exit()
 {
 	for (const auto& x : music_list) {
@@ -222,6 +238,15 @@ void SoundManager::register_sfx(std::string name, const std::string & path)
 std::shared_ptr<SFX> SoundManager::get_sfx(std::string name)
 {
 	return sfx_list.at(name);
+}
+
+void SoundManager::add_delayed_sfx(std::string name, float delay)
+{
+	DelayedSFX delayed_sfx;
+	delayed_sfx.name = name;
+	delayed_sfx.timer = 0;
+	delayed_sfx.delay = delay;
+	sfx_poll.emplace_back(delayed_sfx);
 }
 
 void SoundManager::setSFX_Volumes(float volume)

@@ -83,8 +83,18 @@ private:
 	std::map<std::string, std::shared_ptr<Music>> music_list;
 	std::map<std::string, std::shared_ptr<SFX>> sfx_list;
 
+	struct DelayedSFX {
+		float timer;
+		float delay;
+		std::string name;
+	};
+
+	std::vector<DelayedSFX> sfx_poll;
+
 public:
 	SoundManager() { }
+
+	void update(float dt);
 
 	void exit();
 
@@ -92,6 +102,7 @@ public:
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);
 	std::shared_ptr<SFX> get_sfx(std::string name);
+	void add_delayed_sfx(std::string name, float delay);
 
 	void setSFX_Volumes(float volume);
 };

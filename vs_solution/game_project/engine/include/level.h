@@ -8,13 +8,14 @@ using namespace bear;
 typedef std::vector<std::vector<int>> level_list;
 
 #include"enemy.h"
+#include"item.h"
 
-// Structure for data that every level has // @PROTOTYPE
+// Structure for data that every level has /
 struct LevelContent {
 	core::Vector2i goal_pos;
 	level_list tile_map;
 	std::vector<Entity> walls_floors;
-	//std::map<core::Vector2i, Item> items;
+	std::map<std::string, Item> items;
 	std::map<std::string, EnemyBase> enemies;
 };
 

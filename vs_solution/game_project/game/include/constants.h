@@ -23,10 +23,15 @@ typedef std::vector<std::vector<int>> level_list;
 #define GOAL 99
 #define G GOAL
 
+#define ITEM 2000
+#define WI ITEM+0
+#define HI ITEM+1
+
 #define BAT 7 
 
 #define ENEMIES { BAT }
 #define FLOORS_AND_WALLS { FLOOR1, WALL_TOP, PIT, WALL_LEFT, WALL_RIGHT, BOTTOM_LEFT_WALL, BOTTOM_RIGHT_WALL }
+#define ITEMS { WI, HI }
 
 static bool is_enemy(int _v) {
 	for (int _e : ENEMIES) {
@@ -52,11 +57,20 @@ static bool is_floor(int _v) {
 	return false;
 }
 
+static bool is_item(int _v) {
+	for (int _e : ITEMS) {
+		if (_v == _e) {
+			return true;
+		}
+	}
+	return false;
+}
+
 static level_list TEST_LEVEL = 
 {
-	{ 3, 1, 1, 1, 1,   1, 4 },
+	{ 3, 1, 1, 1,   1,   1, 4 },
 	{ 3, 0, 0, BAT, 0,   0, 4 },
-	{ 3, 0, 0, 0,   BAT, G, 4 },    
+	{ 3, 0, 0, WI,  BAT, G, 4 },    
 	{ 3, 0, 0, BAT, 0,   0, 4 },	
 	{-1, 2, 2, 2,   2,   2,-1 },
 };

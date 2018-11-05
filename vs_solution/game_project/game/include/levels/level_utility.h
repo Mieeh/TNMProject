@@ -63,7 +63,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 						break;
 					}
 				}
-				}
+			}
 			else if (is_enemy(tile_value)) {
 
 				// Place ground tile under the enemy
@@ -87,6 +87,27 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 
 				// Set correct layer according to y
 				level_content.enemies.at(key).entity.renderable.m_Layer = LAYER3 + y;
+			}
+			else if (is_item(tile_value)) {
+				// Place ground tile under the item
+				level_content.walls_floors.push_back(Entity());
+				Entity& entity = level_content.walls_floors.back();
+				entity.renderable.m_TextureName = "ground";
+				entity.renderable.m_Transform.m_Position = realPosition;
+				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				Item item;
+				item.entity
+
+				// Place the item with correct key at correct position
+				core::Vector2i tile_position(x, y);
+				std::string key = (std::string)tile_position;
+				switch (tile_value) {
+				case WI:
+					break;
+				case HI:
+					break;
+				}
 			}
 		}
 	}

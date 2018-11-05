@@ -143,6 +143,7 @@
     <ClInclude Include="engine\include\engine.h" />
     <ClInclude Include="engine\include\entity.h" />
     <ClInclude Include="engine\include\game_systems.h" />
+    <ClInclude Include="engine\include\item.h" />
     <ClInclude Include="engine\include\level.h" />
     <ClInclude Include="engine\include\sfml_audio_wrapper.h" />
     <ClInclude Include="game\include\combat.h" />
@@ -150,7 +151,6 @@
     <ClInclude Include="game\include\death_screen.h" />
     <ClInclude Include="game\include\enemies\bat.h" />
     <ClInclude Include="game\include\game.h" />
-    <ClInclude Include="game\include\item.h" />
     <ClInclude Include="game\include\levels\level1.h" />
     <ClInclude Include="game\include\levels\level2.h" />
     <ClInclude Include="game\include\levels\level_utility.h" />

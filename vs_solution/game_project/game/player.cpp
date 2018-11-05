@@ -63,10 +63,6 @@ void Player::update(float dt)
 		break;
 	case PlayerStates::IN_TRANSIT:
 		move_player_state_control(move_direction, dt);
-		if (engine->sound_manager->get_sfx(last_played_footstep)->sf_sound.getStatus() != sf::SoundSource::Status::Playing) {
-			last_played_footstep = get_random_footstep(3);
-			engine->sound_manager->get_sfx(last_played_footstep)->sf_sound.play();
-		}
 		break;
 	case PlayerStates::INTRO:
 		intro_player(dt);
@@ -106,6 +102,10 @@ void Player::move_player(int move_direction_enum)
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+
+		// Walk SFX
+		std::string footstep = get_random_footstep(3);
+		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
@@ -271,6 +271,10 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+
+		// Walk SFX
+		std::string footstep = get_random_footstep(3);
+		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
