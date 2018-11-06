@@ -24,19 +24,18 @@ private:
 	Engine() { }
 
 public:
+	~Engine();
+
 	static Engine* Instance();
 
 	BearClass *bear_class;
 	bear::window::Window* game_window;
 
 	// Game systems
-	/*
-	LevelManager* level_manager;
-	GraphicsManager* graphics_manager;
-	ConfigManager* config_manager;
-	SoundManager* sound_manager;
-	*/
-	std::shared_ptr<
+	std::shared_ptr<LevelManager> level_manager;
+	std::shared_ptr<GraphicsManager> graphics_manager;
+	std::shared_ptr<ConfigManager> config_manager;
+	std::shared_ptr<SoundManager> sound_manager;
 
 	// Cam shake stuff
 	bool do_window_shake = false;
