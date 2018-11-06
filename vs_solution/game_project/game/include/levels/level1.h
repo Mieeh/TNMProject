@@ -40,6 +40,7 @@ struct Level1 : ILevel {
 		player->render();
 		engine->graphics_manager->draw(content.enemies);
 		engine->graphics_manager->draw(content.walls_floors);
+		engine->graphics_manager->draw(content.items);
 	}
 
 	void player_moved() override {

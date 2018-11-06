@@ -19,7 +19,7 @@ void GraphicsManager::init()
 	slow_ui_renderer->init();
 }
 
-void GraphicsManager::exit()
+GraphicsManager::~GraphicsManager()
 {
 	//std::cout << "Graphics Singleton exit called\n";
 	delete slow_renderer;
@@ -68,6 +68,13 @@ void GraphicsManager::draw(std::map<std::string, EnemyBase>& enemy_map)
 	}
 }
 
+void GraphicsManager::draw(std::map<std::string, Item>& item_map) {
+	for (auto& x : item_map) {
+		if(x.second.state == ItemState::ON_MAP)
+			slow_renderer->submit(x.second.entity.renderable);
+	}
+}
+
 void GraphicsManager::draw(Entity & entity)
 {
 	slow_renderer->submit(entity.renderable);
@@ -91,7 +98,7 @@ void GraphicsManager::window_resized(const Event & event)
 
 // Level Manager
 
-void LevelManager::exit()
+LevelManager::~LevelManager()
 {
 	current_level = nullptr;
 	auto it = std::map<std::string, ILevel*>::iterator();
@@ -210,7 +217,7 @@ void SoundManager::update(float dt)
 	}
 }
 
-void SoundManager::exit()
+SoundManager::~SoundManager()
 {
 	for (const auto& x : music_list) {
 		music_list.erase(x.first);

@@ -17,10 +17,10 @@ enum ItemState {
 };
 
 struct Item {
-	ItemState state;
 	ItemType type;
+	float value;
 
+	ItemState state;
 	Entity entity;
 	std::string name;
-	float value;
 };

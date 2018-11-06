@@ -14,6 +14,7 @@
 #include"level.h"
 #include"engine.h"
 #include"sfml_audio_wrapper.h"
+#include"item.h"
 
 using namespace bear;
 
@@ -25,8 +26,7 @@ public:
 
 public:
 	LevelManager() { }
-
-	void exit();
+	~LevelManager();
 
 	void registerLevel(const std::string& level_name, ILevel* level);
 	void setCurrentLevel(const std::string& level_name);
@@ -49,16 +49,17 @@ public:
 
 public:
 	GraphicsManager() { }
+	~GraphicsManager();
 
 	void update(float dt);
 
 	void init();
-	void exit(); // Called on application exit
 
 	void begin();
 	void draw_as_ui(Entity& entity);
 	void draw(std::vector<Entity>& entity_list);
 	void draw(std::map<std::string, EnemyBase>& enemy_map);
+	void draw(std::map<std::string, Item>& item_map);
 	void draw(Entity& entity);
 	void flush();
 
@@ -93,11 +94,10 @@ private:
 
 public:
 	SoundManager() { }
+	~SoundManager();
 
 	void update(float dt);
-
-	void exit();
-
+	
 	void register_music(std::string name, const std::string& path);
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);

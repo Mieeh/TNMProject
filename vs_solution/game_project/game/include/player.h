@@ -51,6 +51,8 @@ private:
 	std::string last_played_footstep = "footstep1";
 	const float footstep_delay = 250;
 
+	Item* current_item = nullptr;
+
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
 	bool goal_trigger = false;
@@ -72,6 +74,7 @@ public:
 
 	void play_intro_at(const core::Vector2i position);
 	void resolve_combat(EnemyBase& enemy, int move_direction_enum);
+	void resolve_item(Item& item, int move_direction_enum);
 	void reset_after_death();
 
 	// Per state code methods

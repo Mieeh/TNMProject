@@ -2,6 +2,8 @@
 
 #include"bear_framework.h"
 #include"game_systems.h"
+
+#include<memory.h>
  
 /* This class gets inherited by the main "game" class */
 
@@ -28,11 +30,14 @@ public:
 	bear::window::Window* game_window;
 
 	// Game systems
+	/*
 	LevelManager* level_manager;
 	GraphicsManager* graphics_manager;
 	ConfigManager* config_manager;
 	SoundManager* sound_manager;
-	
+	*/
+	std::shared_ptr<
+
 	// Cam shake stuff
 	bool do_window_shake = false;
 	bear::core::Vector2i origin;

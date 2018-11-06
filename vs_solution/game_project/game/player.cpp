@@ -54,8 +54,6 @@ void Player::update(float dt)
 	// Update the animation object
 	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
 
-	// Offset
-
 	// What're we doing?
 	switch (player_state) {
 	case PlayerStates::IDLE:
@@ -115,6 +113,12 @@ void Player::move_player(int move_direction_enum)
 		std::string key = (std::string)new_tile_position;
 		EnemyBase& enemy = engine->level_manager->current_level->get_level_content().enemies.at(key);
 		resolve_combat(enemy, move_direction_enum);
+	}
+	else if (is_item(new_tile_value)) {
+		std::string key = (std::string)new_tile_position;
+		Item& item = engine->level_manager->current_level->get_level_content().items.at(key);
+		// Resolve item collision
+		resolve_item(item, move_direction_enum);
 	}
 	else if (new_tile_value == GOAL) {
 
@@ -241,6 +245,7 @@ void Player::play_intro_at(const core::Vector2i position)
 
 	// Reset player HP
 	hp = 5;
+	current_item = nullptr;
 }
 
 void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
@@ -281,10 +286,40 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 	}
 }
 
+void Player::resolve_item(Item & item, int move_direction_enum)
+{
+	if (item.state == ItemState::ON_MAP) {
+		if (current_item != nullptr) {
+			current_item->state = ItemState::DISCARDED;
+		}
+		current_item = &item;
+
+		// current_items is now picked up
+		current_item->state = ItemState::PICKED_UP;
+	}
+	else {
+		// Set the player to be in transit!
+		player_state = PlayerStates::IN_TRANSIT;
+		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+		core::Vector2i dir = move_directions[move_direction_enum];
+		tile_position += dir;
+		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+
+		// Walk SFX
+		std::string footstep = get_random_footstep(3);
+		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
+
+		// Message the level we've moved
+		engine->level_manager->current_level->player_moved();
+	}
+}
+
 void Player::reset_after_death()
 {
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 5; // Reset hp
+	current_item = nullptr;
 }
 
 Player* Player::get()

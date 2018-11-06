@@ -17,6 +17,7 @@ using namespace bear;
 static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 
 	level_content.enemies.clear();
+	level_content.items.clear();
 
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
@@ -96,18 +97,37 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 
+				// Item entity position & size
 				Item item;
-				item.entity
+				item.entity.renderable.m_Transform.m_Position = realPosition;
+				item.entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE,TILE_SIZE);
+				item.state = ItemState::ON_MAP;
 
 				// Place the item with correct key at correct position
 				core::Vector2i tile_position(x, y);
 				std::string key = (std::string)tile_position;
 				switch (tile_value) {
 				case WI:
+					// Weapon item! set correct sprite & shit
+					// Item name, type & value
+					item.entity.renderable.m_TextureName = "sword";
+					item.type = ItemType::WEAPON;
+					item.name = "Weapon";
+					item.value = 2; // Notes(david) ???
 					break;
 				case HI:
+					// Healing item! set correct sprite & shit
+					// Item name, type & value
+					item.entity.renderable.m_TextureName = "heart";
+					item.type = ItemType::HEALTH;
+					item.name = "Health";
+					item.value = 1; // Notes(david) ???
 					break;
 				}
+
+				item.entity.renderable.m_Layer = LAYER3 + y;
+				// Insert into the level content!
+				level_content.items.insert(std::pair<std::string, Item>(key, item));
 			}
 		}
 	}

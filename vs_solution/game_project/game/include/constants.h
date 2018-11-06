@@ -69,9 +69,9 @@ static bool is_item(int _v) {
 static level_list TEST_LEVEL = 
 {
 	{ 3, 1, 1, 1,   1,   1, 4 },
-	{ 3, 0, 0, BAT, 0,   0, 4 },
+	{ 3, 0, 0, BAT, HI,   0, 4 },
 	{ 3, 0, 0, WI,  BAT, G, 4 },    
-	{ 3, 0, 0, BAT, 0,   0, 4 },	
+	{ 3, 0, 0, BAT, HI,   0, 4 },	
 	{-1, 2, 2, 2,   2,   2,-1 },
 };
 
