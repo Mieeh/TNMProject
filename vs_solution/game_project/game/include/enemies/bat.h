@@ -16,6 +16,6 @@ struct Bat : EnemyBase {
 		hp = 3;
 		damage = 1;
 		name = "Bat";
-		entity.renderable.m_TextureName = "bat";
+		entity.renderable.m_TextureName = "test_enemy";
 	}
 };

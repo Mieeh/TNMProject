@@ -12,7 +12,7 @@ struct Level2 : ILevel {
 	Player* player = Player::get(); // Update, event, render
 	Engine* engine = Engine::Instance();
 
-	void init() override {
+	void init() override {		
 		content.tile_map = LEVEL_2;
 		levelUtility_ConvertToLevelContent(content);
 

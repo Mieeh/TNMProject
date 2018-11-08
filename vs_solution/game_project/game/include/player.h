@@ -6,6 +6,7 @@
 
 #include"death_screen.h"
 #include"player_animation.h"
+#include"player_ui.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -50,6 +51,9 @@ private:
 	PlayerAnimation player_anim;
 	std::string last_played_footstep = "footstep1";
 	const float footstep_delay = 250;
+
+	// Player ui object
+	PlayerUI player_ui;
 
 	Item* current_item = nullptr;
 

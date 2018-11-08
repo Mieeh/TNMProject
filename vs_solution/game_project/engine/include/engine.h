@@ -1,10 +1,10 @@
 #pragma once
 
 #define TILE_SIZE 64
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 896
+#define WINDOW_HEIGHT 504
 #define VSYNC 1
-#define UNLIT_BACKGROUND_COLOR { 0.05f, 0.05f, 0.05f, 1.0f }
+#define UNLIT_BACKGROUND_COLOR  {0,0,0}  //{ 34/255.f, 32/255.f, 52/255.f }
 #define RESOURCES_RELATIVE_PATH "resources\\"
 #define MUSIC_RELATIVE_PATH "resources\\music\\"
 #define SFX_RELATIVE_PATH "resources\\sfx\\"

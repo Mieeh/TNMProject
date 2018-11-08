@@ -15,7 +15,7 @@ using namespace bear;
 
 Player* Player::instance = nullptr;
 
-Player::Player() : player_anim()
+Player::Player() : player_anim(), player_ui()
 {
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
@@ -24,7 +24,11 @@ Player::Player() : player_anim()
 
 std::string Player::get_random_footstep(unsigned int number_of_footsteps)
 {
-	return "footstep" + std::to_string((rand() % number_of_footsteps + 1));
+	if (last_played_footstep == "footstep1")
+		return "footstep2";
+	else
+		return "footstep1";
+	//return "footstep" + std::to_string((rand() % number_of_footsteps + 1));
 }
 
 void Player::on_event(Event & event)
@@ -77,6 +81,8 @@ void Player::update(float dt)
 
 void Player::render()
 {
+	player_ui.render_player_hp();
+
 	engine->graphics_manager->draw(entity);
 
 	// Dead? render the death panel if we are!
@@ -102,8 +108,9 @@ void Player::move_player(int move_direction_enum)
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
 		// Walk SFX
-		std::string footstep = get_random_footstep(3);
-		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
+		last_played_footstep = get_random_footstep(2);
+		
+		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
@@ -265,6 +272,7 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 			death_panel.a = 0.0f;
 			break;
 		case CombatResult::CLASH:
+			engine->perform_window_shake(100, 3);
 			break;
 		}
 	}
@@ -278,8 +286,8 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
 		// Walk SFX
-		std::string footstep = get_random_footstep(3);
-		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
+		last_played_footstep = get_random_footstep(2);
+		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
@@ -307,8 +315,8 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
 		// Walk SFX
-		std::string footstep = get_random_footstep(3);
-		engine->sound_manager->add_delayed_sfx(footstep, footstep_delay); // Add delayed sfx to the sound manager
+		last_played_footstep = get_random_footstep(2);
+		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
 
 		// Message the level we've moved
 		engine->level_manager->current_level->player_moved();
