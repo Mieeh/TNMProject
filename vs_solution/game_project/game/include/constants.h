@@ -24,14 +24,15 @@ typedef std::vector<std::vector<int>> level_list;
 #define G GOAL
 
 #define ITEM 2000
-#define WI ITEM+0
-#define HI ITEM+1
+#define WI ITEM+0 // Weapon Item
+#define HI ITEM+1 // Health Item
+#define SI ITEM+2 // Shield Item
 
 #define BAT 7 
 
 #define ENEMIES { BAT }
 #define FLOORS_AND_WALLS { FLOOR1, WALL_TOP, PIT, WALL_LEFT, WALL_RIGHT, BOTTOM_LEFT_WALL, BOTTOM_RIGHT_WALL }
-#define ITEMS { WI, HI }
+#define ITEMS { WI, HI, SI }
 
 static bool is_enemy(int _v) {
 	for (int _e : ENEMIES) {
@@ -68,11 +69,11 @@ static bool is_item(int _v) {
 
 static level_list TEST_LEVEL = 
 {
-	{ 3, 1, 1, 1,   1,   1, 4 },
-	{ 3, 0, 0, BAT, HI,   0, 4 },
-	{ 3, 0, 0, WI,  BAT, G, 4 },    
-	{ 3, 0, 0, BAT, HI,   0, 4 },	
-	{-1, 2, 2, 2,   2,   2,-1 },
+	{ 3, 1, 1,  1,   1,   1, 4 },
+	{ 3, 0, 0,  BAT, HI,   0, 4 },
+	{ 3, 0, SI, WI,  BAT, G, 4 },    
+	{ 3, 0, 0,  BAT, HI,   0, 4 },	
+	{-1, 2, 2,  2,   2,   2,-1 },
 };
 
 static level_list LEVEL_2 =

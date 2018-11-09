@@ -80,6 +80,7 @@ public:
 	void resolve_combat(EnemyBase& enemy, int move_direction_enum);
 	void resolve_item(Item& item, int move_direction_enum);
 	void reset_after_death();
+	void handle_item_use();
 
 	// Per state code methods
 	void idle_player_state_control(); // logic for idle state is here

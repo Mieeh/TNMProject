@@ -44,6 +44,10 @@ void Player::on_event(Event & event)
 				move_player(PlayerMoveDirection::DOWN);
 			else if (event.key == engine->config_manager->key_map.at("MOVE_UP"))
 				move_player(PlayerMoveDirection::UP);
+
+			if (event.key == engine->config_manager->key_map.at("INTERACT2")) { // 'e' by default
+				handle_item_use();
+			}
 		}
 		else if (player_state == PlayerStates::DEAD) {
 			if (event.key == Key::X) {
@@ -72,7 +76,6 @@ void Player::update(float dt)
 	case PlayerStates::OUTRO:
 		outro_player(dt);
 		break;
-
 	case PlayerStates::DEAD:
 		death_panel.fade_to_1(dt);
 		break;
@@ -296,6 +299,7 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 
 void Player::resolve_item(Item & item, int move_direction_enum)
 {
+	// Is the item on the map?
 	if (item.state == ItemState::ON_MAP) {
 		if (current_item != nullptr) {
 			current_item->state = ItemState::DISCARDED;
@@ -305,22 +309,21 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 		// current_items is now picked up
 		current_item->state = ItemState::PICKED_UP;
 	}
-	else {
-		// Set the player to be in transit!
-		player_state = PlayerStates::IN_TRANSIT;
-		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
 
-		core::Vector2i dir = move_directions[move_direction_enum];
-		tile_position += dir;
-		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+	// Set the player to be in transit!
+	player_state = PlayerStates::IN_TRANSIT;
+	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
 
-		// Walk SFX
-		last_played_footstep = get_random_footstep(2);
-		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
+	core::Vector2i dir = move_directions[move_direction_enum];
+	tile_position += dir;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
 
-		// Message the level we've moved
-		engine->level_manager->current_level->player_moved();
-	}
+	// Walk SFX
+	last_played_footstep = get_random_footstep(2);
+	engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
+
+	// Message the level we've moved
+	engine->level_manager->current_level->player_moved();
 }
 
 void Player::reset_after_death()
@@ -328,6 +331,27 @@ void Player::reset_after_death()
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 5; // Reset hp
 	current_item = nullptr;
+}
+
+void Player::handle_item_use()
+{
+	if (current_item == nullptr)
+		return void();
+
+	// Continue and use current item!
+	switch (current_item->type) {
+	case ItemType::HEALTH:
+		hp += current_item->value;
+		if (hp >= 5)
+			hp -= (5 - hp);
+		current_item->state = ItemState::DISCARDED;
+		current_item = nullptr;
+		break;
+	case ItemType::WEAPON:
+		break;
+	case ItemType::KEY:
+		break;
+	}
 }
 
 Player* Player::get()

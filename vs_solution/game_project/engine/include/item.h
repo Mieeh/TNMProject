@@ -7,6 +7,7 @@
 enum ItemType {
 	WEAPON,
 	HEALTH,
+	SHIELD,
 	KEY
 };
 

@@ -34,7 +34,6 @@ void GraphicsManager::update(float dt) {
 		core::Vector2f curr = view.getPosition();
 		if (core::Vector2f::distance(curr, goal_pos) > 1.0f) {
 			curr.lerp(goal_pos, 0.0025f*dt);
-			//curr.moveTowards(goal_pos, 0.1f*dt);
 			curr.x = round(curr.x);
 			curr.y = round(curr.y);
 			view.setPosition(curr);

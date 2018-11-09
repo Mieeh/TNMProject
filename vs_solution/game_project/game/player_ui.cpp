@@ -2,7 +2,7 @@
 
 #include"include/player.h"
 
-#define FOOD_SPRITE_SIZE 96
+#define FOOD_SPRITE_SIZE 64
 
 PlayerUI::PlayerUI()
 {

@@ -92,7 +92,7 @@ void Engine::loadResources()
 	for (auto &path : image_paths) {
 		unsigned int i = path.find("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
-		std::string file_name = path.substr(i+1, (j-i)-1); 
+		std::string file_name = path.substr(i+1, (j-i)-1);
 		ResourceManager::Instance()->CreateTexture(file_name, path, graphics::image_format::RGBA);
 	}
 

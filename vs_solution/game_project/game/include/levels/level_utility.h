@@ -117,10 +117,16 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				case HI:
 					// Healing item! set correct sprite & shit
 					// Item name, type & value
-					item.entity.renderable.m_TextureName = "heart";
+					item.entity.renderable.m_TextureName = "food";
 					item.type = ItemType::HEALTH;
 					item.name = "Health";
 					item.value = 1; // Notes(david) ???
+					break;
+				case SI:
+					item.entity.renderable.m_TextureName = "shield";
+					item.type = ItemType::SHIELD;
+					item.name = "Armor";
+					item.value = 1;
 					break;
 				}
 
