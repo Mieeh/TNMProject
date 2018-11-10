@@ -101,9 +101,9 @@ LevelManager::~LevelManager()
 {
 	current_level = nullptr;
 	auto it = std::map<std::string, ILevel*>::iterator();
-	for (it = level_map.begin(); it != level_map.end(); ++it) {
+	for (it = level_map.begin() ; it != level_map.end() ; ) {
 		delete it->second;
-		level_map.erase(it);
+		it = level_map.erase(it);
 	}
 }
 
@@ -218,12 +218,12 @@ void SoundManager::update(float dt)
 
 SoundManager::~SoundManager()
 {
-	for (const auto& x : music_list) {
-		music_list.erase(x.first);
-	}
-	for (const auto& x : sfx_list) {
-		sfx_list.erase(x.first);
-	}
+	//for (const auto& x : music_list) {
+	//	music_list.erase(x.first);
+	//}
+	//for (const auto& x : sfx_list) {
+	//	sfx_list.erase(x.first);
+	//}
 }
 
 void SoundManager::register_music(std::string name, const std::string & path)

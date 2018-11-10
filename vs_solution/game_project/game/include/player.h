@@ -89,7 +89,6 @@ public:
 	void intro_player(float dt); // does intro 
 	void outro_player(float dt); // does outro 
 
-
 public:
 	static Player* get();
 private:

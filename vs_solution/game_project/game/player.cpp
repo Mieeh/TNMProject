@@ -348,8 +348,16 @@ void Player::handle_item_use()
 		current_item = nullptr;
 		break;
 	case ItemType::WEAPON:
+		printf("tried to use weapon\n");
+		current_item = nullptr;
+		break;
+	case ItemType::SHIELD:
+		printf("tried to use shield\n");
+		current_item = nullptr;
 		break;
 	case ItemType::KEY:
+		printf("tried to use key\n");
+		current_item = nullptr;
 		break;
 	}
 }
