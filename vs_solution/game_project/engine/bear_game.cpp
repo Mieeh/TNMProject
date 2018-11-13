@@ -81,19 +81,29 @@ void Engine::loadResources()
 
 	// Loop through each .png file in the /resources folder and register the texture with filename as name
 	std::vector<std::string> image_paths;
-	// 1. Get all .png paths
-	for (auto &path : fs::directory_iterator(RESOURCES_RELATIVE_PATH)) {
-		std::string p = path.path().string();
-		if (core::get_file_suffix(p) == ".png") {
-			image_paths.push_back(p);
-		}
+	// Get all png(rgba) paths
+	for (auto &path : fs::directory_iterator(PNG_RELATIVE_PATH)) {
+		image_paths.push_back(path.path().string());
 	}
 	// Load pngs
 	for (auto &path : image_paths) {
-		unsigned int i = path.find("\\"); // Name start ]
+		unsigned int i = path.find_last_of("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
 		std::string file_name = path.substr(i+1, (j-i)-1);
 		ResourceManager::Instance()->CreateTexture(file_name, path, graphics::image_format::RGBA);
+	}
+
+	// Get all jpg(rgb) paths
+	image_paths.clear();
+	for (auto &path : fs::directory_iterator(JPG_RELATIVE_PATH)) {
+		image_paths.push_back(path.path().string());
+	}
+	// Load them
+	for (auto& path : image_paths) {
+		unsigned int i = path.find_last_of("\\"); // Name start ]
+		unsigned int j = path.find("."); // Name end [
+		std::string file_name = path.substr(i + 1, (j - i) - 1);
+		ResourceManager::Instance()->CreateTexture(file_name, path, graphics::image_format::RGB);
 	}
 
 	// Loop through each .ogg file in the /resources/music and register them with the filename as name
