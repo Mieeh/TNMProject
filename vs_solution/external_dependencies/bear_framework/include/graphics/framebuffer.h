@@ -30,7 +30,7 @@ namespace bear { namespace graphics {
 		void clearFBO();               // binds and clears the framebuffer color buffer
 		void bind();				   // bind the framebuffer to be rendered
 		void unbind();				   // unbind the framebuffer
-		static void FBOunbind();	   // Dummy method for unbding and drawing to the screen
+		static void FBOunbind();			   // Dummy method for unbding and drawing to the screen
 		void drawFramebufferTextureToScreen(); // Draw the framebuffer texture
 		unsigned int getFBO();
 	};

@@ -4,6 +4,7 @@
 
 #include"../renderable.h"
 #include"../view.h"
+#include"../framebuffer.h"
 
 namespace bear { namespace graphics {
 
@@ -15,13 +16,21 @@ private:
 	unsigned int IBO; // Index buffer object
 	std::deque<Renderable> render_poll;
 
+	// Post processing 
+	Framebuffer* target_framebuffer;
+
+	// Default view if nothing is passed when drawing
 	static View unit_view; 
 
-public:
+public:	
 	/* Constructor */
 	SlowRenderer();
 	/* Destructor */
 	~SlowRenderer();
+
+	/* Framebuffer setter & getter */
+	void setFramebuffer(Framebuffer* a_Framebuffer);
+	Framebuffer* getFramebuffer();
 
 	/* Should initalize the opengl buffers */
 	void init();

@@ -7,7 +7,6 @@
 PlayerUI::PlayerUI()
 {
 	engine = Engine::Instance();
-	//player = Player::get();
 
 	for (int i = 0; i < 5; i++) {
 		food_entities[i] = Entity();

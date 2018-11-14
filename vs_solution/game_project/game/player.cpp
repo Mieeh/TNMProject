@@ -77,7 +77,12 @@ void Player::update(float dt)
 		outro_player(dt);
 		break;
 	case PlayerStates::DEAD:
-		death_panel.fade_to_1(dt);
+		death_panel.increaseOffset(dt);
+
+		graphics::Shader* fbShader = ResourceManager::Instance()->GetShader("framebuffer_shader");
+		fbShader->enable();
+		fbShader->setUniformFloat("offset", death_panel.offset);
+		fbShader->disable();
 		break;
 	}
 }		
@@ -90,8 +95,7 @@ void Player::render()
 
 	// Dead? render the death panel if we are!
 	if (player_state == PlayerStates::DEAD) {
-		death_panel.entity.renderable.m_Transform.m_Size = engine->graphics_manager->window_size;
-		engine->graphics_manager->draw_as_ui(death_panel.entity);
+		// We dead boy
 	}
 }
 
@@ -197,6 +201,11 @@ void Player::set_player_state(PlayerStates new_state)
 	if (goal_trigger) {
 		player_state = PlayerStates::OUTRO;
 	}
+
+	if (new_state == PlayerStates::DEAD) {
+		// Tell the graphics_manager we want to enable the death post processing effect
+		engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::BLACK_WHITE_CROSS);
+	}
 }
 
 void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
@@ -272,7 +281,6 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 			break;
 		case CombatResult::PLAYER_DIED:
 			set_player_state(PlayerStates::DEAD);
-			death_panel.a = 0.0f;
 			break;
 		case CombatResult::CLASH:
 			engine->perform_window_shake(100, 3);
@@ -331,6 +339,14 @@ void Player::reset_after_death()
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 5; // Reset hp
 	current_item = nullptr;
+
+	// Disable the post processing effect
+	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);
+	death_panel.offset = 0;
+	//graphics::Shader* fbShader = ResourceManager::Instance()->GetShader("framebuffer_shader");
+	//fbShader->enable();
+	//fbShader->setUniformFloat("offset", 0);
+	//fbShader->disable();
 }
 
 void Player::handle_item_use()
@@ -346,6 +362,10 @@ void Player::handle_item_use()
 			hp -= (5 - hp);
 		current_item->state = ItemState::DISCARDED;
 		current_item = nullptr;
+
+		// Play sfx
+		engine->sound_manager->get_sfx("footstep1")->sf_sound.play(); 
+
 		break;
 	case ItemType::WEAPON:
 		printf("tried to use weapon\n");

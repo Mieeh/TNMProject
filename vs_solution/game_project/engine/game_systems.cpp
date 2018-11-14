@@ -7,8 +7,9 @@ using namespace bear;
 
 #include<core/vector2.h>
 
-#include<graphics/graphics.h>
+#include<graphics\graphics.h>
 #include<window\GLFW_event.h>
+#include<memory\resource_manager.h>
 
 void GraphicsManager::init()
 {
@@ -17,6 +18,9 @@ void GraphicsManager::init()
 	slow_ui_renderer = new bear::graphics::SlowRenderer();
 	slow_renderer->init();
 	slow_ui_renderer->init();
+	
+	graphics::Shader* temp_shader = ResourceManager::Instance()->CreateShaderFromFile("framebuffer_shader", "resources\\fb_vertex.txt", "resources\\fb_fragment.txt", "");
+	framebuffer_list[0].setShader("framebuffer_shader");
 }
 
 GraphicsManager::~GraphicsManager()
@@ -38,6 +42,17 @@ void GraphicsManager::update(float dt) {
 			curr.y = round(curr.y);
 			view.setPosition(curr);
 		}
+	}
+}
+
+void GraphicsManager::set_post_processing_effect(POST_PROCESSING_EFFECTS _v)
+{
+	if (_v == POST_PROCESSING_EFFECTS::NONE) {
+		slow_renderer->setFramebuffer(nullptr);
+		framebuffer_list[0].unbind();
+	}
+	else {
+		slow_renderer->setFramebuffer(&framebuffer_list[static_cast<int>(_v)]);
 	}
 }
 
@@ -82,6 +97,7 @@ void GraphicsManager::draw(Entity & entity)
 void GraphicsManager::flush()
 {
 	slow_renderer->flush(view);
+	graphics::Framebuffer::FBOunbind();
 	slow_ui_renderer->flush();
 }
 
@@ -92,6 +108,9 @@ void GraphicsManager::window_resized(const Event & event)
 		// Bear framework callback for the rendering
 		graphics::Graphics::window_resize_callback(event.size.x, event.size.y);
 		window_size = event.size;
+
+		// Notes(david) framebuffer needs to know the window was resized!
+		//framebuffer->windowResize()
 	}
 }
 

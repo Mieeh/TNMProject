@@ -5,6 +5,7 @@
 #include<graphics/view.h>
 #include<window/event.h>
 #include<window\GLFW_event.h>
+#include<graphics\framebuffer.h> // Post processing 
 
 #include<map>
 #include<string>
@@ -36,6 +37,11 @@ public:
 	void render_current_level();
 };
 
+enum POST_PROCESSING_EFFECTS {
+	NONE = -1,
+	BLACK_WHITE_CROSS = 0
+};
+
 class GraphicsManager {
 private:
 	// Bear framework rendering objects 
@@ -46,12 +52,15 @@ public:
 	core::Vector2f window_size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 	core::Vector2f* point_to_follow;
 	graphics::View view;
+	graphics::Framebuffer framebuffer_list[1] = { graphics::Framebuffer(WINDOW_WIDTH, WINDOW_HEIGHT) }; // Number of entries in the post processing enum
 
 public:
 	GraphicsManager() { }
 	~GraphicsManager();
 
 	void update(float dt);
+
+	void set_post_processing_effect(POST_PROCESSING_EFFECTS _v);
 
 	void init();
 

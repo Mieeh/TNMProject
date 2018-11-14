@@ -17,7 +17,9 @@ struct SFX {
 
 	SFX(const std::string& path)
 	{
-		sf_buffer.loadFromFile(path);
+		if (!sf_buffer.loadFromFile(path)) {
+			printf("Can't do SFX!\n");
+		}
 		sf_sound.setBuffer(sf_buffer);
 		//printf("Creating sound\n");
 	}

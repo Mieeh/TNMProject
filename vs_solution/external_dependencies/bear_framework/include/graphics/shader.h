@@ -46,6 +46,7 @@ namespace bear { namespace graphics {
 		void setUniformInteger(const char* a_UniformName, int a_Integer);
 		void setUniformIntegerArray(const char* a_UniformName, unsigned int a_Count, int* a_Integers);
 		void setUniformVector4f(const char* a_UniformName, core::Color& a_Vector);
+		void setUniformFloat(const char* a_UniformName, float a_Float);
 
 	private:
 		bool didCompile(unsigned int a_ShaderID, std::string &a_ErrMsg);

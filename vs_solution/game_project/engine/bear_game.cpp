@@ -126,7 +126,7 @@ void Engine::loadResources()
 	std::vector<std::string> sfx_paths;
 	for (auto &path : fs::directory_iterator(SFX_RELATIVE_PATH)) {
 		std::string p = path.path().string();
-		if (core::get_file_suffix(p) == ".ogg") {
+		if (core::get_file_suffix(p) == ".ogg" || core::get_file_suffix(p) == ".wav") {
 			sfx_paths.push_back(p);
 		}
 	}
@@ -134,6 +134,7 @@ void Engine::loadResources()
 		unsigned int i = path.find_last_of("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
 		std::string file_name = path.substr(i + 1, (j - i) - 1);
+		std::cout << path << std::endl;
 		sound_manager->register_sfx(file_name, path);
 	}
 

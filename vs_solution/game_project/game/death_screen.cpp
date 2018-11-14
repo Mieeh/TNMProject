@@ -4,26 +4,29 @@
 
 #include<core\vector2.h>
 
-#define DEFAULT_FADE_SPEED 0.005f
+#define DEFAULT_OFFSET_SPEED 0.0015f
 
-DeathPanel::DeathPanel() : a(0.0f), fade_speed(DEFAULT_FADE_SPEED) {
-
-	entity.renderable.m_TextureName = "death_screen";
-	entity.renderable.m_Color.a = a;
-	entity.renderable.m_Transform.m_Size = bear::core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-	entity.renderable.m_Layer = LAYER3;
+DeathPanel::DeathPanel() {
+	// Pass
 }
 
-void DeathPanel::fade_to_1(float dt) {
-	if (a <= 1) {
-		bear::core::lerp(a, 1.1f, fade_speed*dt);
-		entity.renderable.m_Color.a = a;
+void DeathPanel::increaseOffset(float dt)
+{
+	if (offset < 1) {
+		offset += DEFAULT_OFFSET_SPEED * dt;
+	}
+	else {
+		offset = 1;
 	}
 }
 
-void DeathPanel::fade_to_0(float dt) {
-	if (a >= 0) {
-		bear::core::lerp(a, -0.1f, fade_speed*dt);
-		entity.renderable.m_Color.a = a;
+void DeathPanel::decreaseOffset(float dt)
+{
+	if (offset > 0) {
+		offset -= DEFAULT_OFFSET_SPEED * dt;
+	}
+	else {
+		offset = 0;
 	}
 }
+

@@ -1,15 +1,15 @@
 #pragma once
 
-#include"../../engine/include/entity.h"
-
 struct DeathPanel {
 
+	// Constructor 
 	DeathPanel();
 
-	Entity entity;
-	float a;
-	float fade_speed;
+	// Methods
+	void increaseOffset(float dt);
+	void decreaseOffset(float dt);
 
-	void fade_to_1(float dt);
-	void fade_to_0(float dt);
+	// Members
+	float offset = 0;
+
 };
