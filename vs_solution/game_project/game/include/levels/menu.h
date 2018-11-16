@@ -25,7 +25,7 @@ struct TitleScreen : ILevel {
 	void on_event(Event &event) override {
 		if (event.type == EventType::KeyPressed) {
 			if (event.key == engine->config_manager->key_map.at("INTERACT1")) {
-				//engine->level_manager->setCurrentLevel("level1");
+				engine->sound_manager->get_sfx("into_the_well")->sf_sound.play();
 				start_game = true;
 			}
 		}
@@ -37,9 +37,14 @@ struct TitleScreen : ILevel {
 	void update(float dt) override {
 		if (start_game == true) {
 			test.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-			test.renderable.m_Color.a -= 0.0005f*dt;
-			if (test.renderable.m_Color.a < 0)
+			test.renderable.m_Color.a -= 0.00035f*dt;
+			if (test.renderable.m_Color.a < 0) {
+				engine->sound_manager->get_music("bg")->sf_music.setVolume(engine->config_manager->config_values.at("background_levels"));
+				engine->sound_manager->get_music("bg")->sf_music.setLoop(true);
+				engine->sound_manager->get_music("bg")->sf_music.play();
+
 				engine->level_manager->setCurrentLevel("level1");
+			}
 		}
 	}
 

@@ -5,6 +5,10 @@
 PlayerAnimation::PlayerAnimation() {
 
 	for (int i = 1; i <= 8; i++) {
+		graphics::AnimatedKeyframe idle = { "idle1" };
+		idle_animation.addKeyframe(idle);
+	}
+	for (int i = 1; i <= 8; i++) {
 		graphics::AnimatedKeyframe running_down = { "runningDown" + std::to_string(i) };
 		walk_down.addKeyframe(running_down);
 		

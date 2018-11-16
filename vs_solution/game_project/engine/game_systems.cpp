@@ -110,7 +110,7 @@ void GraphicsManager::window_resized(const Event & event)
 		window_size = event.size;
 
 		// Notes(david) framebuffer needs to know the window was resized!
-		//framebuffer->windowResize()
+		framebuffer_list[0].windowResize(event.size.x, event.size.y);
 	}
 }
 

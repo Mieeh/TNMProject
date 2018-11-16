@@ -199,6 +199,8 @@ void Player::set_player_state(PlayerStates new_state)
 {
 	player_state = new_state;
 	if (goal_trigger) {
+		// Notes(david)s
+		//engine->sound_manager->get_sfx("falling")->sf_sound.play();
 		player_state = PlayerStates::OUTRO;
 	}
 
@@ -274,16 +276,26 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		// Perform combat with the enemy
 		CombatResult combat_result = Combat::perform_combat(enemy);
 
+		if (combat_result == CombatResult::PLAYER_BLOCK_CLASH) {
+			printf("player blocked!\n");
+		}
 		// What happend during the combat? 
 		switch (combat_result) {
 		case CombatResult::ENEMY_DIED:
 			enemy.is_dead = true;
+			// Enemy dead sfx
+			// Notes(david) if the enemy we just killed is not a "bones" enemy then this would be weird?
+			// Perhaps have enemy.death_sfx, unique for every type of enemy
+			engine->sound_manager->get_sfx("enemy_dead_bones")->sf_sound.play();
 			break;
 		case CombatResult::PLAYER_DIED:
 			set_player_state(PlayerStates::DEAD);
 			break;
 		case CombatResult::CLASH:
+			// Window shake
 			engine->perform_window_shake(100, 3);
+			// Enemy hurt sfx
+			engine->sound_manager->get_sfx("enemy_hurt")->sf_sound.play();
 			break;
 		}
 	}
@@ -316,6 +328,13 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 
 		// current_items is now picked up
 		current_item->state = ItemState::PICKED_UP;
+	}
+
+	// Play item pickup sfx
+	switch (item.type) {
+	case ItemType::WEAPON:
+		engine->sound_manager->get_sfx("sword_pickup")->sf_sound.play();
+		break;
 	}
 
 	// Set the player to be in transit!
@@ -364,7 +383,7 @@ void Player::handle_item_use()
 		current_item = nullptr;
 
 		// Play sfx
-		engine->sound_manager->get_sfx("footstep1")->sf_sound.play(); 
+		engine->sound_manager->get_sfx("eating_health_up")->sf_sound.play(); 
 
 		break;
 	case ItemType::WEAPON:

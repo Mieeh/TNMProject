@@ -6,7 +6,8 @@
 enum CombatResult {
 	CLASH,
 	ENEMY_DIED,
-	PLAYER_DIED
+	PLAYER_DIED,
+	PLAYER_BLOCK_CLASH
 };
 
 struct Combat {
@@ -14,6 +15,12 @@ struct Combat {
 	{
 		// 0. Get some stuff
 		Player* player = Player::get();
+
+		// Check if the player has a shield
+		bool hasShield = false;
+		if (player->current_item != nullptr)
+			if (player->current_item->type == ItemType::SHIELD)
+				hasShield = true;
 
 		// 1. Resolve player taking damage
 		int newPlayerHP = player->hp - enemy.damage;
@@ -23,7 +30,8 @@ struct Combat {
 			return CombatResult::PLAYER_DIED;
 		}
 
-		player->hp = newPlayerHP;
+		if(!hasShield)
+			player->hp = newPlayerHP;
 		// Done with 1
 
 		// 2. Resolve enemy taking damage
@@ -37,6 +45,8 @@ struct Combat {
 		enemy.hp = newEnemyHP;
 		// Done with 2
 
+		if (hasShield)
+			return PLAYER_BLOCK_CLASH;
 		// 3. We made it all the way through with neither of them dying, it's a clash! 
 		return CombatResult::CLASH;
 	}

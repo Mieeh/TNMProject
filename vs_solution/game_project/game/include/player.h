@@ -41,6 +41,7 @@ public:
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
 	Engine* engine = Engine::Instance();
+	Item* current_item = nullptr;
 
 private:
 	const float move_speed = 0.2f;
@@ -55,7 +56,6 @@ private:
 	// Player ui object
 	PlayerUI player_ui;
 
-	Item* current_item = nullptr;
 
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;

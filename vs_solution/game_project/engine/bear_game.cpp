@@ -134,7 +134,6 @@ void Engine::loadResources()
 		unsigned int i = path.find_last_of("\\"); // Name start ]
 		unsigned int j = path.find("."); // Name end [
 		std::string file_name = path.substr(i + 1, (j - i) - 1);
-		std::cout << path << std::endl;
 		sound_manager->register_sfx(file_name, path);
 	}
 
