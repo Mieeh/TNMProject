@@ -13,7 +13,7 @@ struct Bat : EnemyBase {
 	Bat() 
 	{
 		// Setup the enemy
-		hp = 3;
+		hp = 2;
 		damage = 1;
 		name = "Bat";
 		entity.renderable.m_TextureName = "test_enemy";

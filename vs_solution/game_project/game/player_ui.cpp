@@ -8,7 +8,7 @@ PlayerUI::PlayerUI()
 {
 	engine = Engine::Instance();
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 3; i++) {
 		food_entities[i] = Entity();
 		food_entities[i].renderable.m_TextureName = "food";
 		food_entities[i].renderable.m_Transform.m_Size = core::Vector2f(FOOD_SPRITE_SIZE, FOOD_SPRITE_SIZE);
@@ -18,7 +18,7 @@ PlayerUI::PlayerUI()
 
 void PlayerUI::render_player_hp()
 {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (i < Player::get()->hp) {
 			food_entities[i].renderable.m_Color = core::Color::White();
 		}

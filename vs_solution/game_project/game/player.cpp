@@ -28,7 +28,6 @@ std::string Player::get_random_footstep(unsigned int number_of_footsteps)
 		return "footstep2";
 	else
 		return "footstep1";
-	//return "footstep" + std::to_string((rand() % number_of_footsteps + 1));
 }
 
 void Player::on_event(Event & event)
@@ -265,7 +264,7 @@ void Player::play_intro_at(const core::Vector2i position)
 	entity.renderable.m_Color.a = 0.0f;
 
 	// Reset player HP
-	hp = 5;
+	hp = 3;
 	current_item = nullptr;
 }
 
@@ -276,8 +275,8 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		// Perform combat with the enemy
 		CombatResult combat_result = Combat::perform_combat(enemy);
 
-		if (combat_result == CombatResult::PLAYER_BLOCK_CLASH) {
-			printf("player blocked!\n");
+		if (combat_result == CombatResult::PLAYER_BLOCK_CLASH || combat_result == CombatResult::PLAYER_WEAPON_CLASH) {
+			current_item = nullptr;
 		}
 		// What happend during the combat? 
 		switch (combat_result) {
@@ -291,6 +290,8 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		case CombatResult::PLAYER_DIED:
 			set_player_state(PlayerStates::DEAD);
 			break;
+		case CombatResult::PLAYER_WEAPON_CLASH:
+		case CombatResult::PLAYER_BLOCK_CLASH:
 		case CombatResult::CLASH:
 			// Window shake
 			engine->perform_window_shake(100, 3);

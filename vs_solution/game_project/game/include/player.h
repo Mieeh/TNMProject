@@ -36,7 +36,7 @@ class Player {
 
 public:
 	// Gameplay related
-	int hp = 5;     							
+	int hp = 3;     							
 	int attack = 1; 
 	core::Vector2i tile_position; 
 	core::Vector2f world_position;
