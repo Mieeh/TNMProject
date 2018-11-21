@@ -13,8 +13,8 @@
 
 using namespace bear;
 
-#define PLAYER_SIZE 1.6f
-#define PLAYER_OFFSET core::Vector2f(-22, -30)
+#define PLAYER_SIZE 1.4f
+#define PLAYER_OFFSET core::Vector2f(-14, -24)
 
 enum PlayerStates {
 	INTRO,

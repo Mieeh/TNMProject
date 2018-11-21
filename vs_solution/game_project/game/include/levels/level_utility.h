@@ -9,7 +9,7 @@
 #include"../../../engine/include/level.h"
 
 // Include enemies and such
-#include"../enemies/bat.h"
+#include"../enemies/skeleton.h"
 
 using namespace bear;
 
@@ -78,10 +78,10 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				core::Vector2i tile_position(x, y);
 				std::string key = (std::string)tile_position;
 				switch (tile_value) {
-				case BAT:
-					level_content.enemies.insert(std::pair<std::string, EnemyBase>(key, Bat())); // Add enemy to the list
-					level_content.enemies.at(key).entity.renderable.m_Transform.m_Position = core::Vector2f((tile_position.x*TILE_SIZE) + BAT_OFFSET_X, (tile_position.y*TILE_SIZE) + BAT_OFFSET_Y);
-					level_content.enemies.at(key).entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE*BAT_SIZE_X, TILE_SIZE*BAT_SIZE_Y);
+				case SKE:
+					level_content.enemies.insert(std::pair<std::string, EnemyBase>(key, Skeleton())); // Add enemy to the list
+					level_content.enemies.at(key).entity.renderable.m_Transform.m_Position = core::Vector2f((tile_position.x*TILE_SIZE) + SKELETON_OFFSET_X, (tile_position.y*TILE_SIZE) + SKELETON_OFFSET_Y);
+					level_content.enemies.at(key).entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE*SKELETON_SIZE_X, TILE_SIZE*SKELETON_SIZE_Y);
 					break;
 				}
 
@@ -112,7 +112,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					item.entity.renderable.m_TextureName = "sword";
 					item.type = ItemType::WEAPON;
 					item.name = "Weapon";
-					item.value = 2; // Notes(david) ???
+					item.value = 2; 
 					break;
 				case HI:
 					// Healing item! set correct sprite & shit
@@ -120,12 +120,18 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					item.entity.renderable.m_TextureName = "food";
 					item.type = ItemType::HEALTH;
 					item.name = "Health";
-					item.value = 1; // Notes(david) ???
+					item.value = 1; 
 					break;
 				case SI:
 					item.entity.renderable.m_TextureName = "shield";
 					item.type = ItemType::SHIELD;
 					item.name = "Armor";
+					item.value = 1;
+					break;
+				case KI:
+					item.entity.renderable.m_TextureName = "key";
+					item.type = ItemType::KEY;
+					item.name = "Key";
 					item.value = 1;
 					break;
 				}

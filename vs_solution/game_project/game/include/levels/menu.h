@@ -9,15 +9,26 @@
 
 struct TitleScreen : ILevel {
 
-	Entity test;
+	const float PIPE_WIDTH = TILE_SIZE * 3.0f;
+	const float PIPE_HEIGHT = PIPE_WIDTH / 2;
+	float pipe_x;
+
+	Entity title_screen_entity;
+	Entity pipe;
+
 	Engine* engine = Engine::Instance();
 	bool start_game;
 
-	void init() override {
-		test.renderable.m_TextureName = "titlescreen_wip";
-		test.renderable.m_Transform.m_Size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
-		test.renderable.m_Transform.m_Position = core::Vector2f(0, 0);
-		test.renderable.m_Color.a = 1.0f;
+	void init() override {   
+		title_screen_entity.renderable.m_TextureName = "titlescreen_wip";
+		title_screen_entity.renderable.m_Transform.m_Size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
+		title_screen_entity.renderable.m_Transform.m_Position = core::Vector2f(0, 0);
+		title_screen_entity.renderable.m_Color.a = 1.0f;
+
+		pipe.renderable.m_TextureName = "wallPipe";
+		pipe.renderable.m_Transform.m_Size = core::Vector2f(PIPE_WIDTH, PIPE_HEIGHT);
+		pipe_x = (WINDOW_WIDTH / 2) + PIPE_WIDTH / 2;
+		pipe.renderable.m_Transform.m_Position.x = pipe_x;
 
 		start_game = false;
 	}
@@ -30,15 +41,15 @@ struct TitleScreen : ILevel {
 			}
 		}
 		if (event.type == EventType::WindowReiszed) {
-			test.renderable.m_Transform.m_Size = event.size;
+			title_screen_entity.renderable.m_Transform.m_Size = event.size;
 		}
 	}
 
 	void update(float dt) override {
 		if (start_game == true) {
-			test.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-			test.renderable.m_Color.a -= 0.00035f*dt;
-			if (test.renderable.m_Color.a < 0) {
+			title_screen_entity.renderable.m_Transform.m_Position.y -= 0.2f * dt;
+			title_screen_entity.renderable.m_Color.a -= 0.00035f*dt;
+			if (title_screen_entity.renderable.m_Color.a < 0) {
 				engine->sound_manager->get_music("bg")->sf_music.setVolume(engine->config_manager->config_values.at("background_levels"));
 				engine->sound_manager->get_music("bg")->sf_music.setLoop(true);
 				engine->sound_manager->get_music("bg")->sf_music.play();
@@ -49,7 +60,8 @@ struct TitleScreen : ILevel {
 	}
 
 	void render() override {
-		engine->graphics_manager->draw(test);
+		engine->graphics_manager->draw(title_screen_entity);
+		//engine->graphics_manager->draw(pipe);
 	}
 
 	void player_moved() override {

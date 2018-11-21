@@ -275,24 +275,21 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		// Perform combat with the enemy
 		CombatResult combat_result = Combat::perform_combat(enemy);
 
-		if (combat_result == CombatResult::PLAYER_BLOCK_CLASH || combat_result == CombatResult::PLAYER_WEAPON_CLASH) {
-			current_item = nullptr;
-		}
 		// What happend during the combat? 
 		switch (combat_result) {
 		case CombatResult::ENEMY_DIED:
+			//std::cout << "Enemy died\n";
 			enemy.is_dead = true;
-			// Enemy dead sfx
 			// Notes(david) if the enemy we just killed is not a "bones" enemy then this would be weird?
-			// Perhaps have enemy.death_sfx, unique for every type of enemy
 			engine->sound_manager->get_sfx("enemy_dead_bones")->sf_sound.play();
+			engine->perform_window_shake(160, 4);
 			break;
 		case CombatResult::PLAYER_DIED:
+			//std::cout << "Played died\n";
 			set_player_state(PlayerStates::DEAD);
 			break;
-		case CombatResult::PLAYER_WEAPON_CLASH:
-		case CombatResult::PLAYER_BLOCK_CLASH:
 		case CombatResult::CLASH:
+			//std::cout << "Clash\n";
 			// Window shake
 			engine->perform_window_shake(100, 3);
 			// Enemy hurt sfx
@@ -322,6 +319,7 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 {
 	// Is the item on the map?
 	if (item.state == ItemState::ON_MAP) {
+		// Discard current item if there is anys
 		if (current_item != nullptr) {
 			current_item->state = ItemState::DISCARDED;
 		}
@@ -329,14 +327,15 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 
 		// current_items is now picked up
 		current_item->state = ItemState::PICKED_UP;
+		
+		// Play item pickup sfx
+		switch (item.type) {
+		case ItemType::WEAPON:
+			engine->sound_manager->get_sfx("sword_pickup")->sf_sound.play();
+			break;
+		}
 	}
 
-	// Play item pickup sfx
-	switch (item.type) {
-	case ItemType::WEAPON:
-		engine->sound_manager->get_sfx("sword_pickup")->sf_sound.play();
-		break;
-	}
 
 	// Set the player to be in transit!
 	player_state = PlayerStates::IN_TRANSIT;

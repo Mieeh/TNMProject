@@ -7,8 +7,6 @@ enum CombatResult {
 	CLASH,
 	ENEMY_DIED,
 	PLAYER_DIED,
-	PLAYER_BLOCK_CLASH,
-	PLAYER_WEAPON_CLASH
 };
 
 struct Combat {
@@ -18,29 +16,35 @@ struct Combat {
 		Player* player = Player::get();
 
 		// Check if the player has a shield or a weapon
-		int weaponDamage = 0;
-		bool hasShield = false;
+		bool hasItem = false;
+		ItemType itemType;
 		if (player->current_item != nullptr) {
-			if (player->current_item->type == ItemType::SHIELD)
-				hasShield = true;
-			else if (player->current_item->type == ItemType::WEAPON)
-				weaponDamage = player->current_item->value;
+			if (player->current_item->type == ItemType::SHIELD || player->current_item->type == ItemType::WEAPON) {
+				itemType = player->current_item->type;
+				hasItem = true;
+				player->current_item = nullptr;
+			}
 		}
 
 		// 1. Resolve player taking damage
-		int newPlayerHP = player->hp - enemy.damage;
+		int newPlayerHP = player->hp - enemy.damage;	
+		if (hasItem && itemType == ItemType::SHIELD)
+			newPlayerHP = player->hp;
+
 		/* Did the player die? */
 		if (newPlayerHP <= 0) {
 			player->hp = 0;
 			return CombatResult::PLAYER_DIED;
 		}
 
-		if(!hasShield)
-			player->hp = newPlayerHP;
-		// Done with 1
+		player->hp = newPlayerHP;
 
 		// 2. Resolve enemy taking damage
-		int newEnemyHP = enemy.hp - (player->attack + weaponDamage);
+		int newEnemyHP = enemy.hp - (player->attack);
+		if (hasItem && itemType == ItemType::WEAPON) {
+			newEnemyHP = 0;
+		}
+
 		/* Did the enemy die? */
 		if (newEnemyHP <= 0) {
 			enemy.hp = 0;
@@ -48,12 +52,7 @@ struct Combat {
 		}
 
 		enemy.hp = newEnemyHP;
-		// Done with 2
 
-		if (hasShield)
-			return PLAYER_BLOCK_CLASH;
-		if (weaponDamage != 0)
-			return PLAYER_WEAPON_CLASH;
 		// 3. We made it all the way through with neither of them dying, it's a clash! 
 		return CombatResult::CLASH;
 	}

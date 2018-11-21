@@ -7,7 +7,6 @@ in vec2 UV;
 
 void main() 
 { 
-/*
     if(UV.x < offset) {
         vec3 pixcol = texture2D(texFramebuffer, UV).rgb;
         float y = 0.2126*pixcol.x + 0.7152*pixcol.y + 0.0722*pixcol.z;
@@ -17,9 +16,8 @@ void main()
     else if(UV.x >= offset){
         gl_FragColor = texture2D(texFramebuffer, UV);
     }
-*/
 
-    vec2 newUV = floor(UV * 250) / 250;
+    //vec2 newUV = floor(UV * 250) / 250;
 
-    gl_FragColor = texture2D(texFramebuffer, newUV);
+    //gl_FragColor = texture2D(texFramebuffer, newUV);
 }

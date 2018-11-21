@@ -150,7 +150,7 @@
     <ClInclude Include="game\include\combat.h" />
     <ClInclude Include="game\include\constants.h" />
     <ClInclude Include="game\include\death_screen.h" />
-    <ClInclude Include="game\include\enemies\bat.h" />
+    <ClInclude Include="game\include\enemies\skeleton.h" />
     <ClInclude Include="game\include\game.h" />
     <ClInclude Include="game\include\levels\level1.h" />
     <ClInclude Include="game\include\levels\level2.h" />
