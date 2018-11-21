@@ -15,6 +15,8 @@ using namespace bear;
 
 // Used for simplifly the task of converting a list of integers to a list of entities that can be rendered 
 static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
+	
+	bool ground_toggle = false;
 
 	level_content.enemies.clear();
 	level_content.items.clear();
@@ -37,9 +39,11 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				// Set texture name based on tile value
 				{
 					// Big switch setting the correct texture for the tile
+					std::string temp;
 					switch (tile_value) {
 					case FLOOR1:
-						entity.renderable.m_TextureName = "ground";
+						entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+						ground_toggle = !ground_toggle;
 						break;
 					case WALL_TOP:
 						entity.renderable.m_TextureName = "wallTop";
@@ -70,7 +74,9 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				// Place ground tile under the enemy
 				level_content.walls_floors.push_back(Entity());
 				Entity& entity = level_content.walls_floors.back();
-				entity.renderable.m_TextureName = "ground";
+				// Toggle between the two floor types
+				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+				ground_toggle = !ground_toggle;
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 
@@ -92,7 +98,9 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				// Place ground tile under the item
 				level_content.walls_floors.push_back(Entity());
 				Entity& entity = level_content.walls_floors.back();
-				entity.renderable.m_TextureName = "ground";
+				// Toggle between the two floor types
+				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+				ground_toggle = !ground_toggle;
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 
