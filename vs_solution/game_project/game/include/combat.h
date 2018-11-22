@@ -22,7 +22,12 @@ struct Combat {
 			if (player->current_item->type == ItemType::SHIELD || player->current_item->type == ItemType::WEAPON) {
 				itemType = player->current_item->type;
 				hasItem = true;
+			}
+			// Shield is one time use then discarded
+			if (itemType == ItemType::SHIELD) {
 				player->current_item = nullptr;
+				// Play the armor destroyed sfx
+				Engine::Instance()->sound_manager->get_sfx("armor_break")->sf_sound.play();
 			}
 		}
 

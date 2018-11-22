@@ -47,6 +47,10 @@ void Player::on_event(Event & event)
 			if (event.key == engine->config_manager->key_map.at("INTERACT2")) { // 'e' by default
 				handle_item_use();
 			}
+			if (event.key == engine->config_manager->key_map.at("INTERACT1")) {
+				engine->level_manager->reInitCurrentLevel();
+				reset_after_death();
+			}
 		}
 		else if (player_state == PlayerStates::DEAD) {
 			if (event.key == Key::X) {
@@ -198,14 +202,16 @@ void Player::set_player_state(PlayerStates new_state)
 {
 	player_state = new_state;
 	if (goal_trigger) {
-		// Notes(david)s
-		//engine->sound_manager->get_sfx("falling")->sf_sound.play();
+		engine->sound_manager->get_sfx("falling")->sf_sound.play();
 		player_state = PlayerStates::OUTRO;
 	}
 
 	if (new_state == PlayerStates::DEAD) {
 		// Tell the graphics_manager we want to enable the death post processing effect
 		engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::BLACK_WHITE_CROSS);
+		// Play the death chords 
+		engine->sound_manager->get_music("bg")->sf_music.stop();
+		engine->sound_manager->get_music("game_over_music")->sf_music.play();
 	}
 }
 
@@ -321,7 +327,10 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 	if (item.state == ItemState::ON_MAP) {
 		// Discard current item if there is anys
 		if (current_item != nullptr) {
+			// Discard current item unless it's a key!
 			current_item->state = ItemState::DISCARDED;
+			if (current_item->type == ItemType::KEY)
+				current_item->state = ItemState::ON_MAP;
 		}
 		current_item = &item;
 
@@ -333,9 +342,13 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 		case ItemType::WEAPON:
 			engine->sound_manager->get_sfx("sword_pickup")->sf_sound.play();
 			break;
+		case ItemType::SHIELD:
+			engine->sound_manager->get_sfx("armor_pickup")->sf_sound.play();
+			break;
+		case ItemType::KEY:
+			engine->sound_manager->get_sfx("key_pickup")->sf_sound.play();
 		}
 	}
-
 
 	// Set the player to be in transit!
 	player_state = PlayerStates::IN_TRANSIT;
@@ -356,16 +369,17 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 void Player::reset_after_death()
 {
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
-	hp = 5; // Reset hp
+	hp = 3; // Reset hp
 	current_item = nullptr;
+
+	// Start the bg music & stop the dead music
+	if(engine->sound_manager->get_music("bg")->sf_music.getStatus() != sf::Sound::Status::Playing)
+		engine->sound_manager->get_music("bg")->sf_music.play();
+	engine->sound_manager->get_music("game_over_music")->sf_music.stop();
 
 	// Disable the post processing effect
 	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);
 	death_panel.offset = 0;
-	//graphics::Shader* fbShader = ResourceManager::Instance()->GetShader("framebuffer_shader");
-	//fbShader->enable();
-	//fbShader->setUniformFloat("offset", 0);
-	//fbShader->disable();
 }
 
 void Player::handle_item_use()

@@ -72,8 +72,8 @@ static level_list TEST_LEVEL =
 {
 	{ 3, 1, 1,  1,   1,   1, 4 },
 	{ 3, 0, 0,  SKE, HI,   0, 4 },
-	{ 3, 0, SI, KI,  SKE, G, 4 },    
-	{ 3, 0, 0,  SKE, HI,   0, 4 },	
+	{ 3, 0, 0, SI,  SKE, G, 4 },    
+	{ 3, KI, 0,  SKE, HI,   0, 4 },	
 	{-1, 2, 2,  2,   2,   2,-1 },
 };
 

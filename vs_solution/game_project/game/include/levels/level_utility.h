@@ -20,6 +20,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 
 	level_content.enemies.clear();
 	level_content.items.clear();
+	level_content.walls_floors.clear();
 
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
@@ -28,6 +29,8 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 		{
 			core::Vector2f realPosition = core::Vector2f(x*TILE_SIZE, y*TILE_SIZE);
 			
+			ground_toggle = !ground_toggle;
+
 			int tile_value = _level_list.at(y).at(x);
 			if (is_floor_or_wall(tile_value)) {
 				level_content.walls_floors.push_back(Entity());
@@ -43,7 +46,6 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					switch (tile_value) {
 					case FLOOR1:
 						entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
-						ground_toggle = !ground_toggle;
 						break;
 					case WALL_TOP:
 						entity.renderable.m_TextureName = "wallTop";
@@ -76,7 +78,6 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				Entity& entity = level_content.walls_floors.back();
 				// Toggle between the two floor types
 				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
-				ground_toggle = !ground_toggle;
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 
@@ -100,7 +101,6 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				Entity& entity = level_content.walls_floors.back();
 				// Toggle between the two floor types
 				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
-				ground_toggle = !ground_toggle;
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 

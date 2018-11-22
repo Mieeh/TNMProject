@@ -35,6 +35,7 @@ struct TitleScreen : ILevel {
 			game_start = true;
 		}
 		if (event.type == EventType::WindowReiszed) {
+			fade_panel.renderable.m_Transform.m_Size = event.size;
 			title_screen.renderable.m_Transform.m_Size = event.size;
 			long_pipe.renderable.m_Transform.m_Size.x = event.size.x * magic_well_constant;
 			long_pipe.renderable.m_Transform.m_Size.y = long_pipe.renderable.m_Transform.m_Position.x * 16;
