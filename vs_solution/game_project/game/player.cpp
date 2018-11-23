@@ -15,7 +15,7 @@ using namespace bear;
 
 Player* Player::instance = nullptr;
 
-Player::Player() : player_anim(), player_ui()
+Player::Player() : player_anim(), player_ui(), gas()
 {
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
@@ -36,13 +36,13 @@ void Player::on_event(Event & event)
 		// Make sure the player is idle before we move/perform something!
 		if (player_state == PlayerStates::IDLE) {
 			if (event.key == engine->config_manager->key_map.at("MOVE_RIGHT"))
-				move_player(PlayerMoveDirection::RIGHT);
+				resolve_move(PlayerMoveDirection::RIGHT);
 			else if (event.key == engine->config_manager->key_map.at("MOVE_LEFT"))
-				move_player(PlayerMoveDirection::LEFT);
+				resolve_move(PlayerMoveDirection::LEFT);
 			else if (event.key == engine->config_manager->key_map.at("MOVE_DOWN"))
-				move_player(PlayerMoveDirection::DOWN);
+				resolve_move(PlayerMoveDirection::DOWN);
 			else if (event.key == engine->config_manager->key_map.at("MOVE_UP"))
-				move_player(PlayerMoveDirection::UP);
+				resolve_move(PlayerMoveDirection::UP);
 
 			if (event.key == engine->config_manager->key_map.at("INTERACT2")) { // 'e' by default
 				handle_item_use();
@@ -96,34 +96,22 @@ void Player::render()
 
 	engine->graphics_manager->draw(entity);
 
+	gas.draw();
+
 	// Dead? render the death panel if we are!
 	if (player_state == PlayerStates::DEAD) {
 		// We dead boy
 	}
 }
 
-void Player::move_player(int move_direction_enum)
+void Player::resolve_move(int move_direction_enum)
 {
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
 	int new_tile_value = engine->level_manager->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
 
 	// We trying to transit to a floor?
 	if (is_floor(new_tile_value)) {
-		// Set the player to be in transit!
-		player_state = PlayerStates::IN_TRANSIT;
-		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
-
-		core::Vector2i dir = move_directions[move_direction_enum];
-		tile_position += dir;
-		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
-
-		// Walk SFX
-		last_played_footstep = get_random_footstep(2);
-		
-		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
-
-		// Message the level we've moved
-		engine->level_manager->current_level->player_moved();
+		do_move_player(move_direction_enum);
 	}
 	else if (is_enemy(new_tile_value)) {
 		// Get the enemy!
@@ -188,6 +176,26 @@ void Player::outro_player(float dt)
 		// Reset layer
 		entity.renderable.m_Layer = LAYER3;
 	}
+}
+
+void Player::do_move_player(int move_direction_enum)
+{
+	// Set the player to be in transit!
+	player_state = PlayerStates::IN_TRANSIT;
+	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
+
+	core::Vector2i dir = move_directions[move_direction_enum];
+	tile_position += dir;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+
+	// Walk SFX
+	last_played_footstep = get_random_footstep(2);
+
+	engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
+
+	// Message the level we've moved
+	engine->level_manager->current_level->player_moved();
+	gas.player_moved();
 }
 
 void Player::set_player_position(const core::Vector2i position)
@@ -305,19 +313,7 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 	}
 	else {
 		// Set the player to be in transit!
-		player_state = PlayerStates::IN_TRANSIT;
-		move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
-
-		core::Vector2i dir = move_directions[move_direction_enum];
-		tile_position += dir;
-		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
-
-		// Walk SFX
-		last_played_footstep = get_random_footstep(2);
-		engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
-
-		// Message the level we've moved
-		engine->level_manager->current_level->player_moved();
+		do_move_player(move_direction_enum);
 	}
 }
 
@@ -351,19 +347,7 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 	}
 
 	// Set the player to be in transit!
-	player_state = PlayerStates::IN_TRANSIT;
-	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
-
-	core::Vector2i dir = move_directions[move_direction_enum];
-	tile_position += dir;
-	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
-
-	// Walk SFX
-	last_played_footstep = get_random_footstep(2);
-	engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
-
-	// Message the level we've moved
-	engine->level_manager->current_level->player_moved();
+	do_move_player(move_direction_enum);
 }
 
 void Player::reset_after_death()

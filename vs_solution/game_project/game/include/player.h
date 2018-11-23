@@ -7,6 +7,7 @@
 #include"death_screen.h"
 #include"player_animation.h"
 #include"player_ui.h"
+#include"gas.h"
 
 #include<window\event.h>
 #include<core\vector2.h>
@@ -53,9 +54,8 @@ private:
 	std::string last_played_footstep = "footstep1";
 	const float footstep_delay = 250;
 
-	// Player ui object
 	PlayerUI player_ui;
-
+	Gas gas;
 
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
@@ -79,15 +79,16 @@ public:
 	void play_intro_at(const core::Vector2i position);
 	void resolve_combat(EnemyBase& enemy, int move_direction_enum);
 	void resolve_item(Item& item, int move_direction_enum);
+	void resolve_move(int move_direction_enum); // moves player in direction
 	void reset_after_death();
 	void handle_item_use();
 
 	// Per state code methods
 	void idle_player_state_control(); // logic for idle state is here
 	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
-	void move_player(int move_direction_enum); // moves player in direction
 	void intro_player(float dt); // does intro 
 	void outro_player(float dt); // does outro 
+	void do_move_player(int move_direction_enum);
 
 public:
 	static Player* get();

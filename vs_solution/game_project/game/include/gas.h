@@ -1,6 +1,7 @@
 #pragma once
 
 #include"../../engine/include/entity.h"
+#include"../../engine/include/bear_game.h"
 
 struct Gas {
 
@@ -9,8 +10,11 @@ struct Gas {
 	int current_x;
 	int step_interval; // Move the gas forward each step_interval 
 	int step_counter; // Counter for when the gas will move forward again
+	Engine* engine;
 	
-	void player_moved();
+	/* Constructor & Methods */
+	Gas();
 
+	void player_moved();
 	void draw();
 };

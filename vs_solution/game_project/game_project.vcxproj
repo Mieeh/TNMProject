@@ -132,6 +132,7 @@
     <ClCompile Include="engine\game_systems.cpp" />
     <ClCompile Include="game\death_screen.cpp" />
     <ClCompile Include="game\game.cpp" />
+    <ClCompile Include="game\gas.cpp" />
     <ClCompile Include="game\player.cpp" />
     <ClCompile Include="game\player_animation.cpp" />
     <ClCompile Include="game\player_ui.cpp" />
