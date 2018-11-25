@@ -82,6 +82,7 @@ public:
 	void resolve_move(int move_direction_enum); // moves player in direction
 	void reset_after_death();
 	void handle_item_use();
+	void message_gas();
 
 	// Per state code methods
 	void idle_player_state_control(); // logic for idle state is here

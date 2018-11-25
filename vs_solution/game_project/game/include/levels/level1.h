@@ -17,6 +17,10 @@ struct Level1 : ILevel {
 		content.tile_map = TEST_LEVEL;
 		levelUtility_ConvertToLevelContent(content);
 		
+		// Set the gas variables
+		gas_offset = -1;
+		gas_interval = 2;
+		
 		// Setup the player
 		player->play_intro_at(core::Vector2i(1, 1));
 
@@ -24,7 +28,7 @@ struct Level1 : ILevel {
 		engine->graphics_manager->point_to_follow = &player->world_position;
 		
 		// Set the next level name so we know which level to load!
-		next_level_name = "level2";
+		next_level_name = "level2";					
 	}
 
 	void on_event(Event& event) {

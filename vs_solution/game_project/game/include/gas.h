@@ -15,6 +15,9 @@ struct Gas {
 	/* Constructor & Methods */
 	Gas();
 
-	void player_moved();
+	void reset_gas_to_current_level();
+
+	void player_event();
 	void draw();
+	void update(float dt); 
 };

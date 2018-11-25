@@ -22,6 +22,8 @@ struct LevelContent {
 struct ILevel {
 
 	std::string next_level_name;
+	int gas_offset;
+	int gas_interval;
 
 	virtual void init() = 0; // Called when a level is started
 	virtual void on_event(Event& event) = 0; // Called every event

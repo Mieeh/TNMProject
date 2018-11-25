@@ -62,6 +62,9 @@ void Player::on_event(Event & event)
 
 void Player::update(float dt)
 {	
+	// Update the gas
+	gas.update(dt);
+
 	// Update the animation object
 	entity.renderable.m_TextureName = player_anim.update(player_state, move_direction, dt);
 
@@ -92,16 +95,14 @@ void Player::update(float dt)
 
 void Player::render()
 {
+	// Draw player related UI
 	player_ui.render_player_hp();
 
+	// Draw the player entity
 	engine->graphics_manager->draw(entity);
 
+	// Draw the gas entity(*)
 	gas.draw();
-
-	// Dead? render the death panel if we are!
-	if (player_state == PlayerStates::DEAD) {
-		// We dead boy
-	}
 }
 
 void Player::resolve_move(int move_direction_enum)
@@ -193,9 +194,9 @@ void Player::do_move_player(int move_direction_enum)
 
 	engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
 
-	// Message the level we've moved
+	// Message the level we've moved & the gas we've done a gas related action
 	engine->level_manager->current_level->player_moved();
-	gas.player_moved();
+	message_gas();
 }
 
 void Player::set_player_position(const core::Vector2i position)
@@ -277,6 +278,9 @@ void Player::play_intro_at(const core::Vector2i position)
 
 	entity.renderable.m_Color.a = 0.0f;
 
+	// reset the gas
+	gas.reset_gas_to_current_level();
+
 	// Reset player HP
 	hp = 3;
 	current_item = nullptr;
@@ -310,6 +314,9 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 			engine->sound_manager->get_sfx("enemy_hurt")->sf_sound.play();
 			break;
 		}
+
+		// Gas
+		message_gas();
 	}
 	else {
 		// Set the player to be in transit!
@@ -396,6 +403,15 @@ void Player::handle_item_use()
 		printf("tried to use key\n");
 		current_item = nullptr;
 		break;
+	}
+}
+
+void Player::message_gas()
+{
+	gas.player_event();
+	// Check if we're inside the gas!
+	if (gas.current_x >= tile_position.x) {
+		set_player_state(PlayerStates::DEAD);
 	}
 }
 
