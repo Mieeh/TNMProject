@@ -19,7 +19,7 @@ struct Level2 : ILevel {
 		gas_interval = -1;
 		gas_offset = -1;
 
-		player->play_intro_at(core::Vector2i(1, 2));
+		player->play_intro_at(core::Vector2i(1, 5));
 
 		engine->graphics_manager->point_to_follow = &player->world_position;
 
@@ -38,6 +38,7 @@ struct Level2 : ILevel {
 		player->render();
 		engine->graphics_manager->draw(content.walls_floors);
 		engine->graphics_manager->draw(content.enemies);
+		engine->graphics_manager->draw(content.items);
 	}
 
 	void player_moved() override {
