@@ -162,6 +162,7 @@
     <ClInclude Include="game\include\player.h" />
     <ClInclude Include="game\include\player_animation.h" />
     <ClInclude Include="game\include\player_ui.h" />
+    <ClInclude Include="engine\include\presure_plate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

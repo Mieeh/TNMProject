@@ -14,17 +14,18 @@ struct Level1 : ILevel {
 
 	void init() override {
 		// Load the actual map data
-		content.tile_map = TEST_LEVEL;
+		content.tile_map = TUTORIAL_LEVEL;
 		levelUtility_ConvertToLevelContent(content);
 		
 		// Set the gas variables
 		gas_offset = -1;
-		gas_interval = 2;
+		gas_interval = -1;
 		
 		// Setup the player
-		player->play_intro_at(core::Vector2i(1, 1));
+		player->play_intro_at(core::Vector2i(1, 5));
 
 		// Signal the camera which point to follows
+		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
 		
 		// Set the next level name so we know which level to load!
@@ -45,10 +46,13 @@ struct Level1 : ILevel {
 		engine->graphics_manager->draw(content.enemies);
 		engine->graphics_manager->draw(content.walls_floors);
 		engine->graphics_manager->draw(content.items);
+		engine->graphics_manager->draw(content.presure_plates);
 	}
 
 	void player_moved() override {
-
+		if (player->tile_position == core::Vector2i(19, 7)) {
+			std::cout << "Start that FOG cutscene!" << std::endl;
+		}
 	}
 
 	LevelContent& get_level_content()

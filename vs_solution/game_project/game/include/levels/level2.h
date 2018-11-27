@@ -13,14 +13,15 @@ struct Level2 : ILevel {
 	Engine* engine = Engine::Instance();
 
 	void init() override {		
-		content.tile_map = LEVEL_2;
+		content.tile_map = TEST_LEVEL;
 		levelUtility_ConvertToLevelContent(content);
 
 		gas_interval = -1;
 		gas_offset = -1;
 
-		player->play_intro_at(core::Vector2i(1, 5));
+		player->play_intro_at(core::Vector2i(1, 1));
 
+		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
 
 		next_level_name = "level1";
@@ -39,6 +40,7 @@ struct Level2 : ILevel {
 		engine->graphics_manager->draw(content.walls_floors);
 		engine->graphics_manager->draw(content.enemies);
 		engine->graphics_manager->draw(content.items);
+		engine->graphics_manager->draw(content.presure_plates);
 	}
 
 	void player_moved() override {

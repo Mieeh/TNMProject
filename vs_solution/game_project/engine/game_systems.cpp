@@ -34,7 +34,8 @@ void GraphicsManager::update(float dt) {
 
 	// Make the view follow the point_to_follow
 	if (point_to_follow != nullptr) {
-		core::Vector2f goal_pos = ((*point_to_follow) * -1) + core::Vector2f((window_size.x/2) - TILE_SIZE/2, (window_size.y/2) - TILE_SIZE/2);
+		core::Vector2f actual_window_size = window_size * graphics::Graphics::get_zoom();
+		core::Vector2f goal_pos = ((*point_to_follow) * -1) + core::Vector2f((actual_window_size.x/2) - TILE_SIZE/2, (actual_window_size.y/2) - TILE_SIZE/2);
 		core::Vector2f curr = view.getPosition();
 		if (core::Vector2f::distance(curr, goal_pos) > 1.0f) {
 			curr.lerp(goal_pos, 0.0025f*dt);
@@ -89,6 +90,12 @@ void GraphicsManager::draw(std::map<std::string, Item>& item_map) {
 	}
 }
 
+void GraphicsManager::draw(std::map<std::string, PresurePlate>& item_map) {
+	for (auto& x : item_map) {
+		slow_renderer->submit(x.second.entity.renderable);
+	}
+}
+
 void GraphicsManager::draw(Entity & entity)
 {
 	slow_renderer->submit(entity.renderable);
@@ -107,8 +114,20 @@ void GraphicsManager::window_resized(const Event & event)
 	if (event.type == EventType::WindowReiszed) {
 		// Bear framework callback for the rendering
 		graphics::Graphics::window_resize_callback(event.size.x, event.size.y);
-		window_size = event.size;
+		graphics::Graphics::set_uniform_size(event.size.x, event.size.y);
 
+		if (event.size.x >= WINDOW_WIDTH * 1.4f) {
+			graphics::Graphics::set_zoom(0.5f);
+		}
+		else if (event.size.x >= WINDOW_WIDTH * 1.2f) {
+			graphics::Graphics::set_zoom(0.7f);
+		}
+		else {
+			graphics::Graphics::set_zoom(1.0f);
+		}
+
+		window_size = event.size;
+		
 		// Notes(david) framebuffer needs to know the window was resized!
 		framebuffer_list[0].windowResize(event.size.x, event.size.y);
 	}

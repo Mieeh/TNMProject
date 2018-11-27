@@ -9,12 +9,14 @@ typedef std::vector<std::vector<int>> level_list;
 
 #include"enemy.h"
 #include"item.h"
+#include"presure_plate.h"
 
 // Structure for data that every level has /
 struct LevelContent {
 	core::Vector2i goal_pos;
 	level_list tile_map;
 	std::vector<Entity> walls_floors;
+	std::map<std::string, PresurePlate> presure_plates;
 	std::map<std::string, Item> items;
 	std::map<std::string, EnemyBase> enemies;
 };

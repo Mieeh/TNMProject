@@ -28,6 +28,7 @@ typedef std::vector<std::vector<int>> level_list;
 #define HI ITEM+1 // Health Item
 #define SI ITEM+2 // Shield Item
 #define KI ITEM+3 // Key    Item
+#define PP ITEM+4 // Presure (Not Item) But still for ease of use we categorise it as an item
 
 #define SKE 7
 
@@ -68,17 +69,24 @@ static bool is_item(int _v) {
 	return false;
 }
 
+static bool is_pp(int _v) {
+	if (_v == PP) {
+		return true;
+	}
+	return false;
+}
+
 static level_list TEST_LEVEL = 
 {
 	{ 3, 1,1,  1,  1,1, 4},
 	{ 3, 0,0,SKE, HI,0, 4},
-	{ 3, 0,0, SI,SKE,G, 4},    
+	{ 3, 0,0, WI,SKE,G, 4},    
 	{ 3,KI,0,SKE, HI,0, 4},	
 	{-1, 2,2,  2,  2,2,-1},
 };
 
-static level_list LEVEL_2 =
-{
+static level_list TUTORIAL_LEVEL =
+{															 // 19
 	{-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 3, 1,  1, 1, 4,-1,-1,-1,-1,-1,-1,-1},
 	{-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 3, 0, KI, 0, 4,-1,-1,-1,-1,-1,-1,-1},
 	{-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 3, 2,  0, 2, 4,-1,-1,-1,-1,-1,-1,-1},
@@ -86,7 +94,7 @@ static level_list LEVEL_2 =
 	{ 3, 0, 0, 0, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 0,  0, 0, 4,-1,-1,-1,-1,-1,-1,-1},
 	{ 3, 0, 0, 0, 0, 0, 0,SKE, 0, 0, 0,HI, 0, 0,SI,  0, 0, 4,-1,-1, 3, 1, 1, 1, 4},
 	{ 3, 0, 0, 0, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2, 0,  0, 0, 1, 1, 1, 1, 0, 0, 0, 4},
-	{-1, 2, 2, 2,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1, 0,  0, 0, 0, 0, 0, 0, 0, G, 0, 4},
+	{-1, 2, 2, 2,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1, 0,  0, 0, 0, 0,PP, 0, 0, G, 0, 4},  // 7
 	{-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1, 2,  2, 2, 2, 2, 2, 2, 0, 0, 0, 4},
 	{-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1, -1,-1,-1,-1,-1,-1, 2, 2, 2,-1},
 };

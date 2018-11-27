@@ -21,6 +21,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 	level_content.enemies.clear();
 	level_content.items.clear();
 	level_content.walls_floors.clear();
+	level_content.presure_plates.clear();
 
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
@@ -147,6 +148,27 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				item.entity.renderable.m_Layer = LAYER3 + y;
 				// Insert into the level content!
 				level_content.items.insert(std::pair<std::string, Item>(key, item));
+			}
+			else if (is_pp(tile_value)) {
+				// Place ground tile under the item
+				level_content.walls_floors.push_back(Entity());
+				Entity& entity = level_content.walls_floors.back();
+				// Toggle between the two floor types
+				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+				entity.renderable.m_Transform.m_Position = realPosition;
+				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				// Add the presure plate
+				PresurePlate pp;
+				pp.entity.renderable.m_TextureName = "pp0";
+				pp.entity.renderable.m_Transform.m_Position = realPosition;
+				pp.entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+				pp.entity.renderable.m_Layer = LAYER3 + y;
+
+				// Insert presure plate into the pp map
+				core::Vector2i tile_position(x, y);
+				std::string key = (std::string)tile_position;
+				level_content.presure_plates.insert(std::pair<std::string, PresurePlate>(key, pp));
 			}
 		}
 	}

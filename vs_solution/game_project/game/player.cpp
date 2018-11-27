@@ -9,6 +9,7 @@
 
 #include<window/event.h>
 #include<window/GLFW_event.h>
+#include<graphics\graphics.h>
 using namespace bear;
 
 #include<random>
@@ -110,6 +111,13 @@ void Player::resolve_move(int move_direction_enum)
 	core::Vector2i new_tile_position = tile_position + move_directions[move_direction_enum];
 	int new_tile_value = engine->level_manager->current_level->get_level_content().tile_map.at(new_tile_position.y).at(new_tile_position.x);
 
+	// Make sure we disable the presure plate (if we stood on one)
+	if (presure_plate != nullptr) {
+		presure_plate->toggle();
+		engine->sound_manager->get_sfx("pp0")->sf_sound.play();
+		presure_plate = nullptr;
+	}
+
 	// We trying to transit to a floor?
 	if (is_floor(new_tile_value)) {
 		do_move_player(move_direction_enum);
@@ -125,6 +133,19 @@ void Player::resolve_move(int move_direction_enum)
 		Item& item = engine->level_manager->current_level->get_level_content().items.at(key);
 		// Resolve item collision
 		resolve_item(item, move_direction_enum);
+	}
+	else if (is_pp(new_tile_value)) {
+		// Move the player to the presure plate
+		do_move_player(move_direction_enum);
+		
+		// Get the presure plate
+		std::string key = (std::string)new_tile_position;
+		presure_plate = &engine->level_manager->current_level->get_level_content().presure_plates.at(key);
+		presure_plate->toggle();
+
+		// SFX
+		engine->sound_manager->get_sfx("pp1")->sf_sound.play();
+		//engine->sound_manager->add_delayed_sfx("pp1", 150);
 	}
 	else if (new_tile_value == GOAL) {
 
@@ -392,16 +413,10 @@ void Player::handle_item_use()
 
 		break;
 	case ItemType::WEAPON:
-		printf("tried to use weapon\n");
-		current_item = nullptr;
 		break;
 	case ItemType::SHIELD:
-		printf("tried to use shield\n");
-		current_item = nullptr;
 		break;
 	case ItemType::KEY:
-		printf("tried to use key\n");
-		current_item = nullptr;
 		break;
 	}
 }

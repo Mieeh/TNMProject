@@ -43,6 +43,7 @@ public:
 	core::Vector2f world_position;
 	Engine* engine = Engine::Instance();
 	Item* current_item = nullptr;
+	PresurePlate* presure_plate = nullptr; // Presure plate last stood on
 
 private:
 	const float move_speed = 0.2f;
