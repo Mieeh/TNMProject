@@ -75,6 +75,12 @@ void Player::update(float dt)
 		idle_player_state_control();
 		break;
 	case PlayerStates::IN_TRANSIT:
+		// Returns true when the player reaches its destianation
+		if (move_player_state_control(move_direction, dt)) {
+			set_player_state(PlayerStates::IDLE);
+		}
+		break;
+	case PlayerStates::CUTSCENE:
 		move_player_state_control(move_direction, dt);
 		break;
 	case PlayerStates::INTRO:
@@ -245,7 +251,7 @@ void Player::set_player_state(PlayerStates new_state)
 	}
 }
 
-void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
+bool Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 {
 	switch (dir) {
 	case PlayerMoveDirection::RIGHT:
@@ -253,35 +259,41 @@ void Player::move_player_state_control(PlayerMoveDirection dir, float dt)
 		entity.renderable.m_Transform.m_Position.x += move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position!
 		if (entity.renderable.m_Transform.m_Position.x >= world_position.x) {
-			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
+			//set_player_state(PlayerStates::IDLE);
+			return true;
 		}
 		break;
 	case PlayerMoveDirection::LEFT:
 		entity.renderable.m_Transform.m_Position.x += -move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position!
 		if (entity.renderable.m_Transform.m_Position.x <= world_position.x) {
-			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
+			//set_player_state(PlayerStates::IDLE);
+			return true;
 		}
 		break;
 	case PlayerMoveDirection::DOWN:
 		entity.renderable.m_Transform.m_Position.y += move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position
 		if (entity.renderable.m_Transform.m_Position.y >= world_position.y) {
-			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
+			//set_player_state(PlayerStates::IDLE);
+			return true;
 		}
 		break;
 	case PlayerMoveDirection::UP:
 		entity.renderable.m_Transform.m_Position.y += -move_speed * dt;
 		// Make sure we go to an idle state when we've reached our new position
 		if (entity.renderable.m_Transform.m_Position.y <= world_position.y) {
-			set_player_state(PlayerStates::IDLE);
 			entity.renderable.m_Transform.m_Position = world_position;
+			//set_player_state(PlayerStates::IDLE);
+			return true;
 		}
 		break;
 	}
+
+	return false;
 }
 
 void Player::idle_player_state_control()

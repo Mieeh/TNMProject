@@ -14,15 +14,16 @@
 
 using namespace bear;
 
-#define PLAYER_SIZE 1.4f
-#define PLAYER_OFFSET core::Vector2f(-14, -24)
+#define PLAYER_SIZE 1.0f
+#define PLAYER_OFFSET core::Vector2f(0,-13)//core::Vector2f(-14, -24)
 
 enum PlayerStates {
 	INTRO,
 	IDLE,
 	IN_TRANSIT,
 	OUTRO,
-	DEAD
+	DEAD,
+	CUTSCENE
 };
 
 enum PlayerMoveDirection {
@@ -87,7 +88,7 @@ public:
 
 	// Per state code methods
 	void idle_player_state_control(); // logic for idle state is here
-	void move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
+	bool move_player_state_control(PlayerMoveDirection dir, float dt); // logic for move state is here
 	void intro_player(float dt); // does intro 
 	void outro_player(float dt); // does outro 
 	void do_move_player(int move_direction_enum);

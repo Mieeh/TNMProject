@@ -11,6 +11,7 @@ struct Level1 : ILevel {
 	LevelContent content;
 	Player* player = Player::get(); // Update, event, render
 	Engine* engine = Engine::Instance();
+	float cutscene_timer = 0.0f;
 
 	void init() override {
 		// Load the actual map data
@@ -27,6 +28,9 @@ struct Level1 : ILevel {
 		// Signal the camera which point to follows
 		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
+
+		// Cutscenetimer reset
+		cutscene_timer = 0.0f;
 		
 		// Set the next level name so we know which level to load!
 		next_level_name = "level2";					
@@ -38,6 +42,11 @@ struct Level1 : ILevel {
 
 	void update(float dt) override {
 		player->update(dt);
+
+		if (engine->sound_manager->get_sfx("pp_rumble")->sf_sound.getStatus() == sf::SoundSource::Status::Playing) {
+			cutscene_timer += 0.1f * dt;
+			std::cout << cutscene_timer << std::endl;
+		}
 	}
 
 	void render() override {
@@ -51,7 +60,8 @@ struct Level1 : ILevel {
 
 	void player_moved() override {
 		if (player->tile_position == core::Vector2i(19, 7)) {
-			std::cout << "Start that FOG cutscene!" << std::endl;
+			engine->sound_manager->get_sfx("pp_rumble")->sf_sound.play();
+			player->set_player_state(PlayerStates::CUTSCENE); 
 		}
 	}
 
