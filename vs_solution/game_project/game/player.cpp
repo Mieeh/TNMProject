@@ -246,8 +246,7 @@ void Player::set_player_state(PlayerStates new_state)
 		// Tell the graphics_manager we want to enable the death post processing effect
 		engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::BLACK_WHITE_CROSS);
 		// Play the death chords 
-		engine->sound_manager->get_music("bg")->sf_music.stop();
-		engine->sound_manager->get_music("game_over_music")->sf_music.play();
+		engine->sound_manager->set_background_music("game_over_music"); 
 	}
 }
 
@@ -395,11 +394,6 @@ void Player::reset_after_death()
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 3; // Reset hp
 	current_item = nullptr;
-
-	// Start the bg music & stop the dead music
-	if(engine->sound_manager->get_music("bg")->sf_music.getStatus() != sf::Sound::Status::Playing)
-		engine->sound_manager->get_music("bg")->sf_music.play();
-	engine->sound_manager->get_music("game_over_music")->sf_music.stop();
 
 	// Disable the post processing effect
 	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);

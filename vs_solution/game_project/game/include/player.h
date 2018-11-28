@@ -45,6 +45,7 @@ public:
 	Engine* engine = Engine::Instance();
 	Item* current_item = nullptr;
 	PresurePlate* presure_plate = nullptr; // Presure plate last stood on
+	Gas gas;
 
 private:
 	const float move_speed = 0.2f;
@@ -57,7 +58,6 @@ private:
 	const float footstep_delay = 250;
 
 	PlayerUI player_ui;
-	Gas gas;
 
 	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;

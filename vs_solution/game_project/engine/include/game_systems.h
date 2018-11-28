@@ -101,6 +101,7 @@ private:
 	};
 
 	std::vector<DelayedSFX> sfx_poll;
+	std::string background_music;
 
 public:
 	SoundManager() { }
@@ -108,6 +109,10 @@ public:
 
 	void update(float dt);
 	
+	void set_background_music(const std::string& new_background_music);
+	void start_background_music();
+	void stop_background_music();
+
 	void register_music(std::string name, const std::string& path);
 	std::shared_ptr<Music> get_music(std::string name);
 	void register_sfx(std::string name, const std::string& path);

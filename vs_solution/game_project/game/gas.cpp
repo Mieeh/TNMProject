@@ -4,7 +4,6 @@
 #include"../engine/include/game_systems.h"
 
 #define BIG_SQUARE 700.0f
-#define GAS_MOVE_SPEED 0.2f
 
 using namespace bear;
 
@@ -23,6 +22,8 @@ Gas::Gas()
 	gas_entity.renderable.m_Transform.m_Size = { TILE_SIZE, BIG_SQUARE };
 	gas_entity.renderable.m_TextureName = "shadows";
 	gas_entity.renderable.m_Layer = 9999; // This is rendered on top of everything
+
+	gas_speed = GAS_MOVE_SPEED;
 }
 
 void Gas::reset_gas_to_current_level()
@@ -48,18 +49,25 @@ void Gas::update(float dt)
 {
 	float goal_pos = (current_x * TILE_SIZE);
 	if (gas_entity.renderable.m_Transform.m_Position.x <= goal_pos) {
-		gas_entity.renderable.m_Transform.m_Position.x += GAS_MOVE_SPEED * dt;
+		gas_entity.renderable.m_Transform.m_Position.x += gas_speed * dt;
 	}
 	if (rect_entity.renderable.m_Transform.m_Position.x < goal_pos - BIG_SQUARE + 10) {
-		rect_entity.renderable.m_Transform.m_Position.x += GAS_MOVE_SPEED * dt;
+		rect_entity.renderable.m_Transform.m_Position.x += gas_speed * dt;
 	}
+}
+
+void Gas::reset_gas_speed()
+{
+	gas_speed = GAS_MOVE_SPEED;
 }
 
 void Gas::player_event()
 {
 	step_counter++;
-	if (step_counter == step_interval) {
-		step_counter = 0;
-		current_x++;
+	if (step_interval > 0) {
+		if (step_counter >= step_interval) {
+			step_counter = 0;
+			current_x++;
+		}
 	}
 }

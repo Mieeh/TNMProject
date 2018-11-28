@@ -24,6 +24,9 @@ struct Level2 : ILevel {
 		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
 
+		// Background music
+		engine->sound_manager->set_background_music("bg");
+
 		next_level_name = "level1";
 	}
 

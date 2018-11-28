@@ -42,12 +42,13 @@ struct TitleScreen : ILevel {
 			}
 		}
 		if (event.type == EventType::WindowReiszed) {
-			fade_panel.renderable.m_Transform.m_Size = event.size * graphics::Graphics::get_zoom();
-			title_screen.renderable.m_Transform.m_Size = event.size * graphics::Graphics::get_zoom();
+			float zoom = graphics::Graphics::get_zoom();
+			fade_panel.renderable.m_Transform.m_Size = event.size * zoom;
+			title_screen.renderable.m_Transform.m_Size = event.size * zoom;
 
-			long_pipe.renderable.m_Transform.m_Size.x = event.size.x * magic_well_constant * graphics::Graphics::get_zoom();
+			long_pipe.renderable.m_Transform.m_Size.x = event.size.x * magic_well_constant * zoom;
 			long_pipe.renderable.m_Transform.m_Size.y = long_pipe.renderable.m_Transform.m_Position.x * 16;
-			long_pipe.renderable.m_Transform.m_Position = core::Vector2f((event.size.x / 2) - (long_pipe.renderable.m_Transform.m_Size.x / 2), event.size.y);
+			long_pipe.renderable.m_Transform.m_Position = core::Vector2f(((event.size.x * zoom) / 2) - (long_pipe.renderable.m_Transform.m_Size.x / 2), event.size.y * zoom);
 		}
 	}
 
@@ -59,10 +60,6 @@ struct TitleScreen : ILevel {
 			fade_panel.renderable.m_Color.a += 0.00040f * dt;
 			if (fade_panel.renderable.m_Color.a >= 1.2f) {
 				// Start the game!
-				float music_volume = Engine::Instance()->config_manager->config_values.at("background_levels");
-				Engine::Instance()->sound_manager->get_music("mist_first_encounter")->sf_music.setVolume(music_volume);
-				Engine::Instance()->sound_manager->get_music("mist_first_encounter")->sf_music.setLoop(true);
-				Engine::Instance()->sound_manager->get_music("mist_first_encounter")->sf_music.play();
 				engine->level_manager->setCurrentLevel("level1");
 			}
 		}

@@ -11,6 +11,8 @@ using namespace bear;
 #include<window\GLFW_event.h>
 #include<memory\resource_manager.h>
 
+#include"include/bear_game.h"
+
 void GraphicsManager::init()
 {
 	// Create and init renderers
@@ -298,4 +300,35 @@ void SoundManager::setSFX_Volumes(float volume)
 	for (auto it = sfx_list.begin(); it != sfx_list.end(); ++it) {
 		it->second->sf_sound.setVolume(volume);
 	}
+}
+
+void SoundManager::set_background_music(const std::string & new_background_music)
+{
+	// There is nothing we want to do if this is the case
+	if (new_background_music == background_music)
+		return void();
+	else {
+		Engine* engine = Engine::Instance();
+		// Stop this background track before we start the new one
+		if(background_music != "")
+			get_music(background_music)->sf_music.stop();
+		// Start & configure the new one
+		background_music = new_background_music;
+		float music_volume = engine->config_manager->config_values.at("background_levels");
+		get_music(background_music)->sf_music.setVolume(music_volume);
+		get_music(background_music)->sf_music.setLoop(true);
+		get_music(background_music)->sf_music.play();
+	}
+}
+
+void SoundManager::start_background_music()
+{
+	if (background_music != "")
+		get_music(background_music)->sf_music.play();
+}
+
+void SoundManager::stop_background_music()
+{
+	if(background_music != "")
+		get_music(background_music)->sf_music.stop();
 }

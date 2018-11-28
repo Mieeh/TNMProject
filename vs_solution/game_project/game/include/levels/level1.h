@@ -11,7 +11,13 @@ struct Level1 : ILevel {
 	LevelContent content;
 	Player* player = Player::get(); // Update, event, render
 	Engine* engine = Engine::Instance();
+
 	float cutscene_timer = 0.0f;
+	bool intro_shake_flag;
+	bool intro_camera_flag;
+	bool intro_gas_flag;
+	bool intro_end_flag;
+	core::Vector2f intro_camera_position;
 
 	void init() override {
 		// Load the actual map data
@@ -29,8 +35,15 @@ struct Level1 : ILevel {
 		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
 
-		// Cutscenetimer reset
+		// Reset cutscene
 		cutscene_timer = 0.0f;
+		intro_shake_flag = false;
+		intro_camera_flag = false;
+		intro_gas_flag = false;
+		intro_end_flag = false;
+
+		// Background music
+		engine->sound_manager->stop_background_music();
 		
 		// Set the next level name so we know which level to load!
 		next_level_name = "level2";					
@@ -45,7 +58,35 @@ struct Level1 : ILevel {
 
 		if (engine->sound_manager->get_sfx("pp_rumble")->sf_sound.getStatus() == sf::SoundSource::Status::Playing) {
 			cutscene_timer += 0.1f * dt;
-			std::cout << cutscene_timer << std::endl;
+
+			// Start the camera shake
+			if (cutscene_timer >= 190 && !intro_shake_flag) {
+				intro_shake_flag = true;
+				engine->perform_window_shake(3900, 3);
+			}
+			// Start the gas
+			if (cutscene_timer >= 0 && !intro_gas_flag) {
+				intro_gas_flag = true;
+				// Start the gas moving towards the player yo
+				player->gas.current_x = 14;
+			}
+			// Move the camera left
+			if (cutscene_timer >= 210 && !intro_camera_flag) {
+				intro_camera_flag = true;
+				// Move the camera a bit to the left
+				intro_camera_position = player->world_position - core::Vector2f(200, 0);
+				engine->graphics_manager->point_to_follow = &intro_camera_position;
+			}
+			// End 
+			if (cutscene_timer >= 600 && !intro_end_flag) {
+				intro_end_flag = true;
+				// Reset camera
+				engine->graphics_manager->point_to_follow = &player->world_position;
+				// Gas interval
+				player->gas.step_interval = 1;
+				// Start the music
+				engine->sound_manager->set_background_music("mist_first_encounter");
+			}
 		}
 	}
 
@@ -59,9 +100,10 @@ struct Level1 : ILevel {
 	}
 
 	void player_moved() override {
-		if (player->tile_position == core::Vector2i(19, 7)) {
+		if (player->tile_position == core::Vector2i(17, 6) && !intro_end_flag) {
+			// Play the pp + rumble sfx
 			engine->sound_manager->get_sfx("pp_rumble")->sf_sound.play();
-			player->set_player_state(PlayerStates::CUTSCENE); 
+			player->gas.gas_speed = GAS_MOVE_SPEED * 1.075f;
 		}
 	}
 
