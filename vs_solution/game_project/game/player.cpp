@@ -14,6 +14,11 @@ using namespace bear;
 
 #include<random>
 
+#define SHIELD_HOLD_OFFSET core::Vector2f(0, -30)
+#define WEAPON_HOLD_OFFSET core::Vector2f(0, -30)
+#define HEALTH_HOLD_OFFSET core::Vector2f(0, -30)
+#define KEY_HOLD_OFFSET core::Vector2f(0, -22)
+
 Player* Player::instance = nullptr;
 
 Player::Player() : player_anim(), player_ui(), gas()
@@ -104,6 +109,35 @@ void Player::render()
 {
 	// Draw player related UI
 	player_ui.render_player_hp();
+
+	// render holding item
+	if (current_item != nullptr) {
+		switch (current_item->type) {
+		case ItemType::SHIELD:
+			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + SHIELD_HOLD_OFFSET;
+			holding_item.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+			holding_item.renderable.m_TextureName = "shield";
+			break;
+		case ItemType::HEALTH:
+			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + HEALTH_HOLD_OFFSET;
+			holding_item.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+			holding_item.renderable.m_TextureName = "food";
+			break;
+		case ItemType::KEY:
+			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + KEY_HOLD_OFFSET;
+			holding_item.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+			holding_item.renderable.m_TextureName = "key";
+			break;
+		case ItemType::WEAPON:
+			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + WEAPON_HOLD_OFFSET;
+			holding_item.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+			holding_item.renderable.m_TextureName = "sword";
+			break;
+		}
+
+		holding_item.renderable.m_Layer = entity.renderable.m_Layer+1;
+		engine->graphics_manager->draw(holding_item);
+	}
 
 	// Draw the player entity
 	engine->graphics_manager->draw(entity);

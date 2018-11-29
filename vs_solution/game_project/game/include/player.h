@@ -46,6 +46,7 @@ public:
 	Item* current_item = nullptr;
 	PresurePlate* presure_plate = nullptr; // Presure plate last stood on
 	Gas gas;
+	Entity holding_item;
 
 private:
 	const float move_speed = 0.2f;
