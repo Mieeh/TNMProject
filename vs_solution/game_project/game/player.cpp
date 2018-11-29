@@ -14,8 +14,8 @@ using namespace bear;
 
 #include<random>
 
-#define SHIELD_HOLD_OFFSET core::Vector2f(0, -30)
-#define WEAPON_HOLD_OFFSET core::Vector2f(0, -30)
+#define SHIELD_HOLD_OFFSET core::Vector2f(0, -37)
+#define WEAPON_HOLD_OFFSET core::Vector2f(0, -25)
 #define HEALTH_HOLD_OFFSET core::Vector2f(0, -30)
 #define KEY_HOLD_OFFSET core::Vector2f(0, -22)
 

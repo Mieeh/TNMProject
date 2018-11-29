@@ -12,6 +12,7 @@ struct TitleScreen : ILevel {
 	Entity long_pipe;
 	Entity fade_panel;
 	bool game_start = false;
+	float game_start_timer;
 
 	const float magic_well_constant = 0.165f;
 
@@ -31,6 +32,8 @@ struct TitleScreen : ILevel {
 		float music_volume = Engine::Instance()->config_manager->config_values.at("background_levels");
 		engine->sound_manager->get_music("title_screen")->sf_music.setVolume(music_volume);
 		engine->sound_manager->get_music("title_screen")->sf_music.play();
+
+		game_start_timer = 0;
 	}
 
 	void on_event(Event &event) override {
@@ -54,13 +57,16 @@ struct TitleScreen : ILevel {
 
 	void update(float dt) override {
 		if (game_start) {
-			engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.95f);
-			long_pipe.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-			title_screen.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-			fade_panel.renderable.m_Color.a += 0.00040f * dt;
-			if (fade_panel.renderable.m_Color.a >= 1.2f) {
-				// Start the game!
-				engine->level_manager->setCurrentLevel("level1");
+			game_start_timer += 0.1f * dt;
+			if (game_start_timer >= 50) {
+				engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.95f);
+				long_pipe.renderable.m_Transform.m_Position.y -= 0.2f * dt;
+				title_screen.renderable.m_Transform.m_Position.y -= 0.2f * dt;
+				fade_panel.renderable.m_Color.a += 0.00040f * dt;
+				if (fade_panel.renderable.m_Color.a >= 1.2f) {
+					// Start the game!
+					engine->level_manager->setCurrentLevel("level1");
+				}
 			}
 		}
 	}
