@@ -25,7 +25,7 @@ struct Level1 : ILevel {
 		levelUtility_ConvertToLevelContent(content);
 		
 		// Set the gas variables
-		gas_offset = -1;
+		gas_offset = -3;
 		gas_interval = -1;
 		
 		// Setup the player
@@ -68,7 +68,7 @@ struct Level1 : ILevel {
 			if (cutscene_timer >= 0 && !intro_gas_flag) {
 				intro_gas_flag = true;
 				// Start the gas moving towards the player yo
-				player->gas.current_x = 14;
+				player->gas.current_x = 12;
 			}
 			// Move the camera left
 			if (cutscene_timer >= 210 && !intro_camera_flag) {
@@ -100,7 +100,7 @@ struct Level1 : ILevel {
 	}
 
 	void player_moved() override {
-		if (player->tile_position == core::Vector2i(17, 6) && !intro_end_flag) {
+		if (player->tile_position == core::Vector2i(14, 6) && !intro_end_flag) {
 			// Play the pp + rumble sfx
 			engine->sound_manager->get_sfx("pp_rumble")->sf_sound.play();
 			player->gas.gas_speed = GAS_MOVE_SPEED * 1.075f;

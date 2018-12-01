@@ -136,6 +136,7 @@
     <ClCompile Include="game\player.cpp" />
     <ClCompile Include="game\player_animation.cpp" />
     <ClCompile Include="game\player_ui.cpp" />
+    <ClCompile Include="game\spike.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="game\include\player_animation.h" />
     <ClInclude Include="game\include\player_ui.h" />
     <ClInclude Include="engine\include\presure_plate.h" />
+    <ClInclude Include="game\include\spike.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
