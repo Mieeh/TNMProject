@@ -1,6 +1,7 @@
 #pragma once
 
 #include<graphics/renderers/slow_renderer.h>
+#include<graphics\renderers\particle_source.h>
 //#include<graphics/renderers/batch_renderer.h>
 #include<graphics/view.h>
 #include<window/event.h>
@@ -49,6 +50,7 @@ private:
 	bear::graphics::SlowRenderer *slow_ui_renderer;
 
 public:									
+	bear::graphics::ParticleSource *particle_source;
 	core::Vector2f window_size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 	core::Vector2f* point_to_follow;
 	graphics::View view;

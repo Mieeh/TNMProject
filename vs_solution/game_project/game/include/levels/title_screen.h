@@ -43,7 +43,7 @@ struct TitleScreen : ILevel {
 				engine->sound_manager->get_sfx("into_the_well")->sf_sound.play();
 				game_start = true;
 			}
-		}
+		} 
 		if (event.type == EventType::WindowReiszed) {
 			float zoom = graphics::Graphics::get_zoom();
 			fade_panel.renderable.m_Transform.m_Size = event.size * zoom;

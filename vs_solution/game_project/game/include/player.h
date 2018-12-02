@@ -15,7 +15,7 @@
 using namespace bear;
 
 #define PLAYER_SIZE 1.0f
-#define PLAYER_OFFSET core::Vector2f(0,-13)//core::Vector2f(-14, -24)
+#define DEFAULT_PLAYER_OFFSET core::Vector2f(0,-13)
 
 enum PlayerStates {
 	INTRO,
@@ -47,12 +47,15 @@ public:
 	PresurePlate* presure_plate = nullptr; // Presure plate last stood on
 	Gas gas;
 	Entity holding_item;
+	Entity entity;
+	core::Vector2f player_offset;
+	bool show_item;
+	PlayerStates player_state = PlayerStates::IDLE;
 
 private:
 	const float move_speed = 0.2f;
 	const float fall_speed = 0.65;
 
-	Entity entity;
 	DeathPanel death_panel;
 	PlayerAnimation player_anim;
 	std::string last_played_footstep = "footstep1";
@@ -60,7 +63,6 @@ private:
 
 	PlayerUI player_ui;
 
-	PlayerStates player_state = PlayerStates::IDLE;
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
 	bool goal_trigger = false;
 
@@ -71,7 +73,6 @@ private:
 	std::string get_random_footstep(unsigned int number_of_footsteps);
 
 public:
-
 	void on_event(Event& event);
 	void update(float dt);
 	void render();

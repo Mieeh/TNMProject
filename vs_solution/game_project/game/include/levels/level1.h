@@ -43,7 +43,7 @@ struct Level1 : ILevel {
 		intro_end_flag = false;
 
 		// Background music
-		engine->sound_manager->stop_background_music();
+		engine->sound_manager->set_background_music("ambience_tutorial");
 		
 		// Set the next level name so we know which level to load!
 		next_level_name = "level2";					
@@ -102,6 +102,7 @@ struct Level1 : ILevel {
 	void player_moved() override {
 		if (player->tile_position == core::Vector2i(14, 6) && !intro_end_flag) {
 			// Play the pp + rumble sfx
+			engine->sound_manager->stop_background_music();
 			engine->sound_manager->get_sfx("pp_rumble")->sf_sound.play();
 			player->gas.gas_speed = GAS_MOVE_SPEED * 1.075f;
 		}

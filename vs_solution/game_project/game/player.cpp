@@ -26,6 +26,8 @@ Player::Player() : player_anim(), player_ui(), gas()
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
 	entity.renderable.m_Layer = LAYER3;
+	player_offset = DEFAULT_PLAYER_OFFSET;
+	show_item = true;
 }
 
 std::string Player::get_random_footstep(unsigned int number_of_footsteps)
@@ -110,8 +112,8 @@ void Player::render()
 	// Draw player related UI
 	player_ui.render_player_hp();
 
-	// render holding item
-	if (current_item != nullptr) {
+	// render holding item (if we want to)
+	if (current_item != nullptr && show_item) {
 		switch (current_item->type) {
 		case ItemType::SHIELD:
 			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + SHIELD_HOLD_OFFSET;
@@ -197,7 +199,7 @@ void Player::resolve_move(int move_direction_enum)
 
 		core::Vector2i dir = move_directions[move_direction_enum];
 		tile_position += dir;
-		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
 	}
 
 	// Update the layer
@@ -248,12 +250,15 @@ void Player::do_move_player(int move_direction_enum)
 
 	core::Vector2i dir = move_directions[move_direction_enum];
 	tile_position += dir;
-	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
 
 	// Walk SFX
 	last_played_footstep = get_random_footstep(2);
 
 	engine->sound_manager->add_delayed_sfx(last_played_footstep, footstep_delay); // Add delayed sfx to the sound manager
+
+	// Make sure the attack animation isnt playing
+	player_anim.stop_attack();
 
 	// Message the level we've moved & the gas we've done a gas related action
 	engine->level_manager->current_level->player_moved();
@@ -264,7 +269,7 @@ void Player::set_player_position(const core::Vector2i position)
 {
 	// Sets the player position (instantly no state logic)
 	tile_position = position;
-	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
 	entity.renderable.m_Transform.m_Position = world_position;
 }
 
@@ -281,6 +286,12 @@ void Player::set_player_state(PlayerStates new_state)
 		engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::BLACK_WHITE_CROSS);
 		// Play the death chords 
 		engine->sound_manager->set_background_music("game_over_music"); 
+		// SFX
+		engine->sound_manager->get_sfx("player_die")->sf_sound.play();
+		// Animation
+		player_anim.play_death();
+		// Remove item
+		current_item = nullptr;
 	}
 }
 
@@ -338,7 +349,7 @@ void Player::play_intro_at(const core::Vector2i position)
 {
 	player_state = PlayerStates::INTRO;
 	tile_position = position;
-	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + PLAYER_OFFSET;
+	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
 	static const int intro_offset = -350; 
 	entity.renderable.m_Transform.m_Position = world_position + core::Vector2f(0, intro_offset);
 
@@ -362,18 +373,19 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 		// What happend during the combat? 
 		switch (combat_result) {
 		case CombatResult::ENEMY_DIED:
-			//std::cout << "Enemy died\n";
+			// Animation
+			player_anim.play_attack(move_direction_enum);
 			enemy.is_dead = true;
 			// Notes(david) if the enemy we just killed is not a "bones" enemy then this would be weird?
 			engine->sound_manager->get_sfx("enemy_dead_bones")->sf_sound.play();
 			engine->perform_window_shake(160, 4);
 			break;
 		case CombatResult::PLAYER_DIED:
-			//std::cout << "Played died\n";
 			set_player_state(PlayerStates::DEAD);
 			break;
 		case CombatResult::CLASH:
-			//std::cout << "Clash\n";
+			// Animation
+			player_anim.play_attack(move_direction_enum);
 			// Window shake
 			engine->perform_window_shake(100, 3);
 			// Enemy hurt sfx
@@ -416,6 +428,10 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 			break;
 		case ItemType::KEY:
 			engine->sound_manager->get_sfx("key_pickup")->sf_sound.play();
+			break;
+		case ItemType::HEALTH:
+			engine->sound_manager->get_sfx("food_pickup")->sf_sound.play();
+			break;
 		}
 	}
 
@@ -427,7 +443,6 @@ void Player::reset_after_death()
 {
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	hp = 3; // Reset hp
-	current_item = nullptr;
 
 	// Disable the post processing effect
 	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);
@@ -443,8 +458,8 @@ void Player::handle_item_use()
 	switch (current_item->type) {
 	case ItemType::HEALTH:
 		hp += current_item->value;
-		if (hp >= 5)
-			hp -= (5 - hp);
+		if (hp >= 3)
+			hp -= (3 - hp);
 		current_item->state = ItemState::DISCARDED;
 		current_item = nullptr;
 
