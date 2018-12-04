@@ -72,6 +72,7 @@ public:
 	void draw(std::map<std::string, EnemyBase>& enemy_map);
 	void draw(std::map<std::string, Item>& item_map);
 	void draw(std::map<std::string, PresurePlate>& pp_map);
+	void draw(std::map<std::string, Gate>& gate_map);
 	void draw(Entity& entity);
 	void flush();
 

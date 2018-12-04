@@ -51,6 +51,7 @@ public:
 	core::Vector2f player_offset;
 	bool show_item;
 	PlayerStates player_state = PlayerStates::IDLE;
+	bool standing_on_spike;
 
 private:
 	const float move_speed = 0.2f;

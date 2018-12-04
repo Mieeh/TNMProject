@@ -28,6 +28,7 @@ Player::Player() : player_anim(), player_ui(), gas()
 	entity.renderable.m_Layer = LAYER3;
 	player_offset = DEFAULT_PLAYER_OFFSET;
 	show_item = true;
+	standing_on_spike = false;
 }
 
 std::string Player::get_random_footstep(unsigned int number_of_footsteps)
@@ -201,6 +202,30 @@ void Player::resolve_move(int move_direction_enum)
 		tile_position += dir;
 		world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
 	}
+	else if (new_tile_value == SPIKE) {
+		standing_on_spike = true;
+		do_move_player(move_direction_enum);
+	}
+	else if (is_gate(new_tile_value)) {
+		std::string key = (std::string)new_tile_position;
+		Gate& gate = engine->level_manager->current_level->get_level_content().gates.at(key);
+
+		// Is the gate up?
+		if (gate.gate_state == GATE_STATE::LOCKED) {
+			if (current_item != nullptr) {
+				if (current_item->type == ItemType::KEY) {
+					current_item = nullptr;
+					gate.unlock();
+					// SFX
+					engine->sound_manager->get_sfx("key_unlock")->sf_sound.play();
+					engine->sound_manager->get_sfx("door_open")->sf_sound.play();
+				}
+			}
+		}
+		else {
+			do_move_player(move_direction_enum);
+		}
+	}
 
 	// Update the layer
 	entity.renderable.m_Layer = LAYER3 + tile_position.y;
@@ -251,6 +276,11 @@ void Player::do_move_player(int move_direction_enum)
 	core::Vector2i dir = move_directions[move_direction_enum];
 	tile_position += dir;
 	world_position = ((core::Vector2f)tile_position * TILE_SIZE) + player_offset;
+
+	// Check spike stance
+	int standing_tile_value = engine->level_manager->current_level->get_level_content().tile_map.at(tile_position.y).at(tile_position.x);
+	if (standing_tile_value != SPIKE)
+		standing_on_spike = false;
 
 	// Walk SFX
 	last_played_footstep = get_random_footstep(2);
@@ -481,6 +511,13 @@ void Player::message_gas()
 	gas.player_event();
 	// Check if we're inside the gas!
 	if (gas.current_x >= tile_position.x) {
+		set_player_state(PlayerStates::DEAD);
+	}
+	
+	// Also message the spikes here?
+	engine->level_manager->current_level->get_level_content().spike_system.incement_spike_level();
+
+	if (standing_on_spike && engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
 		set_player_state(PlayerStates::DEAD);
 	}
 }

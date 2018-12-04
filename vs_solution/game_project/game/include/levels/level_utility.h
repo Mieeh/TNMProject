@@ -13,6 +13,9 @@
 
 using namespace bear;
 
+#define SPIKE_OFFSET core::Vector2f(0, -TILE_SIZE)
+#define GATE_OFFSET core::Vector2f(0, -TILE_SIZE);
+
 // Used for simplifly the task of converting a list of integers to a list of entities that can be rendered 
 static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 	
@@ -22,6 +25,8 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 	level_content.items.clear();
 	level_content.walls_floors.clear();
 	level_content.presure_plates.clear();
+	level_content.spike_system.spike_entity_list.clear();
+	level_content.gates.clear();
 
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
@@ -169,6 +174,55 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				core::Vector2i tile_position(x, y);
 				std::string key = (std::string)tile_position;
 				level_content.presure_plates.insert(std::pair<std::string, PresurePlate>(key, pp));
+			}
+			else if (tile_value == SPIKE) {
+				// Place the spike + ground
+				level_content.walls_floors.push_back(Entity());
+				Entity& entity = level_content.walls_floors.back();
+				// Toggle between the two floor types
+				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+				entity.renderable.m_Transform.m_Position = realPosition;
+				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				// Spike
+				level_content.spike_system.spike_entity_list.push_back(Entity());
+				Entity &spike_entity = level_content.spike_system.spike_entity_list.back();
+				spike_entity.renderable.m_TextureName = "spike0";
+				spike_entity.renderable.m_Transform.m_Position = realPosition + SPIKE_OFFSET;
+				spike_entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE * 2);
+				spike_entity.renderable.m_Layer = LAYER3 + y;
+			}
+			else if (is_gate(tile_value)) {
+				// Place the spike + ground
+				level_content.walls_floors.push_back(Entity());
+				Entity& entity = level_content.walls_floors.back();
+				// Toggle between the two floor types
+				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
+				entity.renderable.m_Transform.m_Position = realPosition;
+				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				GATE_FACE_DIRECTION facing_direction;
+				switch (tile_value) {
+				case GATE_FACING_RIGHT:
+					facing_direction = GATE_FACE_DIRECTION::FACING_RIGHT;
+					break;
+				case GATE_FACING_LEFT:
+					facing_direction = GATE_FACE_DIRECTION::FACING_LEFT;
+					break;
+				case GATE_FACING_DOWN:
+					facing_direction = GATE_FACE_DIRECTION::FACING_DOWN;
+					break;
+				}
+
+				Gate& gate_entity = Gate(facing_direction);
+				gate_entity.entity.renderable.m_Transform.m_Position = realPosition + GATE_OFFSET;
+				gate_entity.entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE * 2);
+				gate_entity.entity.renderable.m_Layer = LAYER3 + y; 
+
+				// Insert into gate map
+				core::Vector2i tile_position(x, y);
+				std::string key = (std::string)tile_position;
+				level_content.gates.insert(std::pair<std::string, Gate>(key, gate_entity));
 			}
 		}
 	}

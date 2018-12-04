@@ -130,13 +130,15 @@
   <ItemGroup>
     <ClCompile Include="engine\bear_game.cpp" />
     <ClCompile Include="engine\game_systems.cpp" />
+    <ClCompile Include="engine\gate.cpp" />
+    <ClCompile Include="engine\level.cpp" />
     <ClCompile Include="game\death_screen.cpp" />
     <ClCompile Include="game\game.cpp" />
     <ClCompile Include="game\gas.cpp" />
     <ClCompile Include="game\player.cpp" />
     <ClCompile Include="game\player_animation.cpp" />
     <ClCompile Include="game\player_ui.cpp" />
-    <ClCompile Include="game\spike.cpp" />
+    <ClCompile Include="engine\spike_system.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +148,7 @@
     <ClInclude Include="engine\include\engine.h" />
     <ClInclude Include="engine\include\entity.h" />
     <ClInclude Include="engine\include\game_systems.h" />
+    <ClInclude Include="engine\include\gate.h" />
     <ClInclude Include="engine\include\item.h" />
     <ClInclude Include="engine\include\level.h" />
     <ClInclude Include="engine\include\sfml_audio_wrapper.h" />
@@ -164,7 +167,7 @@
     <ClInclude Include="game\include\player_animation.h" />
     <ClInclude Include="game\include\player_ui.h" />
     <ClInclude Include="engine\include\presure_plate.h" />
-    <ClInclude Include="game\include\spike.h" />
+    <ClInclude Include="engine\include\spike_system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -92,6 +92,12 @@ void GraphicsManager::draw(std::map<std::string, Item>& item_map) {
 	}
 }
 
+void GraphicsManager::draw(std::map<std::string, Gate>& gate_map) {
+	for (auto& x : gate_map) {
+		slow_renderer->submit(x.second.entity.renderable);
+	}
+}
+
 void GraphicsManager::draw(std::map<std::string, PresurePlate>& item_map) {
 	for (auto& x : item_map) {
 		slow_renderer->submit(x.second.entity.renderable);

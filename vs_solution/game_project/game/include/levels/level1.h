@@ -55,6 +55,7 @@ struct Level1 : ILevel {
 
 	void update(float dt) override {
 		player->update(dt);
+		content.update(dt); // Updates spikes & doors
 
 		if (engine->sound_manager->get_sfx("pp_rumble")->sf_sound.getStatus() == sf::SoundSource::Status::Playing) {
 			cutscene_timer += 0.1f * dt;
@@ -97,6 +98,8 @@ struct Level1 : ILevel {
 		engine->graphics_manager->draw(content.walls_floors);
 		engine->graphics_manager->draw(content.items);
 		engine->graphics_manager->draw(content.presure_plates);
+		content.spike_system.render();
+		engine->graphics_manager->draw(content.gates);
 	}
 
 	void player_moved() override {

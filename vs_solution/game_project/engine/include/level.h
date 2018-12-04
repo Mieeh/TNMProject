@@ -5,11 +5,14 @@
 using namespace bear;
 
 #include<vector>
+#include<map>
 typedef std::vector<std::vector<int>> level_list;
 
 #include"enemy.h"
 #include"item.h"
 #include"presure_plate.h"
+#include"spike_system.h"
+#include"gate.h"
 
 // Structure for data that every level has /
 struct LevelContent {
@@ -19,6 +22,10 @@ struct LevelContent {
 	std::map<std::string, PresurePlate> presure_plates;
 	std::map<std::string, Item> items;
 	std::map<std::string, EnemyBase> enemies;
+	SpikeSystem spike_system;
+	std::map<std::string, Gate> gates;
+
+	void update(float dt);
 };
 
 struct ILevel {
