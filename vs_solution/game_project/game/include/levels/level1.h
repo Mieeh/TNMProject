@@ -30,6 +30,7 @@ struct Level1 : ILevel {
 		
 		// Setup the player
 		player->play_intro_at(core::Vector2i(1, 5));
+		//player->play_intro_at(core::Vector2i(1, 7));
 
 		// Signal the camera which point to follows
 		engine->graphics_manager->view.setPosition(player->world_position);

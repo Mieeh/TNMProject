@@ -13,13 +13,13 @@ struct Level2 : ILevel {
 	Engine* engine = Engine::Instance();
 
 	void init() override {		
-		content.tile_map = TEST_LEVEL;
+		content.tile_map = LEVEL2;
 		levelUtility_ConvertToLevelContent(content);
 
 		gas_interval = -1;
 		gas_offset = -1;
 
-		player->play_intro_at(core::Vector2i(1, 1));
+		player->play_intro_at(core::Vector2i(1, 5));
 
 		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
