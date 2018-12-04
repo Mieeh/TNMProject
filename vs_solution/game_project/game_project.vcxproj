@@ -161,6 +161,7 @@
     <ClInclude Include="game\include\levels\level1.h" />
     <ClInclude Include="game\include\levels\level2.h" />
     <ClInclude Include="game\include\levels\level3.h" />
+    <ClInclude Include="game\include\levels\level4.h" />
     <ClInclude Include="game\include\levels\level_utility.h" />
     <ClInclude Include="game\include\levels\menu.h" />
     <ClInclude Include="game\include\levels\title_screen.h" />

@@ -3,6 +3,7 @@
 #include"include/levels/level1.h"
 #include"include/levels/level2.h"
 #include"include/levels/level3.h"
+#include"include/levels/level4.h"
 #include"include/levels/title_screen.h"
 
 #include"../engine/include/game_systems.h"
@@ -13,6 +14,7 @@ void Game::init()
 	Engine::Instance()->level_manager->registerLevel("level1", new Level1);
 	Engine::Instance()->level_manager->registerLevel("level2", new Level2);
 	Engine::Instance()->level_manager->registerLevel("level3", new Level3);
+	Engine::Instance()->level_manager->registerLevel("level4", new Level4);
 	Engine::Instance()->level_manager->registerLevel("menu", new TitleScreen);
 
 	/*
