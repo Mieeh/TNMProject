@@ -10,19 +10,42 @@ struct TitleScreen : ILevel {
 	Engine *engine = Engine::Instance();
 	Entity title_screen;
 	Entity long_pipe;
+	Entity logo;
+	Entity press_any_key;
+	Entity credits;
 	Entity fade_panel;
 	bool game_start = false;
-	float game_start_timer;
 
 	const float magic_well_constant = 0.165f;
+	const float fade_speed = 0.001f;
 
 	void init() override {
-		title_screen.renderable.m_TextureName = "titlescreen_wip";
+		title_screen.renderable.m_TextureName = "titlescreen";
 		title_screen.renderable.m_Transform.m_Size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 		
 		fade_panel.renderable.m_Transform.m_Size = core::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT);
 		fade_panel.renderable.m_Color = core::Color::Black();
 		fade_panel.renderable.m_Color.a = 0.0f;
+
+		// Logo entity & press_any_key & credits
+		logo.renderable.setTextureNameWData("logo");
+		logo.renderable.m_Transform.m_Size = logo.renderable.m_Transform.m_Size * 0.5f;
+		logo.renderable.m_Transform.m_Position = core::Vector2f((WINDOW_WIDTH / 2) - (logo.renderable.m_Transform.m_Size.x / 2), 35);
+		logo.renderable.m_Layer = 10;
+
+		press_any_key.renderable.setTextureNameWData("titleprompt");
+		press_any_key.renderable.m_Transform.m_Size = press_any_key.renderable.m_Transform.m_Size * 0.5f;
+		press_any_key.renderable.m_Transform.m_Position = core::Vector2f((WINDOW_WIDTH / 2) - (press_any_key.renderable.m_Transform.m_Size.x / 2), 70 + logo.renderable.m_Transform.m_Size.y);
+		press_any_key.renderable.m_Layer = 10;
+
+		credits.renderable.setTextureNameWData("credits");
+		credits.renderable.m_Transform.m_Size = credits.renderable.m_Transform.m_Size * 0.5f;
+		credits.renderable.m_Transform.m_Position = core::Vector2f(0, WINDOW_HEIGHT - credits.renderable.m_Transform.m_Size.y);
+		credits.renderable.m_Layer = 10;
+
+		logo.renderable.m_Color.a = 0.0f;
+		press_any_key.renderable.m_Color.a = 0.0f;
+		credits.renderable.m_Color.a = 0.0f;
 
 		long_pipe.renderable.setTextureNameWData("wellPipeLong");
 		long_pipe.renderable.m_Transform.m_Size.x = WINDOW_WIDTH * magic_well_constant;
@@ -30,10 +53,8 @@ struct TitleScreen : ILevel {
 		long_pipe.renderable.m_Transform.m_Position = core::Vector2f((WINDOW_WIDTH / 2) - (long_pipe.renderable.m_Transform.m_Size.x / 2), WINDOW_HEIGHT);
 		
 		float music_volume = Engine::Instance()->config_manager->config_values.at("background_levels");
-		engine->sound_manager->get_music("title_screen")->sf_music.setVolume(music_volume);
+		engine->sound_manager->get_music("title_screen")->sf_music.setVolume(music_volume);					
 		engine->sound_manager->get_music("title_screen")->sf_music.play();
-
-		game_start_timer = 0;
 	}
 
 	void on_event(Event &event) override {
@@ -57,8 +78,11 @@ struct TitleScreen : ILevel {
 
 	void update(float dt) override {
 		if (game_start) {
-			game_start_timer += 0.1f * dt;
-			if (game_start_timer >= 50) {
+			// Fade the stuff
+			logo.renderable.m_Color.a -= fade_speed * dt;
+			credits.renderable.m_Color.a -= fade_speed * dt;
+			press_any_key.renderable.m_Color.a -= fade_speed * dt;
+			if (logo.renderable.m_Color.a <= 0.0f) {
 				engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.95f);
 				long_pipe.renderable.m_Transform.m_Position.y -= 0.2f * dt;
 				title_screen.renderable.m_Transform.m_Position.y -= 0.2f * dt;
@@ -69,12 +93,27 @@ struct TitleScreen : ILevel {
 				}
 			}
 		}
+		else {
+			if (logo.renderable.m_Color.a < 1) {
+				logo.renderable.m_Color.a += fade_speed/2 * dt;
+				credits.renderable.m_Color.a += fade_speed/2 * dt;
+				press_any_key.renderable.m_Color.a += fade_speed/2 * dt;
+			}
+			else {
+				logo.renderable.m_Color.a = 1.0f;
+				credits.renderable.m_Color.a = 1.0f;
+				press_any_key.renderable.m_Color.a = 1.0f;
+			}
+		}
 	}
 
 	void render() override {
 		engine->graphics_manager->draw(title_screen);
 		engine->graphics_manager->draw(long_pipe);
 		engine->graphics_manager->draw_as_ui(fade_panel);
+		engine->graphics_manager->draw(logo);
+		engine->graphics_manager->draw(press_any_key);
+		engine->graphics_manager->draw(credits);
 	}
 
 	void player_moved() override {

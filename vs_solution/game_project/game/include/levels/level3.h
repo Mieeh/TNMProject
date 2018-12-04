@@ -6,28 +6,27 @@
 #include"level_utility.h"
 #include "../player.h"
 
-struct Level2 : ILevel {
+struct Level3 : ILevel {
 
 	LevelContent content;
 	Player* player = Player::get(); // Update, event, render
 	Engine* engine = Engine::Instance();
 
-	void init() override {		
-		content.tile_map = LEVEL2;
+	void init() override {
+		content.tile_map = LEVEL3;
 		levelUtility_ConvertToLevelContent(content);
 
 		gas_interval = -1;
 		gas_offset = -1;
 
-		player->play_intro_at(core::Vector2i(1, 5));
+		player->play_intro_at(core::Vector2i(1, 7));
 
 		engine->graphics_manager->view.setPosition(player->world_position);
 		engine->graphics_manager->point_to_follow = &player->world_position;
 
-		// Background music
 		engine->sound_manager->set_background_music("bg");
 
-		next_level_name = "level3";
+		next_level_name = "level1";
 	}
 
 	void on_event(Event& event) {
