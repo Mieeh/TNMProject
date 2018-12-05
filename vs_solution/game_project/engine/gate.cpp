@@ -23,7 +23,7 @@ Gate::Gate(GATE_FACE_DIRECTION _facing_direction) : facing_direction(_facing_dir
 	case GATE_FACE_DIRECTION::FACING_RIGHT:
 		entity.renderable.m_TextureName = "gateFacingRight1";
 		last_frame_name = "gateFacingRight8";
-		for (int i = 0; i <= 8; i++) {
+		for (int i = 1; i <= 8; i++) {
 			AnimatedKeyframe keyframe = { "gateFacingRight" + std::to_string(i) };
 			unlock_animation.addKeyframe(keyframe);
 		}

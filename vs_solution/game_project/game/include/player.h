@@ -66,6 +66,7 @@ private:
 
 	PlayerMoveDirection move_direction = PlayerMoveDirection::NO;
 	bool goal_trigger = false;
+	bool die_trigger = false;
 
 	// Move directions, used for translating the enum into a direction!
 	core::Vector2i move_directions[4] = { core::Vector2i(1,0), core::Vector2i(-1, 0), core::Vector2i(0, 1), core::Vector2i(0, -1) };

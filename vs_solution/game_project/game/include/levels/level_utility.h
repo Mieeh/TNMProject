@@ -190,7 +190,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				spike_entity.renderable.m_TextureName = "spike0";
 				spike_entity.renderable.m_Transform.m_Position = realPosition + SPIKE_OFFSET;
 				spike_entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE * 2);
-				spike_entity.renderable.m_Layer = LAYER3 + y;
+				spike_entity.renderable.m_Layer = LAYER2 + y;
 			}
 			else if (is_gate(tile_value)) {
 				// Place the spike + ground
@@ -217,7 +217,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				Gate& gate_entity = Gate(facing_direction);
 				gate_entity.entity.renderable.m_Transform.m_Position = realPosition + GATE_OFFSET;
 				gate_entity.entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE * 2);
-				gate_entity.entity.renderable.m_Layer = LAYER3 + y; 
+				gate_entity.entity.renderable.m_Layer = LAYER2 + y; 
 
 				// Insert into gate map
 				core::Vector2i tile_position(x, y);

@@ -29,6 +29,11 @@ SpikeSystem::SpikeSystem()
 	spike_go_down.play();
 }
 
+void SpikeSystem::reset_spikes()
+{
+	current_spike_level = 0;
+}
+
 void SpikeSystem::incement_spike_level()
 {
 	if (current_spike_level == 3) {

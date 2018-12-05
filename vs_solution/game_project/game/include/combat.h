@@ -2,6 +2,7 @@
 
 #include"player.h"
 #include"../../engine/include/enemy.h"
+#include"enemies\skeleton.h"
 
 enum CombatResult {
 	CLASH,
@@ -10,7 +11,7 @@ enum CombatResult {
 };
 
 struct Combat {
-	static CombatResult perform_combat(EnemyBase &enemy) 
+	static CombatResult perform_combat(EnemyBase *enemy) 
 	{
 		// 0. Get some stuff
 		Player* player = Player::get();
@@ -35,7 +36,7 @@ struct Combat {
 		}
 
 		// 1. Resolve player taking damage
-		int newPlayerHP = player->hp - enemy.damage;	
+		int newPlayerHP = player->hp - enemy->damage;	
 		if (hasItem && itemType == ItemType::SHIELD)
 			newPlayerHP = player->hp;
 
@@ -47,19 +48,24 @@ struct Combat {
 
 		player->hp = newPlayerHP;
 
+
 		// 2. Resolve enemy taking damage
-		int newEnemyHP = enemy.hp - (player->attack);
+		int newEnemyHP = enemy->hp - (player->attack);
 		if (hasItem && itemType == ItemType::WEAPON) {
 			newEnemyHP = 0;
 		}
 
-		/* Did the enemy die? */
-		if (newEnemyHP <= 0) {
-			enemy.hp = 0;
-			return CombatResult::ENEMY_DIED;
+		enemy->hp = newEnemyHP;
+
+		// Enemy take_damage message
+		if (enemy->name == "Skeleton") {
+			static_cast<Skeleton*>(enemy)->take_damage();
 		}
 
-		enemy.hp = newEnemyHP;
+		if (enemy->hp <= 0) {
+			enemy->hp = 0;
+			return CombatResult::ENEMY_DIED;
+		}
 
 		// 3. We made it all the way through with neither of them dying, it's a clash! 
 		return CombatResult::CLASH;

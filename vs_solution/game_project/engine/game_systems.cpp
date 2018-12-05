@@ -80,8 +80,8 @@ void GraphicsManager::draw(std::vector<Entity>& entity_list)
 void GraphicsManager::draw(std::map<std::string, EnemyBase>& enemy_map)
 {
 	for (auto& x : enemy_map) {
-		if (!x.second.is_dead)
-			slow_renderer->submit(x.second.entity.renderable);
+		//if (!x.second.is_dead)
+		slow_renderer->submit(x.second.entity.renderable);
 	}
 }
 

@@ -7,6 +7,8 @@ PlayerAnimation::PlayerAnimation() {
 	for (int i = 1; i <= 2; i++) {
 		graphics::AnimatedKeyframe idle_holding_frame = { "idle_holding" + std::to_string(i) };
 		idle_holding.addKeyframe(idle_holding_frame);
+		graphics::AnimatedKeyframe falling_frame = { "falling" + std::to_string(i) };
+		falling_animation.addKeyframe(falling_frame);
 	}
 	for (int i = 1; i <= 8; i++) {
 		graphics::AnimatedKeyframe idle = { "idle1" };
@@ -100,6 +102,8 @@ PlayerAnimation::PlayerAnimation() {
 	walk_right_holding.m_IsLooping = true;
 	walk_down_holding.m_IsLooping = true;
 	walk_left_holding.m_IsLooping = true;
+	// Falling
+	falling_animation.m_IsLooping = true;
 
 	walk_up.m_TickBreak = 10;
 	walk_right.m_TickBreak = 10;
@@ -112,6 +116,8 @@ PlayerAnimation::PlayerAnimation() {
 	walk_left_holding.m_TickBreak = 10;
 	// Death
 	death_animation.m_TickBreak = 20;
+	// Falling
+	falling_animation.m_TickBreak = 15;
 	// Idle
 	idle_animation.m_TickBreak = 20;
 	idle_holding.m_TickBreak = 60;
@@ -141,11 +147,17 @@ PlayerAnimation::PlayerAnimation() {
 
 	idle_holding.play();
 	idle_animation.play();
+	falling_animation.play();
 }
 
 std::string PlayerAnimation::update(int player_state, int move_direction, float dt) {
 
 	static Player* player = Player::get();
+
+	if (player->player_state == PlayerStates::OUTRO || player->player_state == PlayerStates::INTRO) {
+		falling_animation.update(dt);
+		return falling_animation.m_CurrentTextureName;
+	}
 
 	if (player->player_state == PlayerStates::DEAD) {
 		if (death_animation.m_IsPlaying) {
@@ -314,6 +326,7 @@ void PlayerAnimation::stop_attack()
 		}
 
 		current_attack_animation->stop();
+		current_attack_animation->reset();
 		current_attack_animation = nullptr;
 	}
 }

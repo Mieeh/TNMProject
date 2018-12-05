@@ -18,6 +18,8 @@ struct Level3 : ILevel {
 
 		gas_interval = 4;
 		gas_offset = -11;
+		gas_offset = -1;
+		gas_interval = 2;
 
 		player->play_intro_at(core::Vector2i(1, 7));
 

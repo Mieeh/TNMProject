@@ -83,11 +83,11 @@ struct TitleScreen : ILevel {
 			credits.renderable.m_Color.a -= fade_speed * dt;
 			press_any_key.renderable.m_Color.a -= fade_speed * dt;
 			if (logo.renderable.m_Color.a <= 0.0f) {
-				engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.95f);
-				long_pipe.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-				title_screen.renderable.m_Transform.m_Position.y -= 0.2f * dt;
-				fade_panel.renderable.m_Color.a += 0.00040f * dt;
-				if (fade_panel.renderable.m_Color.a >= 1.2f) {
+				engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.975f);
+				long_pipe.renderable.m_Transform.m_Position.y -= 0.25f * dt;
+				title_screen.renderable.m_Transform.m_Position.y -= 0.25f * dt;
+				fade_panel.renderable.m_Color.a += 0.00050f * dt;
+				if (fade_panel.renderable.m_Color.a >= 1.15f) {
 					// Start the game!
 					engine->level_manager->setCurrentLevel("level1");
 				}

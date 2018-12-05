@@ -8,7 +8,6 @@
 #define SKELETON_OFFSET_Y -16
 
 struct Skeleton : EnemyBase {
-
 	// Constructor
 	Skeleton()
 	{
@@ -16,6 +15,16 @@ struct Skeleton : EnemyBase {
 		hp = 2;
 		damage = 1;
 		name = "Skeleton";
-		entity.renderable.m_TextureName = "skeleton";
+		entity.renderable.m_TextureName = "skeletonLeft1";
+	}
+
+	void take_damage() 
+	{
+		if (hp == 1) {
+			entity.renderable.m_TextureName = "skeletonLeft_damage1";
+		}
+		else {
+			entity.renderable.m_TextureName = "skeleton_dead";
+		}
 	}
 };

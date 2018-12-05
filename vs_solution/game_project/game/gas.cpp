@@ -2,8 +2,9 @@
 
 #include"include/constants.h"
 #include"../engine/include/game_systems.h"
+#include"include/player.h"
 
-#define BIG_SQUARE 700.0f
+#define BIG_SQUARE 1080.0f
 
 using namespace bear;
 

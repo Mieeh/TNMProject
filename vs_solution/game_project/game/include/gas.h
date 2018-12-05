@@ -13,6 +13,7 @@ struct Gas {
 	int step_interval; // Move the gas forward each step_interval 
 	int step_counter; // Counter for when the gas will move forward again
 	Engine* engine;
+	
 	float gas_speed;
 	
 	/* Constructor & Methods */

@@ -6,7 +6,6 @@
 using namespace bear;
 
 struct EnemyBase {
-
 	// Graphical representation
 	Entity entity;
 	
@@ -14,5 +13,5 @@ struct EnemyBase {
 	std::string name;
 	int hp;
 	int damage;
-	bool is_dead = false;
+	bool is_dead = false;	
 };

@@ -17,7 +17,7 @@ struct Level2 : ILevel {
 		levelUtility_ConvertToLevelContent(content);
 
 		gas_interval = 4;
-		gas_offset = -2;
+		gas_offset = -3;
 
 		player->play_intro_at(core::Vector2i(1, 5));
 

@@ -86,6 +86,10 @@ void Player::update(float dt)
 		// Returns true when the player reaches its destianation
 		if (move_player_state_control(move_direction, dt)) {
 			set_player_state(PlayerStates::IDLE);
+			if (die_trigger) {
+				die_trigger = false;
+				set_player_state(PlayerStates::DEAD);
+			}
 		}
 		break;
 	case PlayerStates::CUTSCENE:
@@ -204,6 +208,13 @@ void Player::resolve_move(int move_direction_enum)
 	}
 	else if (new_tile_value == SPIKE) {
 		standing_on_spike = true;
+
+		// Should we die?
+		std::cout << engine->level_manager->current_level->get_level_content().spike_system.current_spike_level << std::endl;
+		if (engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
+			set_player_state(PlayerStates::DEAD);
+		}
+
 		do_move_player(move_direction_enum);
 	}
 	else if (is_gate(new_tile_value)) {
@@ -269,6 +280,9 @@ void Player::outro_player(float dt)
 
 void Player::do_move_player(int move_direction_enum)
 {
+	if (player_state == PlayerStates::DEAD) {
+		return void();
+	}
 	// Set the player to be in transit!
 	player_state = PlayerStates::IN_TRANSIT;
 	move_direction = static_cast<PlayerMoveDirection>(move_direction_enum);
@@ -398,7 +412,7 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 	// Check to make sure the enemy isn't already dead!
 	if (!enemy.is_dead) {
 		// Perform combat with the enemy
-		CombatResult combat_result = Combat::perform_combat(enemy);
+		CombatResult combat_result = Combat::perform_combat(&enemy);
 
 		// What happend during the combat? 
 		switch (combat_result) {
@@ -472,6 +486,7 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 void Player::reset_after_death()
 {
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
+	engine->level_manager->current_level->get_level_content().spike_system.reset_spikes();
 	hp = 3; // Reset hp
 
 	// Disable the post processing effect
@@ -487,14 +502,16 @@ void Player::handle_item_use()
 	// Continue and use current item!
 	switch (current_item->type) {
 	case ItemType::HEALTH:
-		hp += current_item->value;
-		if (hp >= 3)
-			hp -= (3 - hp);
-		current_item->state = ItemState::DISCARDED;
-		current_item = nullptr;
+		if (hp < 3) {
+			hp += current_item->value;
+			current_item->state = ItemState::DISCARDED;
+			current_item = nullptr;
 
-		// Play sfx
-		engine->sound_manager->get_sfx("eating_health_up")->sf_sound.play(); 
+			// Play sfx
+			engine->sound_manager->get_sfx("eating_health_up")->sf_sound.play();
+
+			message_gas();
+		}
 
 		break;
 	case ItemType::WEAPON:
@@ -515,7 +532,9 @@ void Player::message_gas()
 	}
 	
 	// Also message the spikes here?
-	engine->level_manager->current_level->get_level_content().spike_system.incement_spike_level();
+	if (!die_trigger) {
+		engine->level_manager->current_level->get_level_content().spike_system.incement_spike_level();
+	}
 
 	if (standing_on_spike && engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
 		set_player_state(PlayerStates::DEAD);
