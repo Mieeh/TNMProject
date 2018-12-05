@@ -16,8 +16,8 @@ struct Level2 : ILevel {
 		content.tile_map = LEVEL2;
 		levelUtility_ConvertToLevelContent(content);
 
-		gas_interval = -1;
-		gas_offset = -1;
+		gas_interval = 4;
+		gas_offset = -2;
 
 		player->play_intro_at(core::Vector2i(1, 5));
 
