@@ -64,7 +64,8 @@ struct Level1 : ILevel {
 			// Start the camera shake
 			if (cutscene_timer >= 190 && !intro_shake_flag) {
 				intro_shake_flag = true;
-				engine->perform_window_shake(3900, 3);
+				//engine->perform_window_shake(3900, 3);
+				engine->graphics_manager->perform_view_shake(3900, 6);
 			}
 			// Start the gas
 			if (cutscene_timer >= 0 && !intro_gas_flag) {

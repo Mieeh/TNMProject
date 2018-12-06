@@ -46,6 +46,20 @@ void GraphicsManager::update(float dt) {
 			view.setPosition(curr);
 		}
 	}
+
+	if (do_view_shake) {
+		counter += 1.5f * dt;
+		if (counter < length) {
+			// Perform "view" shake
+			core::Vector2f pos = view.getPosition();
+			core::Vector2f new_pos = pos + (core::Vector2f)core::randomPointInsideCircle(intensity);
+			new_pos = core::Vector2f((int)new_pos.x, (int)new_pos.y);
+			view.setPosition(new_pos);
+		}
+		else {
+			do_view_shake = false;
+		}
+	}
 }
 
 void GraphicsManager::set_post_processing_effect(POST_PROCESSING_EFFECTS _v)
@@ -57,6 +71,15 @@ void GraphicsManager::set_post_processing_effect(POST_PROCESSING_EFFECTS _v)
 	else {
 		slow_renderer->setFramebuffer(&framebuffer_list[static_cast<int>(_v)]);
 	}
+}
+
+void GraphicsManager::perform_view_shake(float length, float intensity)
+{
+	this->length = length;
+	this->intensity = intensity;
+	counter = 0;
+	do_view_shake = true;
+	view_origin = view.getPosition();
 }
 
 void GraphicsManager::begin()

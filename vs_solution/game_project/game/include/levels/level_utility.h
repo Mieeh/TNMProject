@@ -149,6 +149,13 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					item.name = "Key";
 					item.value = 1;
 					break;
+				case RK:
+					std::cout << "idontneedallthosethings" << std::endl;
+					item.entity.renderable.m_TextureName = "key_red";
+					item.type = ItemType::KEY;
+					item.name = "KeyRed";
+					item.value = 1;
+					break;
 				}
 
 				item.entity.renderable.m_Layer = LAYER3 + y;
@@ -205,23 +212,35 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
 
+				GATE_TYPE type = GATE_TYPE::NORMAL; // Assume
+				if (is_gate_red(tile_value)) {
+					type = GATE_TYPE::RED;
+				}
+
 				GATE_FACE_DIRECTION facing_direction;
 				switch (tile_value) {
+				case GFR_R:
 				case GATE_FACING_RIGHT:
 					facing_direction = GATE_FACE_DIRECTION::FACING_RIGHT;
 					break;
+				case GFL_R:
 				case GATE_FACING_LEFT:
 					facing_direction = GATE_FACE_DIRECTION::FACING_LEFT;
 					break;
+				case GFD_R:
 				case GATE_FACING_DOWN:
 					facing_direction = GATE_FACE_DIRECTION::FACING_DOWN;
 					break;
+				case GFU_R:
+				case GATE_FACING_UP:
+					facing_direction = GATE_FACE_DIRECTION::FACING_UP;
+					break;
 				}
 
-				Gate& gate_entity = Gate(facing_direction);
+				Gate& gate_entity = Gate(facing_direction, type);
 				gate_entity.entity.renderable.m_Transform.m_Position = realPosition + GATE_OFFSET;
 				gate_entity.entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE * 2);
-				gate_entity.entity.renderable.m_Layer = LAYER2 + y; 
+				gate_entity.entity.renderable.m_Layer = LAYER3 + y; 
 
 				// Insert into gate map
 				core::Vector2i tile_position(x, y);

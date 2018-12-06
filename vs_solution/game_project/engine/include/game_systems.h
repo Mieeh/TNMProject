@@ -48,6 +48,11 @@ private:
 	// Bear framework rendering objects 
 	bear::graphics::SlowRenderer *slow_renderer;
 	bear::graphics::SlowRenderer *slow_ui_renderer;
+	
+	// View shake values
+	bool do_view_shake = false;
+	bear::core::Vector2f view_origin;
+	float counter, length, intensity;
 
 public:									
 	bear::graphics::ParticleSource *particle_source;
@@ -63,6 +68,7 @@ public:
 	void update(float dt);
 
 	void set_post_processing_effect(POST_PROCESSING_EFFECTS _v);
+	void perform_view_shake(float length, float intensity);
 
 	void init();
 

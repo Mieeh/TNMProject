@@ -47,10 +47,6 @@ void Engine::init(BearClass* bear_class)
 	graphics_manager = std::make_unique<GraphicsManager>();
 	config_manager = std::make_unique<ConfigManager>();
 	sound_manager = std::make_unique<SoundManager>();
-	//level_manager = new LevelManager;
-	//graphics_manager = new GraphicsManager;
-	//config_manager = new ConfigManager;
-	//sound_manager = new SoundManager;
 
 	config_manager->load_key_bindings();
 	config_manager->load_config_values();
@@ -201,11 +197,6 @@ void Engine::core()
 void Engine::exit()
 {
 	bear_class->exit();
-	// Call exit on the various systems!
-	//delete graphics_manager;
-	//delete level_manager;
-	//delete config_manager;
-	//delete sound_manager;
 
 	delete game_window;
 	

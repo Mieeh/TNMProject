@@ -130,7 +130,7 @@ void Player::render()
 		case ItemType::KEY:
 			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + KEY_HOLD_OFFSET;
 			holding_item.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
-			holding_item.renderable.m_TextureName = "key";
+			holding_item.renderable.m_TextureName = (current_item->name == "KeyRed") ? "key_red" : "key";
 			break;
 		case ItemType::WEAPON:
 			holding_item.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + WEAPON_HOLD_OFFSET;
@@ -222,6 +222,11 @@ void Player::resolve_move(int move_direction_enum)
 		if (gate.gate_state == GATE_STATE::LOCKED) {
 			if (current_item != nullptr) {
 				if (current_item->type == ItemType::KEY) {
+					// Make sure the key color matches up!
+					if ((gate.gate_type == GATE_TYPE::RED && current_item->name == "Key") || 
+						(gate.gate_type == GATE_TYPE::NORMAL && current_item->name == "KeyRed")) {
+						return;
+					}
 					current_item = nullptr;
 					gate.unlock();
 					// SFX
@@ -419,7 +424,8 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 			enemy.is_dead = true;
 			// Notes(david) if the enemy we just killed is not a "bones" enemy then this would be weird?
 			engine->sound_manager->get_sfx("enemy_dead_bones")->sf_sound.play();
-			engine->perform_window_shake(160, 4);
+			//engine->perform_window_shake(160, 4);
+			engine->graphics_manager->perform_view_shake(200, 5);
 			break;
 		case CombatResult::PLAYER_DIED:
 			set_player_state(PlayerStates::DEAD);
@@ -428,7 +434,8 @@ void Player::resolve_combat(EnemyBase& enemy, int move_direction_enum)
 			// Animation
 			player_anim.play_attack(move_direction_enum);
 			// Window shake
-			engine->perform_window_shake(100, 3);
+			//engine->perform_window_shake(100, 3);
+			engine->graphics_manager->perform_view_shake(200, 5);
 			// Enemy hurt sfx
 			engine->sound_manager->get_sfx("enemy_hurt")->sf_sound.play();
 			break;

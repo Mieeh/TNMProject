@@ -26,15 +26,27 @@ typedef std::vector<std::vector<int>> level_list;
 #define SI ITEM+2 // Shield Item
 #define KI ITEM+3 // Key    Item
 #define PP ITEM+4 // Presure (Not Item) But still for ease of use we categorise it as an item
+#define RK ITEM+5 // Red-key
 
 #define GATES ITEM+50
+#define GATES_RED GATES+50
 #define GATE_FACING_LEFT GATES+0
 #define GATE_FACING_RIGHT GATES+1
 #define GATE_FACING_DOWN GATES+2
+#define GATE_FACING_UP GATES+3
 #define GFL GATE_FACING_LEFT
 #define GFR GATE_FACING_RIGHT
 #define GFD GATE_FACING_DOWN
-#define GATES_LIST { GFL, GFR, GFD }
+#define GFU GATE_FACING_UP
+
+// Red gates
+#define GFR_R GFR+GATES_RED
+#define GFL_R GFL+GATES_RED
+#define GFD_R GFD+GATES_RED
+#define GFU_R GFU+GATES_RED
+
+#define GATES_LIST {GFL, GFR, GFD, GFU, GFR_R, GFL_R, GFD_R, GFU_R }
+#define GATES_LIST_RED { GFR_R, GFL_R, GFD_R, GFU_R } // Just the reds
 
 #define SPIKE ITEM+10
 #define SP SPIKE
@@ -43,7 +55,7 @@ typedef std::vector<std::vector<int>> level_list;
 
 #define ENEMIES { SKE }
 #define FLOORS_AND_WALLS { FLOOR1, WALL_TOP, PIT, WALL_LEFT, WALL_RIGHT }
-#define ITEMS { WI, HI, SI, KI }
+#define ITEMS { WI, HI, SI, KI, RK }
 
 static bool is_enemy(int _v) {
 	for (int _e : ENEMIES) {
@@ -94,6 +106,15 @@ static bool is_gate(int _v) {
 	return false;
 }
 
+static bool is_gate_red(int _v) {
+	for (int _e : GATES_LIST_RED) {
+		if (_e == _v) {
+			return true;
+		}
+	}
+	return false;
+}
+
 static level_list TUTORIAL_LEVEL =
 {															
 	{ -1,-1,-1,-1,-1, -1,-1,-1, 3, 1,  1, 1, 4,-1,-1, -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 },
@@ -127,7 +148,7 @@ static level_list LEVEL3 =
 	{-1,-1,-1,-1,-1, 3, 0, 0,  0, 0, SP, 0,  0, 0,   0, 0,  0,SP,SI, 4,-1},
 	{-1,-1,-1,-1,-1, 3, 0, 0, SP, 0,  0,SP,  0, 0,  SP, 0, SP, 0,SP, 4,-1},
 	{-1,-1,-1,-1,-1, 3, 0,SP,  0,SP,  0,SP,SKE, 0,   0, 0, SP, 0, 0, 4,-1},
-	{-1,-1,-1,-1,-1, 3,SP, 0, HI, 3,  1, 1,  0, 1,   1, 4,  0, 0, 0, 4,-1},
+	{-1,-1,-1,-1,-1, 3,SP, 0, HI, 3,  1, 1,GFU, 1,   1, 4,  0, 0, 0, 4,-1},
 	{-1,-1,-1,-1,-1, 3, 0, 0,  0, 3,  0, 0,SKE, 0,   0, 4, SP, 0, 0, 4,-1},
 	{ 3, 1, 1, 1, 1, 1, 0, 0,  0, 3,  0, 2,  2, 2,   0, 4,  0,SP, 0, 4,-1},
 	{ 3, 0, 0, 0, 0, 0, 0,WI,SKE,GFL,SKE,GFL,G,GFR,SKE,GFR,SKE, 0,SP,4,-1},

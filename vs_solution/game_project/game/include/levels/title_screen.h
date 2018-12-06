@@ -15,6 +15,7 @@ struct TitleScreen : ILevel {
 	Entity credits;
 	Entity fade_panel;
 	bool game_start = false;
+	float blink_timer = 0.0f;
 
 	const float magic_well_constant = 0.165f;
 	const float fade_speed = 0.001f;
@@ -55,6 +56,8 @@ struct TitleScreen : ILevel {
 		float music_volume = Engine::Instance()->config_manager->config_values.at("background_levels");
 		engine->sound_manager->get_music("title_screen")->sf_music.setVolume(music_volume);					
 		engine->sound_manager->get_music("title_screen")->sf_music.play();
+
+		blink_timer = 0.0f;
 	}
 
 	void on_event(Event &event) override {
@@ -64,8 +67,10 @@ struct TitleScreen : ILevel {
 				engine->sound_manager->get_sfx("into_the_well")->sf_sound.play();
 				engine->sound_manager->get_music("title_screen")->sf_music.stop();
 				game_start = true;
+				press_any_key.renderable.m_Color.a = 1; // <- this one blinks so we have to make sure its alpha is 1!
 			}
 		} 
+
 		if (event.type == EventType::WindowReiszed) {
 			float zoom = graphics::Graphics::get_zoom();
 			fade_panel.renderable.m_Transform.m_Size = event.size * zoom;
@@ -82,7 +87,19 @@ struct TitleScreen : ILevel {
 	}
 
 	void update(float dt) override {
-		if (game_start) {
+
+		if (!game_start) {
+			blink_timer += 0.1f * dt;
+			if (blink_timer > 95) {
+				press_any_key.renderable.m_Color.a = 0;
+				blink_timer = 0;
+			}
+			else {
+				press_any_key.renderable.m_Color.a += fade_speed / 2 * dt;
+			}
+		}
+
+		if(game_start) {
 			// Fade the stuff
 			logo.renderable.m_Color.a -= fade_speed * dt;
 			credits.renderable.m_Color.a -= fade_speed * dt;
@@ -106,7 +123,6 @@ struct TitleScreen : ILevel {
 			else {
 				logo.renderable.m_Color.a = 1.0f;
 				credits.renderable.m_Color.a = 1.0f;
-				press_any_key.renderable.m_Color.a = 1.0f;
 			}
 		}
 	}
