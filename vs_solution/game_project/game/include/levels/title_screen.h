@@ -62,6 +62,7 @@ struct TitleScreen : ILevel {
 			if (event.key == engine->config_manager->key_map.at("INTERACT1")) {
 				engine->sound_manager->get_sfx("press_start")->sf_sound.play();
 				engine->sound_manager->get_sfx("into_the_well")->sf_sound.play();
+				engine->sound_manager->get_music("title_screen")->sf_music.stop();
 				game_start = true;
 			}
 		} 
@@ -69,6 +70,10 @@ struct TitleScreen : ILevel {
 			float zoom = graphics::Graphics::get_zoom();
 			fade_panel.renderable.m_Transform.m_Size = event.size * zoom;
 			title_screen.renderable.m_Transform.m_Size = event.size * zoom;
+
+			logo.renderable.m_Transform.m_Position = core::Vector2f((event.size.x*zoom / 2) - (logo.renderable.m_Transform.m_Size.x / 2), 35);
+			press_any_key.renderable.m_Transform.m_Position = core::Vector2f((event.size.x*zoom / 2) - (press_any_key.renderable.m_Transform.m_Size.x / 2), 70 + logo.renderable.m_Transform.m_Size.y);
+			credits.renderable.m_Transform.m_Position = core::Vector2f(0, (event.size.y*zoom) - credits.renderable.m_Transform.m_Size.y);
 
 			long_pipe.renderable.m_Transform.m_Size.x = event.size.x * magic_well_constant * zoom;
 			long_pipe.renderable.m_Transform.m_Size.y = long_pipe.renderable.m_Transform.m_Position.x * 16;
@@ -83,7 +88,6 @@ struct TitleScreen : ILevel {
 			credits.renderable.m_Color.a -= fade_speed * dt;
 			press_any_key.renderable.m_Color.a -= fade_speed * dt;
 			if (logo.renderable.m_Color.a <= 0.0f) {
-				engine->sound_manager->get_music("title_screen")->sf_music.setVolume(engine->sound_manager->get_music("title_screen")->sf_music.getVolume() * 0.975f);
 				long_pipe.renderable.m_Transform.m_Position.y -= 0.25f * dt;
 				title_screen.renderable.m_Transform.m_Position.y -= 0.25f * dt;
 				fade_panel.renderable.m_Color.a += 0.00050f * dt;

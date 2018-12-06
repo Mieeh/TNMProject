@@ -22,8 +22,7 @@ enum PlayerStates {
 	IDLE,
 	IN_TRANSIT,
 	OUTRO,
-	DEAD,
-	CUTSCENE
+	DEAD
 };
 
 enum PlayerMoveDirection {
@@ -52,6 +51,7 @@ public:
 	bool show_item;
 	PlayerStates player_state = PlayerStates::IDLE;
 	bool standing_on_spike;
+	bool move_lock = false;
 
 private:
 	const float move_speed = 0.2f;

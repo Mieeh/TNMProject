@@ -23,6 +23,7 @@ struct LevelContent {
 	std::map<std::string, Item> items;
 	std::map<std::string, EnemyBase> enemies;
 	SpikeSystem spike_system;
+	std::vector<core::Vector2i> spike_tile_list;
 	std::map<std::string, Gate> gates;
 
 	void update(float dt);

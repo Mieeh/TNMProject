@@ -27,6 +27,7 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 	level_content.presure_plates.clear();
 	level_content.spike_system.spike_entity_list.clear();
 	level_content.gates.clear();
+	level_content.spike_tile_list.clear();
 
 	level_list _level_list = level_content.tile_map;
 	for (int y = 0; y < _level_list.size(); y++) 
@@ -61,15 +62,15 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 						break;
 					case WALL_LEFT:
 						entity.renderable.m_TextureName = "wallLeft";
+						if ((_level_list.at(y+1).at(x) == -1)) {
+							entity.renderable.m_TextureName = "bottomLeftWall";
+						}
 						break;
 					case WALL_RIGHT:
 						entity.renderable.m_TextureName = "wallRight";
-						break;
-					case BOTTOM_LEFT_WALL:
-						entity.renderable.m_TextureName = "bottomLeftWall";
-						break;
-					case BOTTOM_RIGHT_WALL:
-						entity.renderable.m_TextureName = "bottomRightWall";
+						if ((_level_list.at(y+1).at(x) == -1)) {
+							entity.renderable.m_TextureName = "bottomRightWall";
+						}
 						break;
 					case GOAL:
 
@@ -183,6 +184,9 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 				entity.renderable.m_TextureName = "floor" + std::to_string(ground_toggle);
 				entity.renderable.m_Transform.m_Position = realPosition;
 				entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+
+				// Register spike tile position
+				level_content.spike_tile_list.push_back({ x,y });
 
 				// Spike
 				level_content.spike_system.spike_entity_list.push_back(Entity());

@@ -1,4 +1,4 @@
-#include"include\player.h"
+﻿#include"include\player.h"
 
 #include"include/constants.h"
 #include"include/combat.h"
@@ -41,7 +41,7 @@ std::string Player::get_random_footstep(unsigned int number_of_footsteps)
 
 void Player::on_event(Event & event)
 {					
-	if (event.type == EventType::KeyPressed) {
+	if (event.type == EventType::KeyPressed && !move_lock) {
 		// Make sure the player is idle before we move/perform something!
 		if (player_state == PlayerStates::IDLE) {
 			if (event.key == engine->config_manager->key_map.at("MOVE_RIGHT"))
@@ -91,9 +91,6 @@ void Player::update(float dt)
 				set_player_state(PlayerStates::DEAD);
 			}
 		}
-		break;
-	case PlayerStates::CUTSCENE:
-		move_player_state_control(move_direction, dt);
 		break;
 	case PlayerStates::INTRO:
 		intro_player(dt);
@@ -538,6 +535,29 @@ void Player::message_gas()
 
 	if (standing_on_spike && engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
 		set_player_state(PlayerStates::DEAD);
+	}
+
+	// Find the closest spike
+	// x=player and y=spike
+	// abs(player.x−spike.x) + abs(player.y−spike.y)
+	bool play_spike_sfx = false;
+	const int distance_to_sfx = 1;
+
+	for (const auto&spike : engine->level_manager->current_level->get_level_content().spike_tile_list) {
+		int distance = std::abs(tile_position.x - spike.x) + std::abs(tile_position.y - spike.y);
+		if (distance <= distance_to_sfx) {
+			play_spike_sfx = true;
+			break;
+		}
+	}
+
+	if (play_spike_sfx) {
+		if (engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
+			engine->sound_manager->get_sfx("spike_up")->sf_sound.play();
+		}
+		else if (engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 0) {
+			engine->sound_manager->get_sfx("spike_down")->sf_sound.play();
+		}
 	}
 }
 

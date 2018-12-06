@@ -86,6 +86,7 @@ struct Level1 : ILevel {
 				engine->graphics_manager->point_to_follow = &player->world_position;
 				// Gas interval
 				player->gas.step_interval = 1;
+				player->move_lock = false;
 				// Start the music
 				engine->sound_manager->set_background_music("mist_first_encounter");
 			}
@@ -106,6 +107,7 @@ struct Level1 : ILevel {
 	void player_moved() override {
 		if (player->tile_position == core::Vector2i(14, 6) && !intro_end_flag) {
 			// Play the pp + rumble sfx
+			player->move_lock = true;
 			engine->sound_manager->stop_background_music();
 			engine->sound_manager->get_sfx("pp_rumble")->sf_sound.play();
 			player->gas.gas_speed = GAS_MOVE_SPEED * 1.075f;
