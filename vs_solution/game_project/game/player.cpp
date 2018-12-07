@@ -21,7 +21,7 @@ using namespace bear;
 
 Player* Player::instance = nullptr;
 
-Player::Player() : player_anim(), player_ui(), gas()
+Player::Player() : player_anim(), player_ui(), gas(), do_key_fly(false)
 {
 	entity.renderable.m_TextureName = "runningDown3";
 	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
@@ -107,6 +107,16 @@ void Player::update(float dt)
 		fbShader->disable();
 		break;
 	}
+
+	if (do_key_fly) {
+		key_fly.renderable.m_Layer = entity.renderable.m_Layer + 1;
+		key_fly.renderable.m_Transform.m_Position.moveTowards(key_fly_target, key_fly_speed*25*dt);
+		key_fly.renderable.m_Color.a -= key_fly_speed * 0.1f * dt;
+		if (key_fly.renderable.m_Color.a <= 0) {
+			// We're done!
+			do_key_fly = false;
+		}
+	}
 }		
 
 void Player::render()
@@ -148,6 +158,10 @@ void Player::render()
 
 	// Draw the gas entity(*)
 	gas.draw();
+
+	if (do_key_fly) {
+		engine->graphics_manager->draw(key_fly);
+	}
 }
 
 void Player::resolve_move(int move_direction_enum)
@@ -335,6 +349,7 @@ void Player::set_player_state(PlayerStates new_state)
 		// SFX
 		engine->sound_manager->get_sfx("player_die")->sf_sound.play();
 		// Animation
+		player_anim.stop_death();
 		player_anim.play_death();
 		// Remove item
 		current_item = nullptr;
@@ -458,8 +473,17 @@ void Player::resolve_item(Item & item, int move_direction_enum)
 		if (current_item != nullptr) {
 			// Discard current item unless it's a key!
 			current_item->state = ItemState::DISCARDED;
-			if (current_item->type == ItemType::KEY)
+			if (current_item->type == ItemType::KEY) {
+				// Setup key fly
+				key_fly.renderable.m_Transform.m_Position = entity.renderable.m_Transform.m_Position + KEY_HOLD_OFFSET;
+				key_fly.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+				key_fly.renderable.m_TextureName = (current_item->name == "KeyRed") ? "key_red" : "key";
+				key_fly.renderable.m_Color.a = 1.0f;
+				do_key_fly = true;
+				key_fly_target = current_item->entity.renderable.m_Transform.m_Position;
+				// Make sure the key is still on the map afterwards!
 				current_item->state = ItemState::ON_MAP;
+			}
 		}
 		current_item = &item;
 

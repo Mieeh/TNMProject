@@ -5,7 +5,7 @@
 #define SKELETON_SIZE_X 1.3
 #define SKELETON_SIZE_Y 1.3
 #define SKELETON_OFFSET_X -8.6
-#define SKELETON_OFFSET_Y -16
+#define SKELETON_OFFSET_Y -24
 
 struct Skeleton : EnemyBase {
 	// Constructor

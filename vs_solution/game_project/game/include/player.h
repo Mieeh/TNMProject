@@ -46,6 +46,10 @@ public:
 	PresurePlate* presure_plate = nullptr; // Presure plate last stood on
 	Gas gas;
 	Entity holding_item;
+	Entity key_fly;
+	bool do_key_fly;
+	core::Vector2f key_fly_target;
+	const float key_fly_speed = 0.01f;
 	Entity entity;
 	core::Vector2f player_offset;
 	bool show_item;
