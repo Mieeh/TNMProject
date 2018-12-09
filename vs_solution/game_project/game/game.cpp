@@ -20,7 +20,7 @@ void Game::init()
 	Engine::Instance()->sound_manager->setSFX_Volumes(Engine::Instance()->config_manager->config_values.at("sfx_levels"));
 
 	// Set current level
-	Engine::Instance()->level_manager->setCurrentLevel("level4");
+	Engine::Instance()->level_manager->setCurrentLevel("menu");
 }
 
 void Game::update(float dt) {

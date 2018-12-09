@@ -269,7 +269,8 @@ void Player::intro_player(float dt)
 		player_state = PlayerStates::IDLE;
 		entity.renderable.m_Transform.m_Position = world_position;
 		entity.renderable.m_Color.a = 1.0f;
-		engine->perform_window_shake(400, 10);
+		//engine->perform_window_shake(400, 10);
+		engine->graphics_manager->perform_view_shake(400, 10);
 	}
 }
 

@@ -54,7 +54,7 @@ typedef std::vector<std::vector<int>> level_list;
 #define SKE 7
 
 #define ENEMIES { SKE }
-#define FLOORS_AND_WALLS { FLOOR1, WALL_TOP, PIT, WALL_LEFT, WALL_RIGHT }
+#define FLOORS_AND_WALLS { FLOOR1, WALL_TOP, PIT, WALL_LEFT, WALL_RIGHT, GOAL }
 #define ITEMS { WI, HI, SI, KI, RK }
 
 static bool is_enemy(int _v) {
@@ -164,7 +164,7 @@ static level_list LEVEL4 =
 { // 25/24 Start at 1,2
 	{-1,-1,-1,-1,-1, 3, 1, 1, 1, 1, 1,  1,  1,  1,  1,  1, 1, 1,  4,-1,-1,-1,-1,-1,-1,},
 	{ 3, 1, 1, 1, 1, 1, 0, 0, 0, 2, 2,  0,  2,  2,  2,  2, 2, 2,  4, 3, 1, 1, 1, 4,-1,},
-	{ 3, 0, 0, 0, 0, 0, 0,KI, 0, 0, 0, WI, SP,SKE,SKE, -1,-1,-1,  1, 1, 0, 0, 0, 4,-1,},
+	{ 3, 0, 0, 0, 0, 0, 0,KI, 0, 0, 0, WI, SP,SKE, SKE, -1,-1,-1,  1, 1, 0, 0, 0, 4,-1,},
 	{-1, 2, 2, 2, 2, 2, 0, 0, 0, 2, 2,  0,  2,  2, SP,SKE, 0, 0,GFL, 0, 0, G, 0, 4,-1,},
 	{-1,-1,-1,-1,-1,-1, 2,SP, 2,-1,-1,SKE, SP,SKE,  2,  0, 2, 2,  2, 2, 0, 0, 0, 4,-1,},
 	{-1,-1,-1,-1,-1,-1,-1,HI, 0, 0, 0,  0,  2,  0,  0,  0,-1,-1, -1,-1, 2, 2, 2,-1,-1,},

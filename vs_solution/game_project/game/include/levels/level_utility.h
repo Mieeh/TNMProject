@@ -73,7 +73,13 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 						}
 						break;
 					case GOAL:
-
+						entity.renderable.m_TextureName = "goal";
+						level_content.walls_floors.push_back(Entity());
+						Entity& entity = level_content.walls_floors.back();
+						entity.renderable.m_Transform.m_Position = realPosition;
+						entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE);
+						entity.renderable.m_Layer = LAYER1+1;
+						entity.renderable.m_TextureName = "goal_outer";
 						break;
 					}
 				}
