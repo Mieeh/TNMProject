@@ -17,7 +17,7 @@ namespace bear { namespace window {
 	/* GLFW Implementation */
 	class Window {
 	public:
-		Window(unsigned int a_Width, unsigned int a_Height, std::string a_Caption = "GLFW Window");
+		Window(unsigned int a_Width, unsigned int a_Height, std::string a_Caption = "GLFW Window", bool a_Fullscreen = false);
 		~Window();
 
 		bool isOpen();

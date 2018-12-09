@@ -34,7 +34,7 @@ void Engine::init(BearClass* bear_class)
 	this->bear_class = bear_class;
 
 	// Create some framework related objects
-	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project");
+	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project", true);
 	game_window->setVSync(VSYNC);
 
 	// Init bear-framework systems
