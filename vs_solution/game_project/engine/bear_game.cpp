@@ -33,8 +33,12 @@ void Engine::init(BearClass* bear_class)
 {
 	this->bear_class = bear_class;
 
+	// Do this absolute first 
+	config_manager = std::make_unique<ConfigManager>();
+	config_manager->load_config_values();
+
 	// Create some framework related objects
-	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project", true);
+	game_window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "TNM Project", config_manager->config_values.at("fullscreen"));
 	game_window->setVSync(VSYNC);
 
 	// Init bear-framework systems
@@ -45,11 +49,9 @@ void Engine::init(BearClass* bear_class)
 	//Create the game systems
 	level_manager = std::make_unique<LevelManager>();
 	graphics_manager = std::make_unique<GraphicsManager>();
-	config_manager = std::make_unique<ConfigManager>();
 	sound_manager = std::make_unique<SoundManager>();
 
 	config_manager->load_key_bindings();
-	config_manager->load_config_values();
 	graphics_manager->init();
 
 	// Load resources
