@@ -12,6 +12,7 @@ using namespace bear;
 #include<memory\resource_manager.h>
 
 #include"include/bear_game.h"
+#include"include/engine.h"
 
 void GraphicsManager::init()
 {
@@ -23,6 +24,7 @@ void GraphicsManager::init()
 	
 	graphics::Shader* temp_shader = ResourceManager::Instance()->CreateShaderFromFile("framebuffer_shader", "resources\\fb_vertex.txt", "resources\\fb_fragment.txt", "");
 	framebuffer_list[0].setShader("framebuffer_shader");
+	framebuffer_list[0].windowResize(Engine::Instance()->game_window->getWindowSize().x, Engine::Instance()->game_window->getWindowSize().y);
 }
 
 GraphicsManager::~GraphicsManager()

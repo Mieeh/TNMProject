@@ -72,6 +72,12 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 							entity.renderable.m_TextureName = "bottomRightWall";
 						}
 						break;
+					case LWP:
+						entity.renderable.m_TextureName = "leftWallPit";
+						break;
+					case RWP:
+						entity.renderable.m_TextureName = "rightWallPit";
+						break;
 					case GOAL:
 						entity.renderable.m_TextureName = "goal";
 						level_content.walls_floors.push_back(Entity());
