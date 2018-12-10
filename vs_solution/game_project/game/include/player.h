@@ -47,6 +47,7 @@ public:
 	Gas gas;
 	Entity holding_item;
 	Entity key_fly;
+	Entity game_over;
 	bool do_key_fly;
 	core::Vector2f key_fly_target;
 	const float key_fly_speed = 0.01f;

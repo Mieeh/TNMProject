@@ -29,6 +29,10 @@ Player::Player() : player_anim(), player_ui(), gas(), do_key_fly(false)
 	player_offset = DEFAULT_PLAYER_OFFSET;
 	show_item = true;
 	standing_on_spike = false;
+
+	game_over.renderable.m_Transform.m_Size = core::Vector2f(450, 160);
+	game_over.renderable.m_TextureName = "gameover";
+	game_over.renderable.m_Color.a = 0.0f;
 }
 
 std::string Player::get_random_footstep(unsigned int number_of_footsteps)
@@ -101,6 +105,11 @@ void Player::update(float dt)
 	case PlayerStates::DEAD:
 		death_panel.increaseOffset(dt);
 
+		float zoom = graphics::Graphics::get_zoom();
+		game_over.renderable.m_Transform.m_Position = core::Vector2f((engine->graphics_manager->window_size.x*zoom / 2) - (game_over.renderable.m_Transform.m_Size.x / 2), 
+			(engine->graphics_manager->window_size.y*zoom / 2) - (game_over.renderable.m_Transform.m_Size.y / 1.5f));
+		game_over.renderable.m_Color.a += 0.001f*dt;
+
 		graphics::Shader* fbShader = ResourceManager::Instance()->GetShader("framebuffer_shader");
 		fbShader->enable();
 		fbShader->setUniformFloat("offset", death_panel.offset);
@@ -155,6 +164,10 @@ void Player::render()
 
 	// Draw the player entity
 	engine->graphics_manager->draw(entity);
+
+	if (player_state == PlayerStates::DEAD) {
+		engine->graphics_manager->draw_as_ui(game_over);
+	}
 
 	// Draw the gas entity(*)
 	gas.draw();
@@ -346,7 +359,8 @@ void Player::set_player_state(PlayerStates new_state)
 		// Tell the graphics_manager we want to enable the death post processing effect
 		engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::BLACK_WHITE_CROSS);
 		// Play the death chords 
-		engine->sound_manager->set_background_music("game_over_music"); 
+		engine->sound_manager->set_background_music("game_over_music");
+		engine->sound_manager->get_music("game_over_music")->sf_music.setLoop(false);
 		// SFX
 		engine->sound_manager->get_sfx("player_die")->sf_sound.play();
 		// Animation
@@ -354,6 +368,10 @@ void Player::set_player_state(PlayerStates new_state)
 		player_anim.play_death();
 		// Remove item
 		current_item = nullptr;
+		// game over sprite
+		float zoom = graphics::Graphics::get_zoom();
+		game_over.renderable.m_Transform.m_Position = core::Vector2f((engine->graphics_manager->window_size.x*zoom / 2) - (game_over.renderable.m_Transform.m_Size.x / 2),
+			(engine->graphics_manager->window_size.y*zoom / 2) - (game_over.renderable.m_Transform.m_Size.y / 1.5f));
 	}
 }
 
@@ -517,6 +535,8 @@ void Player::reset_after_death()
 	engine->level_manager->reInitCurrentLevel(); // Reset current level
 	engine->level_manager->current_level->get_level_content().spike_system.reset_spikes();
 	hp = 3; // Reset hp
+
+	game_over.renderable.m_Color.a = 0.0f;
 
 	// Disable the post processing effect
 	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);
