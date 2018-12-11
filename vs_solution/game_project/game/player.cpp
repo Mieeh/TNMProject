@@ -234,7 +234,6 @@ void Player::resolve_move(int move_direction_enum)
 		standing_on_spike = true;
 
 		// Should we die?
-		std::cout << engine->level_manager->current_level->get_level_content().spike_system.current_spike_level << std::endl;
 		if (engine->level_manager->current_level->get_level_content().spike_system.current_spike_level == 3) {
 			set_player_state(PlayerStates::DEAD);
 		}

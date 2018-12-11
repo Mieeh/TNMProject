@@ -29,7 +29,6 @@ void GraphicsManager::init()
 
 GraphicsManager::~GraphicsManager()
 {
-	//std::cout << "Graphics Singleton exit called\n";
 	delete slow_renderer;
 	delete slow_ui_renderer;
 }
@@ -141,7 +140,6 @@ void GraphicsManager::flush()
 	slow_ui_renderer->flush();
 }
 
-//std::cout << "Level Manager exit called!\n";
 void GraphicsManager::window_resized(const Event & event)
 {
 	if (event.type == EventType::WindowReiszed) {

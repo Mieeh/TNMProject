@@ -162,7 +162,6 @@ static void levelUtility_ConvertToLevelContent(LevelContent& level_content) {
 					item.value = 1;
 					break;
 				case RK:
-					std::cout << "idontneedallthosethings" << std::endl;
 					item.entity.renderable.m_TextureName = "key_red";
 					item.type = ItemType::KEY;
 					item.name = "KeyRed";
