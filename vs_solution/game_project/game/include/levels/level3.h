@@ -17,7 +17,7 @@ struct Level3 : ILevel {
 		levelUtility_ConvertToLevelContent(content);
 
 		gas_interval = 4;
-		gas_offset = -11;
+		gas_offset = -12;
 		//gas_offset = -1;
 		//gas_interval = 2;
 
