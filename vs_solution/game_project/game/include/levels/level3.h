@@ -28,7 +28,7 @@ struct Level3 : ILevel {
 
 		engine->sound_manager->set_background_music("bg");
 
-		next_level_name = "level4";
+		next_level_name = "menu";
 	}
 
 	void on_event(Event& event) {
