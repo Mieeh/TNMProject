@@ -6,6 +6,8 @@
 #include"level_utility.h"
 #include "../player.h"
 
+#include<fstream>
+
 struct Level3 : ILevel {
 
 	LevelContent content;
@@ -28,7 +30,7 @@ struct Level3 : ILevel {
 
 		engine->sound_manager->set_background_music("bg");
 
-		next_level_name = "menu";
+		next_level_name = "level1";
 	}
 
 	void on_event(Event& event) {
@@ -57,6 +59,14 @@ struct Level3 : ILevel {
 	LevelContent& get_level_content()
 	{
 		return content;
+	}
+
+	void completed_level() override {
+		// Do some stuff to indicate the player has completed the game!
+		std::ofstream file("GAME_WON.txt");
+		file << "You've completed the demo! Thanks for trying the game!" << std::endl;
+		file << "Comment 01100100 01110101 01101110 01110111 01100101 01101100 01101100(dunwell) on the Itch.io page!" << std::endl;
+		file.close();
 	}
 
 };

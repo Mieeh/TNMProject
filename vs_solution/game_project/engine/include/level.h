@@ -41,4 +41,5 @@ struct ILevel {
 	virtual void render() = 0; // Do rendering here
 	virtual void player_moved() = 0; // Called when the player moves!
 	virtual LevelContent& get_level_content() = 0;
+	virtual void completed_level() { }
 };

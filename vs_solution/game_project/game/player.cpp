@@ -301,6 +301,7 @@ void Player::outro_player(float dt)
 		goal_trigger = false;
 		set_player_state(PlayerStates::IDLE);
 		// Load new level
+		engine->level_manager->current_level->completed_level();
 		engine->level_manager->setCurrentLevel(engine->level_manager->current_level->next_level_name); // Load the next level
 		// Reset layer
 		entity.renderable.m_Layer = LAYER3;
@@ -536,6 +537,9 @@ void Player::reset_after_death()
 	hp = 3; // Reset hp
 
 	game_over.renderable.m_Color.a = 0.0f;
+	
+	entity.renderable.m_Transform.m_Size = core::Vector2f(TILE_SIZE, TILE_SIZE)*PLAYER_SIZE;
+	show_item = true;
 
 	// Disable the post processing effect
 	engine->graphics_manager->set_post_processing_effect(POST_PROCESSING_EFFECTS::NONE);

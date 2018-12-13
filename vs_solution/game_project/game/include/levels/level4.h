@@ -58,4 +58,8 @@ struct Level4 : ILevel {
 		return content;
 	}
 
+	void completed_level() override {
+
+	}
+
 };
