@@ -62,7 +62,7 @@ struct TitleScreen : ILevel {
 
 	void on_event(Event &event) override {
 		if (!game_start) {
-			if (event.key == engine->config_manager->key_map.at("INTERACT1")) {
+			if (event.type == EventType::KeyPressed) {
 				engine->sound_manager->get_sfx("press_start")->sf_sound.play();
 				engine->sound_manager->get_sfx("into_the_well")->sf_sound.play();
 				engine->sound_manager->get_music("title_screen")->sf_music.stop();
